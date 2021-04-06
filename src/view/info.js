@@ -1,5 +1,4 @@
-import {sumValues} from '../utils.js';
-import dayjs from 'dayjs';
+import {sumValues, getEventPeriod} from '../utils.js';
 
 export const createTripInfoTemplate = (points) => {
   const route = points.map((point) => {
@@ -11,21 +10,11 @@ export const createTripInfoTemplate = (points) => {
     totalPrice = totalPrice + point.offers.map((offer) => offer.price).reduce(sumValues, point.basePrice);
   });
 
-  const getEventPeriod = () => {
-    const startingPoint = points[0];
-    const endingPoint = points[points.length - 1];
-    const monthStart = dayjs(startingPoint.dateFrom).month();
-    const monthEnd = dayjs(endingPoint.dateTo).month();
-    if (monthStart == monthEnd) {
-      return `${dayjs(startingPoint.dateFrom).format('MMM DD')}&nbsp;&mdash;&nbsp;${dayjs(endingPoint.dateTo).format('DD')}`;
-    }
-    return `${dayjs(startingPoint.dateFrom).format('MMM DD')}&nbsp;&mdash;&nbsp;${dayjs(endingPoint.dateTo).format('MMM DD')}`;
-  };
   return `<section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
         <h1 class="trip-info__title">${route}</h1>
 
-        <p class="trip-info__dates">${getEventPeriod()}</p>
+        <p class="trip-info__dates">${getEventPeriod(points[0], points[points.length - 1])}</p>
       </div>
 
       <p class="trip-info__cost">

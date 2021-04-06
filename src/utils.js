@@ -69,6 +69,15 @@ const getRandomDate = () => {
     .toDate();
 };
 
+const getEventPeriod = (startingPoint, endingPoint) => {
+  const monthStart = dayjs(startingPoint.dateFrom).month();
+  const monthEnd = dayjs(endingPoint.dateTo).month();
+  if (monthStart == monthEnd) {
+    return `${humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDay(endingPoint.dateTo)}`;
+  }
+  return `${humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDate(endingPoint.dateTo)}`;
+};
+
 export {
   capitalizeFirstLetter,
   sumValues,
@@ -79,5 +88,6 @@ export {
   humanizeFullDate,
   humanizeDate,
   humanizeTime,
-  humanizeDay
+  humanizeDay,
+  getEventPeriod
 };
