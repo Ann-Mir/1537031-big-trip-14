@@ -2,17 +2,18 @@ import {getRandomInteger, getRandomValueFromArray, MAX_PRICE, MIN_PRICE, types} 
 import {getRandomDate} from '../utils.js';
 
 
-const pointId = 0;
+let pointId = 0;
 
 const getPoint = (destination, offerTypes) => {
   const firstRandomDate = getRandomDate();
   const secondRandomDate = getRandomDate();
+  pointId += 1;
   const point = {
     basePrice: getRandomInteger(MIN_PRICE, MAX_PRICE),
     dateFrom: firstRandomDate < secondRandomDate ? firstRandomDate : secondRandomDate,
     dateTo: firstRandomDate < secondRandomDate ? secondRandomDate : firstRandomDate,
     destination: destination,
-    id: pointId + 1,
+    id: pointId,
     isFavorite: Boolean(getRandomInteger(0, 1)),
     type: getRandomValueFromArray(types),
   };
@@ -21,4 +22,17 @@ const getPoint = (destination, offerTypes) => {
   return point;
 };
 
-export { getPoint };
+const generatePoints = (pointsCount, destinations, offerTypes) => {
+  const points = new Array(pointsCount)
+    .fill()
+    .map(
+      () => {
+        return getPoint(destinations[getRandomInteger(0, destinations.length - 1)], offerTypes);
+      })
+    .sort((point1, point2) => {
+      return point1.dateFrom - point2.dateFrom;
+    });
+  return points;
+};
+
+export { getPoint, generatePoints };

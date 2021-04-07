@@ -22,6 +22,10 @@ const isEventExpired = (point) => {
   return today.isBefore(dayjs(point.dateFrom), 'd');
 };
 
+const humanizeFullDateAndTime = (date) => {
+  return dayjs(date).format('DD/MM/YY HH:MM');
+};
+
 const humanizeFullDate = (date) => {
   return dayjs(date).format('YYYY-MM-DD');
 };
@@ -85,6 +89,7 @@ export {
   isEventComing,
   isEventExpired,
   getRandomDate,
+  humanizeFullDateAndTime,
   humanizeFullDate,
   humanizeDate,
   humanizeTime,
