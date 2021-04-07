@@ -1,13 +1,27 @@
+import './utils.js';
 import {createSiteMenuTemplate} from './view/site-menu.js';
 import {createTripInfoTemplate} from './view/info.js';
 import {createTripFiltersElement} from './view/filter.js';
 import {createTripEventsSortForm} from './view/sort.js';
-import {createAddNewPointTemplate} from './view/add-new-point.js';
 import {createEditPointTemplate} from './view/edit-point.js';
-import {createPointTemplate} from './view/point.js';
+import {createEventTemplate} from './view/event.js';
 import {createEventsListTemplate} from './view/event-list.js';
+import {getPoint} from './mock/point.js';
+import {getRandomInteger} from './mock/utils.js';
+import {generateFilter} from './filter.js';
+import {DESTINATIONS, OFFER_TYPES, POINTS_COUNT} from './constants.js';
 
-const POINTS_COUNT = 3;
+const points = new Array(POINTS_COUNT)
+  .fill()
+  .map(
+    () => {
+      return getPoint(DESTINATIONS[getRandomInteger(0, DESTINATIONS.length - 1)], OFFER_TYPES);
+    })
+  .sort((point1, point2) => {
+    return point1.dateFrom - point2.dateFrom;
+  });
+
+generateFilter(points);
 
 const siteHeaderElement = document.querySelector('.page-header');
 const tripControlsElement = siteHeaderElement.querySelector('.trip-controls');
@@ -23,16 +37,17 @@ const render = (container, template, place) => {
 };
 
 render(tripControlsElement, createSiteMenuTemplate(), 'beforeend');
-render(tripMainElement, createTripInfoTemplate(), 'afterbegin');
+render(tripMainElement, createTripInfoTemplate(points), 'afterbegin');
 render(tripFiltersElement, createTripFiltersElement(), 'beforeend');
 render(tripEventsElement, createTripEventsSortForm(), 'beforeend');
 render(tripEventsElement, createEventsListTemplate(), 'beforeend');
 
 const eventsListElement = tripEventsElement.querySelector('.trip-events__list');
 
-render(eventsListElement, createEditPointTemplate(), 'afterbegin');
-render(eventsListElement, createAddNewPointTemplate(), 'beforeend');
+render(eventsListElement, createEditPointTemplate(points[0]), 'afterbegin');
+render(eventsListElement, createEditPointTemplate(), 'beforeend');
 
-for (let i=0; i < POINTS_COUNT; i++) {
-  render(eventsListElement, createPointTemplate(), 'beforeend');
-}
+points.forEach((point) => {
+  render(eventsListElement, createEventTemplate(point), 'beforeend');
+});
+
