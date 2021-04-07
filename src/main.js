@@ -6,22 +6,10 @@ import {createTripEventsSortForm} from './view/sort.js';
 import {createEditPointTemplate} from './view/edit-point.js';
 import {createEventTemplate} from './view/event.js';
 import {createEventsListTemplate} from './view/event-list.js';
-import {getPoint} from './mock/point.js';
-import {getRandomInteger} from './mock/utils.js';
-import {generateFilter} from './filter.js';
-import {DESTINATIONS, OFFER_TYPES, POINTS_COUNT} from './constants.js';
+import {DESTINATIONS, OFFER_TYPES, POINTS_COUNT} from './data.js';
+import {generatePoints} from './mock/point';
 
-const points = new Array(POINTS_COUNT)
-  .fill()
-  .map(
-    () => {
-      return getPoint(DESTINATIONS[getRandomInteger(0, DESTINATIONS.length - 1)], OFFER_TYPES);
-    })
-  .sort((point1, point2) => {
-    return point1.dateFrom - point2.dateFrom;
-  });
-
-generateFilter(points);
+const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
 
 const siteHeaderElement = document.querySelector('.page-header');
 const tripControlsElement = siteHeaderElement.querySelector('.trip-controls');

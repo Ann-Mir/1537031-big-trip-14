@@ -9,6 +9,7 @@ const OFFER_TYPES = getOfferTypes();
 const DESTINATIONS = getDestinations(DESTINATIONS_COUNT);
 const DEFAULT_POINT = getPoint(DESTINATIONS[0], OFFER_TYPES);
 
+console.log(OFFER_TYPES);
 
 export {
   DEFAULT_POINT,
