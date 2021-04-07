@@ -24,7 +24,7 @@ const isEventExpired = (point) => {
 
 const humanizeFullDateAndTime = (date) => {
   return dayjs(date).format('DD/MM/YY HH:MM');
-}
+};
 
 const humanizeFullDate = (date) => {
   return dayjs(date).format('YYYY-MM-DD');
