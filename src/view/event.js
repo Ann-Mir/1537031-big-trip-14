@@ -1,7 +1,14 @@
-import {capitalizeFirstLetter, humanizeFullDate, humanizeDuration, humanizeDate, humanizeTime} from '../utils.js';
+import {
+  capitalizeFirstLetter,
+  humanizeFullDate,
+  humanizeDuration,
+  humanizeDate,
+  humanizeTime,
+  createElement
+} from '../utils.js';
 import {createOffersTemplate} from './offers.js';
 
-export const createEventTemplate = (point) => {
+const createEventTemplate = (point) => {
   const type = capitalizeFirstLetter(point.type);
   const favoriteButtonClasses = point.isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
   const duration = humanizeDuration(point.dateFrom, point.dateTo);
@@ -40,3 +47,27 @@ export const createEventTemplate = (point) => {
       </div>
     </li>`;
 };
+
+
+export default class Event {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

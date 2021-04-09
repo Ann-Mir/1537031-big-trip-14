@@ -82,6 +82,34 @@ const getEventPeriod = (startingPoint, endingPoint) => {
   return `${humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDate(endingPoint.dateTo)}`;
 };
 
+const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+const renderElement = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+
+const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement('div'); // 1
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+
 export {
   capitalizeFirstLetter,
   sumValues,
@@ -94,5 +122,9 @@ export {
   humanizeDate,
   humanizeTime,
   humanizeDay,
-  getEventPeriod
+  getEventPeriod,
+  renderTemplate,
+  RenderPosition,
+  renderElement,
+  createElement
 };

@@ -1,41 +1,44 @@
 import './utils.js';
-import {createSiteMenuTemplate} from './view/site-menu.js';
-import {createTripInfoTemplate} from './view/info.js';
-import {createTripFiltersElement} from './view/filter.js';
-import {createTripEventsSortForm} from './view/sort.js';
-import {createEditPointTemplate} from './view/edit-point.js';
-import {createEventTemplate} from './view/event.js';
-import {createEventsListTemplate} from './view/event-list.js';
+import SiteMenuView from './view/site-menu.js';
+import TripInfoView from './view/trip-info.js';
+import SortView from './view/sort.js';
 import {DESTINATIONS, OFFER_TYPES, POINTS_COUNT} from './data.js';
 import {generatePoints} from './mock/point';
+import {renderElement, RenderPosition} from './utils.js';
+import TripControlsView from './view/trip-controls.js';
+import TripControlsNavigationView from './view/trip-controls-navigation.js';
+import TripControlsFiltersView from './view/trip-controls-filters.js';
+import FilterView from './view/filter.js';
+import NewEventButtonView from './view/new-event-button.js';
+import EventView from './view/event.js';
+import EventListView from './view/event-list.js';
+import EditPointView from './view/edit-point.js';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
 
 const siteHeaderElement = document.querySelector('.page-header');
-const tripControlsElement = siteHeaderElement.querySelector('.trip-controls');
-
+const tripControlsElement = new TripControlsView().getElement();
 const tripMainElement = siteHeaderElement.querySelector('.trip-main');
-const tripFiltersElement = siteHeaderElement.querySelector('.trip-controls__filters');
-
+const tripControlsNavigationElement = new TripControlsNavigationView().getElement();
+const tripControlsFiltersElement = new TripControlsFiltersView().getElement();
+const tripFiltersElement = new FilterView().getElement();
+const eventListElement = new EventListView().getElement();
 const siteMainElement = document.querySelector('.page-main');
 const tripEventsElement = siteMainElement.querySelector('.trip-events');
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-render(tripControlsElement, createSiteMenuTemplate(), 'beforeend');
-render(tripMainElement, createTripInfoTemplate(points), 'afterbegin');
-render(tripFiltersElement, createTripFiltersElement(), 'beforeend');
-render(tripEventsElement, createTripEventsSortForm(), 'beforeend');
-render(tripEventsElement, createEventsListTemplate(), 'beforeend');
-
-const eventsListElement = tripEventsElement.querySelector('.trip-events__list');
-
-render(eventsListElement, createEditPointTemplate(points[0]), 'afterbegin');
-render(eventsListElement, createEditPointTemplate(), 'beforeend');
+renderElement(tripMainElement, tripControlsElement, RenderPosition.AFTERBEGIN);
+renderElement(tripControlsElement, tripControlsNavigationElement, RenderPosition.AFTERBEGIN);
+renderElement(tripControlsElement, tripControlsFiltersElement, RenderPosition.BEFOREEND);
+renderElement(tripControlsFiltersElement, tripFiltersElement, RenderPosition.BEFOREEND);
+renderElement(tripMainElement, new TripInfoView(points).getElement(), RenderPosition.AFTERBEGIN);
+renderElement(tripMainElement, new NewEventButtonView().getElement(), RenderPosition.BEFOREEND);
+renderElement(tripControlsNavigationElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
+renderElement(tripEventsElement, new SortView().getElement(), RenderPosition.BEFOREEND);
+renderElement(tripEventsElement, eventListElement, RenderPosition.BEFOREEND);
+renderElement(eventListElement, new EditPointView(points[0]).getElement(), RenderPosition.AFTERBEGIN);
+renderElement(eventListElement, new EditPointView().getElement(), RenderPosition.BEFOREEND);
 
 points.forEach((point) => {
-  render(eventsListElement, createEventTemplate(point), 'beforeend');
+  renderElement(eventListElement, new EventView(point).getElement(), RenderPosition.BEFOREEND);
 });
 
