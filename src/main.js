@@ -13,6 +13,7 @@ import NewEventButtonView from './view/new-event-button.js';
 import EventView from './view/event.js';
 import EventListView from './view/event-list.js';
 import EditPointView from './view/edit-point.js';
+import {replaceChildElement} from './mock/utils.js';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
 
@@ -35,10 +36,22 @@ renderElement(tripMainElement, new NewEventButtonView().getElement(), RenderPosi
 renderElement(tripControlsNavigationElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
 renderElement(tripEventsElement, new SortView().getElement(), RenderPosition.BEFOREEND);
 renderElement(tripEventsElement, eventListElement, RenderPosition.BEFOREEND);
-renderElement(eventListElement, new EditPointView(points[0]).getElement(), RenderPosition.AFTERBEGIN);
-renderElement(eventListElement, new EditPointView().getElement(), RenderPosition.BEFOREEND);
 
 points.forEach((point) => {
-  renderElement(eventListElement, new EventView(point).getElement(), RenderPosition.BEFOREEND);
+  const eventViewElement = new EventView(point).getElement();
+  renderElement(eventListElement, eventViewElement, RenderPosition.BEFOREEND);
+  const editPointViewElement = new EditPointView(point).getElement();
+  const rollUpButton = eventViewElement.querySelector('.event__rollup-btn');
+  const editForm = editPointViewElement.querySelector('form');
+  editForm.addEventListener('submit', replaceChildElement(
+    eventListElement,
+    eventViewElement,
+    editPointViewElement,
+  ));
+  rollUpButton.addEventListener('click', replaceChildElement(
+    eventListElement,
+    editPointViewElement,
+    eventViewElement,
+  ));
 });
 
