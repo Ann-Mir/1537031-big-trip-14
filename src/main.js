@@ -13,7 +13,6 @@ import NewEventButtonView from './view/new-event-button.js';
 import EventView from './view/event.js';
 import EventListView from './view/event-list.js';
 import EditPointView from './view/edit-point.js';
-import {replaceChildElement} from './mock/utils.js';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
 
@@ -43,15 +42,33 @@ points.forEach((point) => {
   const editPointViewElement = new EditPointView(point).getElement();
   const rollUpButton = eventViewElement.querySelector('.event__rollup-btn');
   const editForm = editPointViewElement.querySelector('form');
-  editForm.addEventListener('submit', replaceChildElement(
-    eventListElement,
-    eventViewElement,
-    editPointViewElement,
-  ));
-  rollUpButton.addEventListener('click', replaceChildElement(
-    eventListElement,
-    editPointViewElement,
-    eventViewElement,
-  ));
+
+  const replaceEventWithFrom = () => {
+    eventListElement.replaceChild(editPointViewElement, eventViewElement);
+  };
+
+  const replaceFormWithEvent = () => {
+    eventListElement.replaceChild(eventViewElement, editPointViewElement);
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormWithEvent();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  editForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    replaceFormWithEvent();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  rollUpButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    replaceEventWithFrom();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
 });
 

@@ -56,13 +56,6 @@ const getRandomLengthArray = (arr) => {
   return result;
 };
 
-const replaceChildElement = (parentElement, newChild, oldChild) => {
-  return (event) => {
-    event.preventDefault();
-    parentElement.replaceChild(newChild, oldChild);
-  };
-};
-
 export {
   MIN_PRICE,
   MAX_PRICE,
@@ -71,5 +64,4 @@ export {
   getRandomInteger,
   getRandomValueFromArray,
   getRandomLengthArray,
-  replaceChildElement
 };
