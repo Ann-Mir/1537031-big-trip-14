@@ -27,33 +27,27 @@ const eventListElement = new EventListView().getElement();
 const siteMainElement = document.querySelector('.page-main');
 const tripEventsElement = siteMainElement.querySelector('.trip-events');
 
-renderElement(tripMainElement, tripControlsElement, RenderPosition.AFTERBEGIN);
-renderElement(tripControlsElement, tripControlsNavigationElement, RenderPosition.AFTERBEGIN);
-renderElement(tripControlsElement, tripControlsFiltersElement, RenderPosition.BEFOREEND);
-renderElement(tripControlsFiltersElement, tripFiltersElement, RenderPosition.BEFOREEND);
-renderElement(tripMainElement, new NewEventButtonView().getElement(), RenderPosition.BEFOREEND);
-renderElement(tripControlsNavigationElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
-renderElement(tripEventsElement, eventListElement, RenderPosition.BEFOREEND);
-
-if (points.length === 0) {
-  renderElement(eventListElement, new NoEventView().getElement(), RenderPosition.BEFOREEND);
-} else {
-  renderElement(tripMainElement, new TripInfoView(points).getElement(), RenderPosition.AFTERBEGIN);
+const renderEventsList = (listContainer, events) => {
+  if (events.length === 0) {
+    renderElement(listContainer, new NoEventView().getElement(), RenderPosition.BEFOREEND);
+    return ;
+  }
+  renderElement(tripMainElement, new TripInfoView(events).getElement(), RenderPosition.AFTERBEGIN);
   renderElement(tripEventsElement, new SortView().getElement(), RenderPosition.BEFOREEND);
 
-  points.forEach((point) => {
-    const eventViewElement = new EventView(point).getElement();
-    renderElement(eventListElement, eventViewElement, RenderPosition.BEFOREEND);
-    const editPointViewElement = new EditPointView(point).getElement();
+  events.forEach((event) => {
+    const eventViewElement = new EventView(event).getElement();
+    renderElement(listContainer, eventViewElement, RenderPosition.BEFOREEND);
+    const editPointViewElement = new EditPointView(event).getElement();
     const rollUpButton = eventViewElement.querySelector('.event__rollup-btn');
     const editForm = editPointViewElement.querySelector('form');
 
     const replaceEventWithFrom = () => {
-      eventListElement.replaceChild(editPointViewElement, eventViewElement);
+      listContainer.replaceChild(editPointViewElement, eventViewElement);
     };
 
     const replaceFormWithEvent = () => {
-      eventListElement.replaceChild(eventViewElement, editPointViewElement);
+      listContainer.replaceChild(eventViewElement, editPointViewElement);
     };
 
     const onEscKeyDown = (evt) => {
@@ -76,4 +70,56 @@ if (points.length === 0) {
       document.addEventListener('keydown', onEscKeyDown);
     });
   });
-}
+};
+
+renderElement(tripMainElement, tripControlsElement, RenderPosition.AFTERBEGIN);
+renderElement(tripControlsElement, tripControlsNavigationElement, RenderPosition.AFTERBEGIN);
+renderElement(tripControlsElement, tripControlsFiltersElement, RenderPosition.BEFOREEND);
+renderElement(tripControlsFiltersElement, tripFiltersElement, RenderPosition.BEFOREEND);
+renderElement(tripMainElement, new NewEventButtonView().getElement(), RenderPosition.BEFOREEND);
+renderElement(tripControlsNavigationElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
+renderElement(tripEventsElement, eventListElement, RenderPosition.BEFOREEND);
+renderEventsList(eventListElement, points);
+
+// if (events.length === 0) {
+//   renderElement(eventListElement, new NoEventView().getElement(), RenderPosition.BEFOREEND);
+// } else {
+//   renderElement(tripMainElement, new TripInfoView(events).getElement(), RenderPosition.AFTERBEGIN);
+//   renderElement(tripEventsElement, new SortView().getElement(), RenderPosition.BEFOREEND);
+//
+//   events.forEach((point) => {
+//     const eventViewElement = new EventView(point).getElement();
+//     renderElement(eventListElement, eventViewElement, RenderPosition.BEFOREEND);
+//     const editPointViewElement = new EditPointView(point).getElement();
+//     const rollUpButton = eventViewElement.querySelector('.event__rollup-btn');
+//     const editForm = editPointViewElement.querySelector('form');
+//
+//     const replaceEventWithFrom = () => {
+//       eventListElement.replaceChild(editPointViewElement, eventViewElement);
+//     };
+//
+//     const replaceFormWithEvent = () => {
+//       eventListElement.replaceChild(eventViewElement, editPointViewElement);
+//     };
+//
+//     const onEscKeyDown = (evt) => {
+//       if (evt.key === 'Escape' || evt.key === 'Esc') {
+//         evt.preventDefault();
+//         replaceFormWithEvent();
+//         document.removeEventListener('keydown', onEscKeyDown);
+//       }
+//     };
+//
+//     editForm.addEventListener('submit', (event) => {
+//       event.preventDefault();
+//       replaceFormWithEvent();
+//       document.removeEventListener('keydown', onEscKeyDown);
+//     });
+//
+//     rollUpButton.addEventListener('click', (event) => {
+//       event.preventDefault();
+//       replaceEventWithFrom();
+//       document.addEventListener('keydown', onEscKeyDown);
+//     });
+//   });
+// }
