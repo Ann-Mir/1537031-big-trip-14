@@ -63,5 +63,5 @@ export {
   types,
   getRandomInteger,
   getRandomValueFromArray,
-  getRandomLengthArray,
+  getRandomLengthArray
 };

@@ -2,7 +2,7 @@ import {getOfferTypes} from './mock/offer.js';
 import {getPoint} from './mock/point.js';
 import {getDestinations} from './mock/destination.js';
 
-const POINTS_COUNT = 20;
+const POINTS_COUNT = 0;
 const DESTINATIONS_COUNT = 30;
 
 const OFFER_TYPES = getOfferTypes();
