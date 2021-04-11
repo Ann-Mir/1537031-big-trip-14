@@ -87,7 +87,7 @@ const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
-const renderElement = (container, element, place) => {
+const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
@@ -125,6 +125,6 @@ export {
   getEventPeriod,
   renderTemplate,
   RenderPosition,
-  renderElement,
+  render,
   createElement
 };
