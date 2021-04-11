@@ -41,6 +41,7 @@ const renderEventsList = (listContainer, events) => {
     const editPointViewElement = new EditPointView(event).getElement();
     const rollUpButton = eventViewElement.querySelector('.event__rollup-btn');
     const editForm = editPointViewElement.querySelector('form');
+    const closeFormButton = editForm.querySelector('.event__rollup-btn');
 
     const replaceEventWithFrom = () => {
       listContainer.replaceChild(editPointViewElement, eventViewElement);
@@ -57,6 +58,11 @@ const renderEventsList = (listContainer, events) => {
         document.removeEventListener('keydown', onEscKeyDown);
       }
     };
+
+    closeFormButton.addEventListener('click', () => {
+      replaceFormWithEvent();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
 
     editForm.addEventListener('submit', (event) => {
       event.preventDefault();
