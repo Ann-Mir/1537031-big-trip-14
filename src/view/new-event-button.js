@@ -1,19 +1,18 @@
 import {createElement} from '../utils.js';
 
-const createSiteMenuTemplate = () => {
-  return `<nav class="trip-controls__trip-tabs  trip-tabs">
-      <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
-      <a class="trip-tabs__btn" href="#">Stats</a>
-    </nav>`;
+const createNewEventButtonTemplate = () => {
+  return `<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">
+            New event
+          </button>`;
 };
 
-export default class SiteMenu {
+export default class NewEventButton {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createSiteMenuTemplate();
+    return createNewEventButtonTemplate();
   }
 
   getElement() {

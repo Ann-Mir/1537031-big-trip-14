@@ -1,17 +1,17 @@
-import {createElement} from '../utils';
+import {createElement} from '../utils.js';
 
-const createEventsListTemplate = () => {
-  return `<ul class="trip-events__list">
-    </ul>`;
+const createTripControlsTemplate = () => {
+  return `<div class="trip-main__trip-controls  trip-controls">
+    </div>`;
 };
 
-export default class EventList {
+export default class TripControls {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createEventsListTemplate();
+    return createTripControlsTemplate();
   }
 
   getElement() {
