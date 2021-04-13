@@ -1,4 +1,5 @@
-import {capitalizeFirstLetter, createElement, humanizeFullDateAndTime} from '../utils.js';
+import AbstractView from './abstract.js';
+import {capitalizeFirstLetter, humanizeFullDateAndTime} from '../utils.js';
 import {DEFAULT_POINT, DESTINATIONS, OFFER_TYPES} from '../data.js';
 
 const createOffersTypesTemplate = (currentOfferType) => {
@@ -100,25 +101,14 @@ export const createEditPointTemplate = (point=DEFAULT_POINT) => {
 };
 
 
-export default class EditPoint {
+export default class EditPoint extends AbstractView {
   constructor(point = DEFAULT_POINT) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }

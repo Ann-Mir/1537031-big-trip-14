@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 
 const createNewEventButtonTemplate = () => {
   return `<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">
@@ -6,24 +6,10 @@ const createNewEventButtonTemplate = () => {
           </button>`;
 };
 
-export default class NewEventButton {
-  constructor() {
-    this._element = null;
-  }
+export default class NewEventButton extends AbstractView {
 
   getTemplate() {
     return createNewEventButtonTemplate();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
