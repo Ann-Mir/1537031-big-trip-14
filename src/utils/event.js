@@ -1,12 +1,4 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from './mock/utils.js';
-
-const MIN_DAYS_GAP = -7;
-const MAX_DAYS_GAP = 7;
-
-const capitalizeFirstLetter = (string) => {
-  return string[0].toUpperCase() + string.slice(1);
-};
 
 const sumValues = (accumulator, currentValue) => {
   return accumulator + currentValue;
@@ -62,17 +54,6 @@ const humanizeDay = (date) => {
   return dayjs(date).format('DD');
 };
 
-const getRandomDate = () => {
-  const minutes = getRandomInteger(1, 60);
-  const hours = getRandomInteger(1, 24);
-  const daysGap = getRandomInteger(MIN_DAYS_GAP, MAX_DAYS_GAP);
-  return dayjs()
-    .add(daysGap, 'day')
-    .add(minutes, 'm')
-    .add(hours, 'hour')
-    .toDate();
-};
-
 const getEventPeriod = (startingPoint, endingPoint) => {
   const monthStart = dayjs(startingPoint.dateFrom).month();
   const monthEnd = dayjs(endingPoint.dateTo).month();
@@ -82,49 +63,15 @@ const getEventPeriod = (startingPoint, endingPoint) => {
   return `${humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDate(endingPoint.dateTo)}`;
 };
 
-const RenderPosition = {
-  AFTERBEGIN: 'afterbegin',
-  BEFOREEND: 'beforeend',
-};
-
-const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
-
-const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-const createElement = (template) => {
-  const newElement = document.createElement('div'); // 1
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-
-
 export {
-  capitalizeFirstLetter,
-  sumValues,
-  humanizeDuration,
-  isEventComing,
-  isEventExpired,
-  getRandomDate,
-  humanizeFullDateAndTime,
-  humanizeFullDate,
-  humanizeDate,
-  humanizeTime,
-  humanizeDay,
   getEventPeriod,
-  renderTemplate,
-  RenderPosition,
-  render,
-  createElement
+  humanizeDay,
+  humanizeDuration,
+  humanizeTime,
+  humanizeDate,
+  humanizeFullDate,
+  humanizeFullDateAndTime,
+  isEventExpired,
+  isEventComing,
+  sumValues
 };

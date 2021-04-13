@@ -1,5 +1,5 @@
 import {getRandomInteger, getRandomValueFromArray, MAX_PRICE, MIN_PRICE, types} from './utils.js';
-import {getRandomDate} from '../utils.js';
+import {getRandomDate} from '../utils/common';
 
 
 let pointId = 0;

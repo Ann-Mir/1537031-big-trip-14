@@ -1,6 +1,5 @@
 import AbstractView from './abstract.js';
-import {getEventPeriod} from '../utils.js';
-import {sumValues} from '../utils.js';
+import {getEventPeriod, sumValues} from '../utils/event';
 
 const createTripInfoTemplate = (points) => {
   const route = points.map((point) => {

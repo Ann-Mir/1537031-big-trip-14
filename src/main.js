@@ -1,10 +1,8 @@
-import './utils.js';
 import SiteMenuView from './view/site-menu.js';
 import TripInfoView from './view/trip-info.js';
 import SortView from './view/sort.js';
 import {DESTINATIONS, OFFER_TYPES, POINTS_COUNT} from './data.js';
-import {generatePoints} from './mock/point';
-import {render, RenderPosition} from './utils.js';
+import {generatePoints} from './mock/point.js';
 import TripControlsView from './view/trip-controls.js';
 import TripControlsNavigationView from './view/trip-controls-navigation.js';
 import TripControlsFiltersView from './view/trip-controls-filters.js';
@@ -14,6 +12,7 @@ import EventView from './view/event.js';
 import EventListView from './view/event-list.js';
 import EditPointView from './view/edit-point.js';
 import NoEventView from './view/no-event.js';
+import {render, RenderPosition} from './utils/render.js';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
 
@@ -41,9 +40,6 @@ const renderEventsList = (listContainer, events) => {
     render(listContainer, eventViewElement, RenderPosition.BEFOREEND);
     const editPointView = new EditPointView(event);
     const editPointViewElement = editPointView.getElement();
-    const rollUpButton = eventViewElement.querySelector('.event__rollup-btn');
-    /*const editForm = editPointViewElement.querySelector('form');*/
-    const closeFormButton = editPointViewElement.querySelector('.event__rollup-btn');
 
     const replaceEventWithFrom = () => {
       listContainer.replaceChild(editPointViewElement, eventViewElement);
@@ -61,31 +57,15 @@ const renderEventsList = (listContainer, events) => {
       }
     };
 
-    // closeFormButton.addEventListener('click', () => {
-    //   replaceFormWithEvent();
-    //   document.removeEventListener('keydown', onEscKeyDown);
-    // });
-
     editPointView.setCloseEditFormHandler(() => {
       replaceFormWithEvent();
       document.removeEventListener('keydown', onEscKeyDown);
     });
-    // editForm.addEventListener('submit', (event) => {
-    //   event.preventDefault();
-    //   replaceFormWithEvent();
-    //   document.removeEventListener('keydown', onEscKeyDown);
-    // });
 
     editPointView.setFormSubmitHandler(() => {
       replaceFormWithEvent();
       document.removeEventListener('keydown', onEscKeyDown);
     });
-
-    // rollUpButton.addEventListener('click', (event) => {
-    //   event.preventDefault();
-    //   replaceEventWithFrom();
-    //   document.addEventListener('keydown', onEscKeyDown);
-    // });
 
     eventView.setEditClickHandler(() => {
       replaceEventWithFrom();
