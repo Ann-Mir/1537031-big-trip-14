@@ -36,13 +36,14 @@ const renderEventsList = (listContainer, events) => {
   render(tripEventsElement, new SortView().getElement(), RenderPosition.BEFOREEND);
 
   events.forEach((event) => {
-    const eventViewElement = new EventView(event).getElement();
+    const eventView = new EventView(event);
+    const eventViewElement = eventView.getElement();
     render(listContainer, eventViewElement, RenderPosition.BEFOREEND);
     const editPointView = new EditPointView(event);
     const editPointViewElement = editPointView.getElement();
     const rollUpButton = eventViewElement.querySelector('.event__rollup-btn');
-    const editForm = editPointViewElement.querySelector('form');
-    const closeFormButton = editForm.querySelector('.event__rollup-btn');
+    /*const editForm = editPointViewElement.querySelector('form');*/
+    const closeFormButton = editPointViewElement.querySelector('.event__rollup-btn');
 
     const replaceEventWithFrom = () => {
       listContainer.replaceChild(editPointViewElement, eventViewElement);
@@ -76,8 +77,13 @@ const renderEventsList = (listContainer, events) => {
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    rollUpButton.addEventListener('click', (event) => {
-      event.preventDefault();
+    // rollUpButton.addEventListener('click', (event) => {
+    //   event.preventDefault();
+    //   replaceEventWithFrom();
+    //   document.addEventListener('keydown', onEscKeyDown);
+    // });
+
+    eventView.setEditClickHandler(() => {
       replaceEventWithFrom();
       document.addEventListener('keydown', onEscKeyDown);
     });
