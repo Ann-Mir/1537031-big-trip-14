@@ -38,7 +38,8 @@ const renderEventsList = (listContainer, events) => {
   events.forEach((event) => {
     const eventViewElement = new EventView(event).getElement();
     render(listContainer, eventViewElement, RenderPosition.BEFOREEND);
-    const editPointViewElement = new EditPointView(event).getElement();
+    const editPointView = new EditPointView(event);
+    const editPointViewElement = editPointView.getElement();
     const rollUpButton = eventViewElement.querySelector('.event__rollup-btn');
     const editForm = editPointViewElement.querySelector('form');
     const closeFormButton = editForm.querySelector('.event__rollup-btn');
@@ -64,8 +65,13 @@ const renderEventsList = (listContainer, events) => {
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    editForm.addEventListener('submit', (event) => {
-      event.preventDefault();
+    // editForm.addEventListener('submit', (event) => {
+    //   event.preventDefault();
+    //   replaceFormWithEvent();
+    //   document.removeEventListener('keydown', onEscKeyDown);
+    // });
+
+    editPointView.setFormSubmitHandler(() => {
       replaceFormWithEvent();
       document.removeEventListener('keydown', onEscKeyDown);
     });

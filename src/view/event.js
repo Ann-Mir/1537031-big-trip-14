@@ -4,7 +4,7 @@ import {
   humanizeFullDate,
   humanizeDuration,
   humanizeDate,
-  humanizeTime,
+  humanizeTime
 } from '../utils.js';
 
 const createOffersTemplate = (offers) => {
