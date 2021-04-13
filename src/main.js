@@ -61,11 +61,15 @@ const renderEventsList = (listContainer, events) => {
       }
     };
 
-    closeFormButton.addEventListener('click', () => {
+    // closeFormButton.addEventListener('click', () => {
+    //   replaceFormWithEvent();
+    //   document.removeEventListener('keydown', onEscKeyDown);
+    // });
+
+    editPointView.setCloseEditFormHandler(() => {
       replaceFormWithEvent();
       document.removeEventListener('keydown', onEscKeyDown);
     });
-
     // editForm.addEventListener('submit', (event) => {
     //   event.preventDefault();
     //   replaceFormWithEvent();
