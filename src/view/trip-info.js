@@ -1,10 +1,19 @@
 import AbstractView from './abstract.js';
 import {getEventPeriod, sumValues} from '../utils/event';
 
+const POINTS_TO_SHOW = 3;
+
 const createTripInfoTemplate = (points) => {
-  const route = points.map((point) => {
-    return point.destination.name;
-  }).join(' &mdash; ');
+  let route = '';
+  if (points.length <= POINTS_TO_SHOW) {
+    route = points.map((point) => {
+      return point.destination.name;
+    }).join(' &mdash; ');
+  } else {
+    const startingPoint = points[0];
+    const endingPoint = points[points.length - 1];
+    route = `${startingPoint.destination.name} — ... — ${endingPoint.destination.name}`;
+  }
 
   let totalPrice = 0;
   points.forEach((point) => {

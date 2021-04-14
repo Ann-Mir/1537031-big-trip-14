@@ -1,8 +1,8 @@
 import {getRandomInteger} from '../mock/utils.js';
 import dayjs from 'dayjs';
 
-export const MIN_DAYS_GAP = -7;
-export const MAX_DAYS_GAP = 7;
+const MIN_DAYS_GAP = -7;
+const MAX_DAYS_GAP = 7;
 
 const capitalizeFirstLetter = (string) => {
   return string[0].toUpperCase() + string.slice(1);
@@ -21,5 +21,7 @@ const getRandomDate = () => {
 
 export {
   getRandomDate,
-  capitalizeFirstLetter
+  capitalizeFirstLetter,
+  MIN_DAYS_GAP,
+  MAX_DAYS_GAP
 };
