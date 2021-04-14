@@ -1,4 +1,4 @@
-import {isEventComing, isEventExpired} from './utils.js';
+import {isEventComing, isEventExpired} from './utils/event.js';
 
 const pointsToFilterMap = {
   everything: (points) => {

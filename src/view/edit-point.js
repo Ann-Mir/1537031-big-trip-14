@@ -1,5 +1,7 @@
-import {capitalizeFirstLetter, createElement, humanizeFullDateAndTime} from '../utils.js';
+import AbstractView from './abstract.js';
 import {DEFAULT_POINT, DESTINATIONS, OFFER_TYPES} from '../data.js';
+import {capitalizeFirstLetter} from '../utils/common.js';
+import {humanizeFullDateAndTime} from '../utils/event.js';
 
 const createOffersTypesTemplate = (currentOfferType) => {
   const offerTypesArray = Array.from(OFFER_TYPES.keys());
@@ -100,25 +102,44 @@ export const createEditPointTemplate = (point=DEFAULT_POINT) => {
 };
 
 
-export default class EditPoint {
+export default class EditPoint extends AbstractView {
   constructor(point = DEFAULT_POINT) {
+    super();
     this._point = point;
-    this._element = null;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._closeEditFormHandler = this._closeEditFormHandler.bind(this);
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this
+      .getElement()
+      .querySelector('form')
+      .addEventListener('submit', this._formSubmitHandler);
+  }
+
+  _closeEditFormHandler(evt) {
+    evt.preventDefault();
+    this._callback.formClose();
+  }
+
+  setCloseEditFormHandler(callback) {
+    if (this.getElement().querySelector('.event__rollup-btn')) {
+
+      this._callback.formClose = callback;
+      this
+        .getElement()
+        .querySelector('.event__rollup-btn')
+        .addEventListener('click', this._closeEditFormHandler);
+    }
   }
 }
