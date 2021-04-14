@@ -13,7 +13,7 @@ import EventListView from './view/event-list.js';
 import EditPointView from './view/edit-point.js';
 import NoEventView from './view/no-event.js';
 import {render, RenderPosition} from './utils/render.js';
-import {replace} from './utils/render';
+import {replace} from './utils/render.js';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
 
