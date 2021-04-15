@@ -9,9 +9,9 @@ import TripControlsFiltersView from './view/trip-controls-filters.js';
 import FilterView from './view/filter.js';
 import NewEventButtonView from './view/new-event-button.js';
 import EventView from './view/event.js';
-import EventListView from './view/events-list.js';
+import EventsListView from './view/events-list.js';
 import EditPointView from './view/edit-point.js';
-import NoEventView from './view/no-events.js';
+import NoEventsView from './view/no-events.js';
 import TripEventsBoardView from './view/trip-events-board.js';
 import {render, RenderPosition} from './utils/render.js';
 import {replace} from './utils/render.js';
@@ -24,14 +24,14 @@ const tripMainElement = siteHeaderElement.querySelector('.trip-main');
 const tripControlsNavigation = new TripControlsNavigationView();
 const tripControlsFilters = new TripControlsFiltersView();
 const tripFilters = new FilterView();
-const eventList = new EventListView();
+const eventList = new EventsListView();
 const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
 const tripEventsBoard = new TripEventsBoardView();
 
 const renderEventsList = (listContainer, events) => {
   if (events.length === 0) {
-    render(listContainer, new NoEventView(), RenderPosition.BEFOREEND);
+    render(listContainer, new NoEventsView(), RenderPosition.BEFOREEND);
     return ;
   }
   render(tripMainElement, new TripInfoView(events), RenderPosition.AFTERBEGIN);
