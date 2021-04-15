@@ -12,6 +12,7 @@ import EventView from './view/event.js';
 import EventListView from './view/event-list.js';
 import EditPointView from './view/edit-point.js';
 import NoEventView from './view/no-event.js';
+import TripEventsBoardView from './view/trip-events-board.js';
 import {render, RenderPosition} from './utils/render.js';
 import {replace} from './utils/render.js';
 
@@ -25,7 +26,8 @@ const tripControlsFilters = new TripControlsFiltersView();
 const tripFilters = new FilterView();
 const eventList = new EventListView();
 const siteMainElement = document.querySelector('.page-main');
-const tripEventsElement = siteMainElement.querySelector('.trip-events');
+const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
+const tripEventsBoard = new TripEventsBoardView();
 
 const renderEventsList = (listContainer, events) => {
   if (events.length === 0) {
@@ -33,7 +35,7 @@ const renderEventsList = (listContainer, events) => {
     return ;
   }
   render(tripMainElement, new TripInfoView(events), RenderPosition.AFTERBEGIN);
-  render(tripEventsElement, new SortView(), RenderPosition.BEFOREEND);
+  render(tripEventsBoard, new SortView(), RenderPosition.AFTERBEGIN);
 
   events.forEach((event) => {
     const eventView = new EventView(event);
@@ -65,11 +67,12 @@ const renderEventsList = (listContainer, events) => {
   });
 };
 
+render(bodyContainerElement, tripEventsBoard, RenderPosition.AFTERBEGIN);
 render(tripMainElement, tripControls, RenderPosition.AFTERBEGIN);
 render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
 render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
 render(tripControlsFilters, tripFilters, RenderPosition.BEFOREEND);
 render(tripMainElement, new NewEventButtonView(), RenderPosition.BEFOREEND);
 render(tripControlsNavigation, new SiteMenuView(), RenderPosition.BEFOREEND);
-render(tripEventsElement, eventList, RenderPosition.BEFOREEND);
+render(tripEventsBoard, eventList, RenderPosition.BEFOREEND);
 renderEventsList(eventList, points);
