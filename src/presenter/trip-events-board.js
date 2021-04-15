@@ -23,7 +23,6 @@ export default class TripEventsBoard {
   }
 
   _renderSort() {
-    // Метод для рендеринга сортировки
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
