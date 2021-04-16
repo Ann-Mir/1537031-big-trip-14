@@ -17,6 +17,7 @@ export default class TripEventsBoard {
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleTripEventEdit = this._handleTripEventEdit.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(eventsList) {
@@ -24,6 +25,12 @@ export default class TripEventsBoard {
     render(this._boardContainer, this._boardComponent, RenderPosition.AFTERBEGIN);
     render(this._boardComponent, this._tripEventsListComponent, RenderPosition.BEFOREEND);
     this._renderBoard();
+  }
+
+  _handleSortTypeChange(sortType) {
+    // - Сортируем задачи
+    // - Очищаем список
+    // - Рендерим список заново
   }
 
   _handleModeChange() {
@@ -34,6 +41,7 @@ export default class TripEventsBoard {
 
   _renderSort() {
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderEvent(tripEvent) {
