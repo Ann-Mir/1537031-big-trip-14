@@ -74,7 +74,7 @@ export default class TripEventsBoard {
     Object
       .values(this._tripEventPresenter)
       .forEach((presenter) => presenter.destroy());
-    this._taskPresenter = {};
+    this._tripEventPresenter = {};
   }
 
   _renderBoard() {
