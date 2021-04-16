@@ -10,6 +10,7 @@ import TripEventPresenter from './trip-event.js';
 export default class TripEventsBoard {
   constructor(boardContainer) {
     this._boardContainer = boardContainer;
+    this._tripEventPresenter = {};
     this._boardComponent = new TripEventsBoardView();
     this._sortComponent = new SortView();
     this._tripEventsListComponent = new EventsListView();
@@ -27,9 +28,10 @@ export default class TripEventsBoard {
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderEvent(event) {
+  _renderEvent(tripEvent) {
     const tripEventPresenter = new TripEventPresenter(this._tripEventsListComponent);
-    tripEventPresenter.init(event);
+    tripEventPresenter.init(tripEvent);
+    this._tripEventPresenter[tripEvent.id] = tripEventPresenter;
     // const eventView = new TripEventView(event);
     // render(this._tripEventsListComponent, eventView, RenderPosition.BEFOREEND);
     // const editPointView = new TripEventEditView(event);
@@ -66,6 +68,13 @@ export default class TripEventsBoard {
 
   _renderNoEvents() {
     render(this._tripEventsListComponent, this._noEventsComponent, RenderPosition.BEFOREEND);
+  }
+
+  _clearEventsList() {
+    Object
+      .values(this._tripEventPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._taskPresenter = {};
   }
 
   _renderBoard() {
