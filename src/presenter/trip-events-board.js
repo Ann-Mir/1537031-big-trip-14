@@ -2,7 +2,7 @@ import TripEventsBoardView from '../view/trip-events-board.js';
 import SortView from '../view/sort.js';
 import EventsListView from '../view/events-list.js';
 import NoEventsView from '../view/no-events.js';
-import {render, RenderPosition} from '../utils/render.js';
+import {remove, render, RenderPosition} from '../utils/render.js';
 import TripEventPresenter from './trip-event.js';
 import {updateItem} from '../utils/common.js';
 import {SortType} from '../utils/constants.js';
@@ -13,10 +13,10 @@ export default class TripEventsBoard {
     this._boardContainer = boardContainer;
     this._tripEventPresenter = {};
     this._boardComponent = new TripEventsBoardView();
-    this._sortComponent = new SortView();
     this._tripEventsListComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView();
     this._currentSortType = SortType.DAY;
+    this._sortComponent = null;
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleTripEventEdit = this._handleTripEventEdit.bind(this);
@@ -48,6 +48,11 @@ export default class TripEventsBoard {
   }
 
   _renderSort() {
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+
+    this._sortComponent = new SortView(this._currentSortType);
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
@@ -77,6 +82,7 @@ export default class TripEventsBoard {
       .values(this._tripEventPresenter)
       .forEach((presenter) => presenter.destroy());
     this._tripEventPresenter = {};
+    remove(this._sortComponent);
   }
 
   _handleTripEventEdit(updatedTripEvent) {
@@ -96,7 +102,6 @@ export default class TripEventsBoard {
       default:
         this._eventsList = this._sourcedEventsList.slice();
     }
-
     this._currentSortType = sortType;
   }
 
