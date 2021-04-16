@@ -40,7 +40,7 @@ const createEventTemplate = (point) => {
               <ul class="event__selected-offers">
                 ${offersList}
               </ul>
-              <button class="${favoriteButtonClasses}" type="button">
+              <button class="event__favorite-btn ${favoriteButtonClasses}" type="button">
                   <span class="visually-hidden">Add to favorite</span>
                   <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
                     <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
@@ -55,19 +55,33 @@ const createEventTemplate = (point) => {
 
 
 export default class TripEvent extends AbstractView {
-  constructor(point) {
+  constructor(tripEvent) {
     super();
-    this._point = point;
+    this._tripEvent = tripEvent;
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
-    return createEventTemplate(this._point);
+    return createEventTemplate(this._tripEvent);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   }
 
   _editClickHandler(evt) {
     evt.preventDefault();
     this._callback.editClick();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this
+      .getElement()
+      .querySelector('.event__favorite-btn')
+      .addEventListener('click', this._favoriteClickHandler);
   }
 
   setEditClickHandler(callback) {

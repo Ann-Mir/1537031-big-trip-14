@@ -103,20 +103,20 @@ export const createEditPointTemplate = (point=DEFAULT_POINT) => {
 
 
 export default class TripEventEdit extends AbstractView {
-  constructor(point = DEFAULT_POINT) {
+  constructor(tripEvent = DEFAULT_POINT) {
     super();
-    this._point = point;
+    this._tripEvent = tripEvent;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeEditFormHandler = this._closeEditFormHandler.bind(this);
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._point);
+    return createEditPointTemplate(this._tripEvent);
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._tripEvent);
   }
 
   setFormSubmitHandler(callback) {

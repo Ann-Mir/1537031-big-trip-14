@@ -32,7 +32,7 @@ export default class TripEventsBoard {
   }
 
   _renderEvent(tripEvent) {
-    const tripEventPresenter = new TripEventPresenter(this._tripEventsListComponent);
+    const tripEventPresenter = new TripEventPresenter(this._tripEventsListComponent, this._handleTripEventEdit);
     tripEventPresenter.init(tripEvent);
     this._tripEventPresenter[tripEvent.id] = tripEventPresenter;
     // const eventView = new TripEventView(event);
