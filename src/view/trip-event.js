@@ -54,7 +54,7 @@ const createEventTemplate = (point) => {
 };
 
 
-export default class Event extends AbstractView {
+export default class TripEvent extends AbstractView {
   constructor(point) {
     super();
     this._point = point;

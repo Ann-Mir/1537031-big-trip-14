@@ -102,7 +102,7 @@ export const createEditPointTemplate = (point=DEFAULT_POINT) => {
 };
 
 
-export default class EditPoint extends AbstractView {
+export default class TripEventEdit extends AbstractView {
   constructor(point = DEFAULT_POINT) {
     super();
     this._point = point;
