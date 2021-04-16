@@ -17,13 +17,35 @@ export default class TripEvent {
   init(tripEvent) {
     this._tripEvent = tripEvent;
 
+    const prevTripEventComponent = this._tripEventComponent;
+    const prevTripEventEditComponent = this._tripEventEditComponent;
+
     this._tripEventComponent = new TripEventView(tripEvent);
     this._tripEventEditComponent = new TripEventEditView(tripEvent);
 
     this._tripEventComponent.setEditClickHandler(this._handleEditClick);
     this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
 
-    render(this._tripEventsListContainer, this._tripEventComponent, RenderPosition.BEFOREEND);
+    if (prevTripEventComponent === null || prevTripEventEditComponent === null) {
+      render(this._tripEventsListContainer, this._tripEventComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    if (this._tripEventsListContainer.getElement().contains(prevTripEventComponent.getElement())) {
+      replace(this._tripEventComponent, prevTripEventComponent);
+    }
+
+    if (this._tripEventsListContainer.getElement().contains(prevTripEventEditComponent.getElement())) {
+      replace(this._tripEventEditComponent, prevTripEventEditComponent);
+    }
+
+    remove(prevTripEventComponent);
+    remove(prevTripEventEditComponent);
+  }
+
+  destroy() {
+    remove(this._tripEventComponent);
+    remove(this._tripEventEditComponent);
   }
 
   _replaceCardToForm() {
