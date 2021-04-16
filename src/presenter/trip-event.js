@@ -2,13 +2,20 @@ import TripEventView from '../view/trip-event.js';
 import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 export default class TripEvent {
-  constructor(tripEventsListContainer, changeData) {
+  constructor(tripEventsListContainer, changeData, changeMode) {
     this._tripEventsListContainer = tripEventsListContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
 
     this._tripEventComponent = null;
     this._tripEventEditComponent = null;
+    this._mode = Mode.DEFAULT;
 
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
@@ -36,6 +43,14 @@ export default class TripEvent {
       return;
     }
 
+    if (this._mode === Mode.DEFAULT) {
+      replace(this._tripEventComponent, prevTripEventComponent);
+    }
+
+    if (this._mode === Mode.EDITING) {
+      replace(this._tripEventEditComponent, prevTripEventEditComponent);
+    }
+
     if (this._tripEventsListContainer.getElement().contains(prevTripEventComponent.getElement())) {
       replace(this._tripEventComponent, prevTripEventComponent);
     }
@@ -53,14 +68,23 @@ export default class TripEvent {
     remove(this._tripEventEditComponent);
   }
 
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToCard();
+    }
+  }
+
   _replaceCardToForm() {
     replace(this._tripEventEditComponent, this._tripEventComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _replaceFormToCard() {
     replace(this._tripEventComponent, this._tripEventEditComponent);
     document.removeEventListener('keydown', this._escKeyDownHandler);
+    this._mode = Mode.DEFAULT;
   }
 
   _escKeyDownHandler(evt) {

@@ -2,9 +2,7 @@ import TripEventsBoardView from '../view/trip-events-board.js';
 import SortView from '../view/sort.js';
 import EventsListView from '../view/events-list.js';
 import NoEventsView from '../view/no-events.js';
-import {render, RenderPosition, replace} from '../utils/render.js';
-import TripEventView from '../view/trip-event.js';
-import TripEventEditView from '../view/trip-event-edit.js';
+import {render, RenderPosition} from '../utils/render.js';
 import TripEventPresenter from './trip-event.js';
 import {updateItem} from '../utils/common.js';
 
@@ -17,6 +15,7 @@ export default class TripEventsBoard {
     this._tripEventsListComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView();
 
+    this._handleModeChange = this._handleModeChange.bind(this);
     this._handleTripEventEdit = this._handleTripEventEdit.bind(this);
   }
 
@@ -27,40 +26,24 @@ export default class TripEventsBoard {
     this._renderBoard();
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._tripEventPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   _renderSort() {
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderEvent(tripEvent) {
-    const tripEventPresenter = new TripEventPresenter(this._tripEventsListComponent, this._handleTripEventEdit);
+    const tripEventPresenter = new TripEventPresenter(
+      this._tripEventsListComponent,
+      this._handleTripEventEdit,
+      this._handleModeChange,
+    );
     tripEventPresenter.init(tripEvent);
     this._tripEventPresenter[tripEvent.id] = tripEventPresenter;
-    // const eventView = new TripEventView(event);
-    // render(this._tripEventsListComponent, eventView, RenderPosition.BEFOREEND);
-    // const editPointView = new TripEventEditView(event);
-    //
-    // const onEscKeyDown = (evt) => {
-    //   if (evt.key === 'Escape' || evt.key === 'Esc') {
-    //     evt.preventDefault();
-    //     replace(eventView, editPointView);
-    //     document.removeEventListener('keydown', onEscKeyDown);
-    //   }
-    // };
-    //
-    // editPointView.setCloseEditFormHandler(() => {
-    //   replace(eventView, editPointView);
-    //   document.removeEventListener('keydown', onEscKeyDown);
-    // });
-    //
-    // editPointView.setFormSubmitHandler(() => {
-    //   replace(eventView, editPointView);
-    //   document.removeEventListener('keydown', onEscKeyDown);
-    // });
-    //
-    // eventView.setEditClickHandler(() => {
-    //   replace(editPointView, eventView);
-    //   document.addEventListener('keydown', onEscKeyDown);
-    // });
   }
 
   _renderEvents(events) {
