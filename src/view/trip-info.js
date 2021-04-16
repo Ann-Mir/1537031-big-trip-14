@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import {getEventPeriod, sumValues} from '../utils/event';
+import {getEventPeriod, sumValues} from '../utils/trip-event.js';
 
 const POINTS_TO_SHOW = 3;
 

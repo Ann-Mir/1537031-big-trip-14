@@ -5,6 +5,8 @@ import NoEventsView from '../view/no-events.js';
 import {render, RenderPosition} from '../utils/render.js';
 import TripEventPresenter from './trip-event.js';
 import {updateItem} from '../utils/common.js';
+import {SortType} from '../utils/constants.js';
+import {sortByPrice, sortByTime} from '../utils/trip-event.js';
 
 export default class TripEventsBoard {
   constructor(boardContainer) {
@@ -14,6 +16,7 @@ export default class TripEventsBoard {
     this._sortComponent = new SortView();
     this._tripEventsListComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView();
+    this._currentSortType = SortType.DAY;
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleTripEventEdit = this._handleTripEventEdit.bind(this);
@@ -22,15 +25,20 @@ export default class TripEventsBoard {
 
   init(eventsList) {
     this._eventsList = eventsList.slice();
+    this._sourcedEventsList = eventsList.slice();
+
     render(this._boardContainer, this._boardComponent, RenderPosition.AFTERBEGIN);
     render(this._boardComponent, this._tripEventsListComponent, RenderPosition.BEFOREEND);
     this._renderBoard();
   }
 
   _handleSortTypeChange(sortType) {
-    // - Сортируем задачи
-    // - Очищаем список
-    // - Рендерим список заново
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortEvents(sortType);
+    this._clearEventsList();
+    this._renderBoard();
   }
 
   _handleModeChange() {
@@ -73,7 +81,23 @@ export default class TripEventsBoard {
 
   _handleTripEventEdit(updatedTripEvent) {
     this._eventsList = updateItem(this._eventsList, updatedTripEvent);
+    this._sourcedEventsList = updateItem(this._sourcedEventsList, updatedTripEvent);
     this._tripEventPresenter[updatedTripEvent.id].init(updatedTripEvent);
+  }
+
+  _sortEvents(sortType) {
+    switch (sortType) {
+      case SortType.PRICE:
+        this._eventsList.sort(sortByPrice);
+        break;
+      case SortType.TIME:
+        this._eventsList.sort(sortByTime);
+        break;
+      default:
+        this._eventsList = this._sourcedEventsList.slice();
+    }
+
+    this._currentSortType = sortType;
   }
 
   _renderBoard() {

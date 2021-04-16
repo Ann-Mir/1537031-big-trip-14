@@ -1,6 +1,6 @@
 import AbstractView from './abstract.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
-import {humanizeDate, humanizeDuration, humanizeFullDate, humanizeTime} from '../utils/event.js';
+import {humanizeDate, humanizeDuration, humanizeFullDate, humanizeTime} from '../utils/trip-event.js';
 
 const createOffersTemplate = (offers) => {
   const offersList = offers.map((offer) => {

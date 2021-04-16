@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 import {DEFAULT_POINT, DESTINATIONS, OFFER_TYPES} from '../data.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
-import {humanizeFullDateAndTime} from '../utils/event.js';
+import {humanizeFullDateAndTime} from '../utils/trip-event.js';
 
 const createOffersTypesTemplate = (currentOfferType) => {
   const offerTypesArray = Array.from(OFFER_TYPES.keys());
