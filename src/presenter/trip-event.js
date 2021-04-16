@@ -11,6 +11,7 @@ export default class TripEvent {
 
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleEditFormClose = this._handleEditFormClose.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -25,6 +26,7 @@ export default class TripEvent {
 
     this._tripEventComponent.setEditClickHandler(this._handleEditClick);
     this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._tripEventEditComponent.setCloseEditFormHandler(this._handleEditFormClose);
 
     if (prevTripEventComponent === null || prevTripEventEditComponent === null) {
       render(this._tripEventsListContainer, this._tripEventComponent, RenderPosition.BEFOREEND);
@@ -71,5 +73,10 @@ export default class TripEvent {
 
   _handleFormSubmit() {
     this._replaceFormToCard();
+  }
+
+  _handleEditFormClose() {
+    this._replaceFormToCard();
+    document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 }
