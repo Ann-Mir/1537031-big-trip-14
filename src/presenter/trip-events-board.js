@@ -2,10 +2,11 @@ import TripEventsBoardView from '../view/trip-events-board.js';
 import SortView from '../view/sort.js';
 import EventsListView from '../view/events-list.js';
 import NoEventsView from '../view/no-events.js';
-import {render, RenderPosition, replace} from '../utils/render';
+import {render, RenderPosition, replace} from '../utils/render.js';
 import TripEventView from '../view/trip-event.js';
 import TripEventEditView from '../view/trip-event-edit.js';
 import TripEventPresenter from './trip-event.js';
+import {updateItem} from '../utils/common.js';
 
 export default class TripEventsBoard {
   constructor(boardContainer) {
@@ -15,6 +16,8 @@ export default class TripEventsBoard {
     this._sortComponent = new SortView();
     this._tripEventsListComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView();
+
+    this._handleTripEventEdit = this._handleTripEventEdit.bind(this);
   }
 
   init(eventsList) {
@@ -75,6 +78,11 @@ export default class TripEventsBoard {
       .values(this._tripEventPresenter)
       .forEach((presenter) => presenter.destroy());
     this._tripEventPresenter = {};
+  }
+
+  _handleTripEventEdit(updatedTripEvent) {
+    this._eventsList = updateItem(this._eventsList, updatedTripEvent);
+    this._tripEventPresenter[updatedTripEvent.id].init(updatedTripEvent);
   }
 
   _renderBoard() {
