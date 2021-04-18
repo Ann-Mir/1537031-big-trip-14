@@ -33,10 +33,20 @@ const updateItem = (items, update) => {
   ];
 };
 
+const cloneObjectValue = (obj, value) => {
+  return Object.assign(
+    {},
+    obj,
+    value,
+  );
+};
+
+
 export {
   getRandomDate,
   capitalizeFirstLetter,
   updateItem,
+  cloneObjectValue,
   MIN_DAYS_GAP,
   MAX_DAYS_GAP
 };

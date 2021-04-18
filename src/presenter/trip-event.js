@@ -1,6 +1,7 @@
 import TripEventView from '../view/trip-event.js';
 import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
+import {cloneObjectValue} from '../utils/common';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -109,13 +110,7 @@ export default class TripEvent {
 
   _handleFavoriteClick() {
     this._changeData(
-      Object.assign(
-        {},
-        this._tripEvent,
-        {
-          isFavorite: !this._tripEvent.isFavorite,
-        },
-      ),
+      cloneObjectValue(this._tripEvent, {isFavorite: !this._tripEvent.isFavorite}),
     );
   }
 }

@@ -20,10 +20,8 @@ const tripMainElement = siteHeaderElement.querySelector('.trip-main');
 const tripControlsNavigation = new TripControlsNavigationView();
 const tripControlsFilters = new TripControlsFiltersView();
 const tripFilters = new FilterView();
-const eventList = new EventsListView();
 const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
-const tripEventsBoard = new TripEventsBoardView();
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement);
 
 
@@ -34,5 +32,4 @@ render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
 render(tripControlsFilters, tripFilters, RenderPosition.BEFOREEND);
 render(tripMainElement, new NewEventButtonView(), RenderPosition.BEFOREEND);
 render(tripControlsNavigation, new SiteMenuView(), RenderPosition.BEFOREEND);
-render(tripEventsBoard, eventList, RenderPosition.BEFOREEND);
 tripEventsBoardPresenter.init(points);
