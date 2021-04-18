@@ -7,8 +7,6 @@ import TripControlsNavigationView from './view/trip-controls-navigation.js';
 import TripControlsFiltersView from './view/trip-controls-filters.js';
 import FilterView from './view/filter.js';
 import NewEventButtonView from './view/new-event-button.js';
-import EventsListView from './view/events-list.js';
-import TripEventsBoardView from './view/trip-events-board.js';
 import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import {render, RenderPosition} from './utils/render.js';
 
