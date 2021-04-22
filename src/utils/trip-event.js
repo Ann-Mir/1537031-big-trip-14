@@ -58,22 +58,6 @@ const humanizeDay = (date) => {
   return dayjs(date).format('DD');
 };
 
-const getWeightForNull = (item1, item2) => {
-  if (item1 === null && item2 === null) {
-    return 0;
-  }
-
-  if (item1 === null) {
-    return 1;
-  }
-
-  if (item2 === null) {
-    return -1;
-  }
-
-  return null;
-};
-
 const getEventPeriod = (startingPoint, endingPoint) => {
   const monthStart = dayjs(startingPoint.dateFrom).month();
   const monthEnd = dayjs(endingPoint.dateTo).month();
@@ -84,12 +68,6 @@ const getEventPeriod = (startingPoint, endingPoint) => {
 };
 
 const sortByPrice = (firstEvent, secondEvent) => {
-  const weight = getWeightForNull(firstEvent.basePrice, secondEvent.basePrice);
-
-  if (weight !== null) {
-    return weight;
-  }
-
   return secondEvent.basePrice - firstEvent.basePrice;
 };
 
