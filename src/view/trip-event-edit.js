@@ -13,19 +13,21 @@ const createOffersTypesTemplate = (currentOfferType) => {
   }).join('');
 };
 
-const createAvailableOffersTemplate = (offers) => {
+const createAvailableOffersTemplate = (type, checkedOffers) => {
+  const offers = OFFER_TYPES.get(type);
   return offers.map((offer) => {
-    return `<div class="event__available-offers">
-              <div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="event-offer-${offer.title}">
-                <label class="event__offer-label" for="event-offer-${offer.title}-${offer.title}-${offer.id}">
-                  <span class="event__offer-title">${offer.title}</span>
-                  &plus;&euro;&nbsp;
-                  <span class="event__offer-price">${offer.price}</span>
-                </label>
-              </div>`;
+    const isOfferChecked = checkedOffers ? checkedOffers.some((item) => item.id === offer.id) : false;
+    return `<div class="event__offer-selector">
+              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="event-offer-${offer.title}" ${isOfferChecked ? 'checked' : ''}>
+              <label class="event__offer-label" for="event-offer-${offer.title}-${offer.title}-${offer.id}">
+                <span class="event__offer-title">${offer.title}</span>
+                &plus;&euro;&nbsp;
+                <span class="event__offer-price">${offer.price}</span>
+              </label>
+            </div>`;
   }).join('');
 };
+
 
 const createDestinationsOptionsTemplate = () => {
   return DESTINATIONS.map((destination) => {
@@ -89,7 +91,9 @@ export const createEditPointTemplate = (point=DEFAULT_POINT) => {
               <section class="event__details">
                 <section class="event__section  event__section--offers">
                   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-                  ${createAvailableOffersTemplate(point.offers)}
+                  <div class="event__available-offers">
+                    ${createAvailableOffersTemplate(point.type, point.offers)}
+                  </div>
                 </section>
 
                 <section class="event__section  event__section--destination">
