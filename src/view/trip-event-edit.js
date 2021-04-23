@@ -28,7 +28,6 @@ const createAvailableOffersTemplate = (type, checkedOffers) => {
   }).join('');
 };
 
-
 const createDestinationsOptionsTemplate = () => {
   return DESTINATIONS.map((destination) => {
     return `<option value="${destination.name}"></option>`;
@@ -36,39 +35,39 @@ const createDestinationsOptionsTemplate = () => {
 };
 
 const createPhotosList = (photosList) => {
-  return photosList ? `<div class="event__photos-container">
+  return `<div class="event__photos-container">
   <div class="event__photos-tape">
     ${photosList.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`)}
   </div>
-</div>` : '';
+</div>`;
 };
 
-const createEditPointTemplate = (point=DEFAULT_POINT) => {
-  const hasOffers = OFFER_TYPES.get(point.type).length > 0;
-  const type = capitalizeFirstLetter(point.type);
+const createEditPointTemplate = (state) => {
+  const {basePrice, type, hasOffers, hasDestination, hasImages, offers, destination, dateFrom, dateTo} = state;
+  const typeName = capitalizeFirstLetter(type);
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
               <header class="event__header">
                 <div class="event__type-wrapper">
                   <label class="event__type  event__type-btn" for="event-type-toggle-1">
                     <span class="visually-hidden">Choose event type</span>
-                    <img class="event__type-icon" width="17" height="17" src="img/icons/${point.type}.png" alt="Event type icon">
+                    <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
                   </label>
                   <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
                   <div class="event__type-list">
                     <fieldset class="event__type-group">
                       <legend class="visually-hidden">Event type</legend>
-                          ${createOffersTypesTemplate(point.type)}
+                          ${createOffersTypesTemplate(type)}
                     </fieldset>
                   </div>
                 </div>
 
-                <div class="event__field-group  event__field-group--destination">
+                <div class="event__field-group  event__field-group--destination ${hasDestination ? '' : 'visually-hidden'}">
                   <label class="event__label  event__type-output" for="event-destination-1">
-                    ${type}
+                    ${typeName}
                   </label>
-                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${point.destination.name}" list="destination-list-1">
+                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${hasDestination ? destination.name : ''}" list="destination-list-1">
                   <datalist id="destination-list-1">
                     ${createDestinationsOptionsTemplate()}
                   </datalist>
@@ -76,10 +75,10 @@ const createEditPointTemplate = (point=DEFAULT_POINT) => {
 
                 <div class="event__field-group  event__field-group--time">
                   <label class="visually-hidden" for="event-start-time-1">From</label>
-                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeFullDateAndTime(point.dateFrom)}">
+                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeFullDateAndTime(dateFrom)}">
                   &mdash;
                   <label class="visually-hidden" for="event-end-time-1">To</label>
-                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeFullDateAndTime(point.dateTo)}">
+                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeFullDateAndTime(dateTo)}">
                 </div>
 
                 <div class="event__field-group  event__field-group--price">
@@ -87,7 +86,7 @@ const createEditPointTemplate = (point=DEFAULT_POINT) => {
                     <span class="visually-hidden">Price</span>
                     &euro;
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
+                  <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -100,14 +99,14 @@ const createEditPointTemplate = (point=DEFAULT_POINT) => {
                 <section class="event__section  event__section--offers ${hasOffers ? '' : 'visually-hidden'}">
                   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
                   <div class="event__available-offers">
-                    ${createAvailableOffersTemplate(point.type, point.offers)}
+                    ${hasOffers ? createAvailableOffersTemplate(type, offers) : ''}
                   </div>
                 </section>
 
-                <section class="event__section  event__section--destination ${point.destination ? '' : 'visually-hidden'}">
+                <section class="event__section  event__section--destination ${hasDestination ? '' : 'visually-hidden'}">
                   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                  <p class="event__destination-description">${point.destination.description}</p>
-                  ${createPhotosList(point.destination.pictures)}
+                  <p class="event__destination-description">${hasDestination ? destination.description : ''}</p>
+                  ${hasImages ? createPhotosList(destination.pictures) : ''}
                 </section>
               </section>
             </form>
@@ -118,18 +117,18 @@ const createEditPointTemplate = (point=DEFAULT_POINT) => {
 export default class TripEventEdit extends AbstractView {
   constructor(tripEvent = DEFAULT_POINT) {
     super();
-    this._tripEvent = tripEvent;
+    this._state = TripEventEdit.parseTripEventToState(tripEvent);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeEditFormHandler = this._closeEditFormHandler.bind(this);
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._tripEvent);
+    return createEditPointTemplate(this._state);
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(this._tripEvent);
+    this._callback.formSubmit(this._state);
   }
 
   setFormSubmitHandler(callback) {
@@ -161,9 +160,9 @@ export default class TripEventEdit extends AbstractView {
       {},
       tripEvent,
       {
-        hasOffers: OFFER_TYPES.get(tripEvent.type) !== 0,
+        hasOffers: OFFER_TYPES.get(tripEvent.type).length !== 0,
         hasDestination: tripEvent.destination !== null,
-        hasImages: tripEvent.destination.pictures.length !== 0,
+        hasImages: tripEvent.destination !== null && tripEvent.destination.pictures.length !== 0,
       },
     );
   }
@@ -171,24 +170,21 @@ export default class TripEventEdit extends AbstractView {
   static parseStateToTripEvent(state) {
     state = Object.assign({}, state);
 
-    if (!state.isDueDate) {
-      state.dueDate = null;
+    if (!state.hasOffers) {
+      state.offers = [];
     }
 
-    if (!state.isRepeating) {
-      state.repeating = {
-        mo: false,
-        tu: false,
-        we: false,
-        th: false,
-        fr: false,
-        sa: false,
-        su: false,
-      };
+    if (!state.hasDestination) {
+      state.destination = null;
     }
 
-    delete state.isDueDate;
-    delete state.isRepeating;
+    if (state.hasDestination && !state.hasImages) {
+      state.destination.pictures = [];
+    }
+
+    delete state.hasImages;
+    delete state.hasOffers;
+    delete state.hasDestination;
 
     return state;
   }
