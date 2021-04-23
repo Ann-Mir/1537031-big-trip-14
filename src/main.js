@@ -11,7 +11,7 @@ import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import {render, RenderPosition} from './utils/render.js';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
-
+console.log(points);
 const siteHeaderElement = document.querySelector('.page-header');
 const tripControls = new TripControlsView();
 const tripMainElement = siteHeaderElement.querySelector('.trip-main');
