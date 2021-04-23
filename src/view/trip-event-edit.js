@@ -44,7 +44,7 @@ const createPhotosList = (photosList) => {
 };
 
 const createEditPointTemplate = (point=DEFAULT_POINT) => {
-  const hasOffers = point.offers.length > 0;
+  const hasOffers = OFFER_TYPES.get(point.type).length > 0;
   const type = capitalizeFirstLetter(point.type);
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -154,5 +154,42 @@ export default class TripEventEdit extends AbstractView {
         .querySelector('.event__rollup-btn')
         .addEventListener('click', this._closeEditFormHandler);
     }
+  }
+
+  static parseTripEventToState(tripEvent) {
+    return Object.assign(
+      {},
+      tripEvent,
+      {
+        hasOffers: OFFER_TYPES.get(tripEvent.type) !== 0,
+        hasDestination: tripEvent.destination !== null,
+        hasImages: tripEvent.destination.pictures.length !== 0,
+      },
+    );
+  }
+
+  static parseStateToTripEvent(state) {
+    state = Object.assign({}, state);
+
+    if (!state.isDueDate) {
+      state.dueDate = null;
+    }
+
+    if (!state.isRepeating) {
+      state.repeating = {
+        mo: false,
+        tu: false,
+        we: false,
+        th: false,
+        fr: false,
+        sa: false,
+        su: false,
+      };
+    }
+
+    delete state.isDueDate;
+    delete state.isRepeating;
+
+    return state;
   }
 }
