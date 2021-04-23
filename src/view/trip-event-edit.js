@@ -43,7 +43,7 @@ const createPhotosList = (photosList) => {
 };
 
 const createEditPointTemplate = (availableOffers, state) => {
-  const {basePrice, type, hasOffers, hasDestination, hasImages, offers, destination, dateFrom, dateTo} = state;
+  const {basePrice, type, hasOffers, hasDestination, hasDescription, hasImages, offers, destination, dateFrom, dateTo} = state;
   const typeName = capitalizeFirstLetter(type);
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -105,7 +105,7 @@ const createEditPointTemplate = (availableOffers, state) => {
 
                 <section class="event__section  event__section--destination ${hasDestination ? '' : 'visually-hidden'}">
                   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                  <p class="event__destination-description">${hasDestination ? destination.description : ''}</p>
+                  <p class="event__destination-description ${hasDescription ? '' : 'visually-hidden'}">${destination.description}</p>
                   ${hasImages ? createPhotosList(destination.pictures) : ''}
                 </section>
               </section>
@@ -123,6 +123,7 @@ export default class TripEventEdit extends AbstractView {
     this._closeEditFormHandler = this._closeEditFormHandler.bind(this);
     this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
+    this._priceChangeHAndler = this._priceChangeHAndler.bind(this);
     this._setInnerHandlers();
   }
 
@@ -133,6 +134,23 @@ export default class TripEventEdit extends AbstractView {
     this.getElement()
       .querySelector('.event__input--destination')
       .addEventListener('blur', this._destinationToggleHandler);
+    this.getElement()
+      .querySelector('.event__input--price')
+      .addEventListener('input', this._priceChangeHAndler);
+  }
+
+  _priceChangeHAndler(evt) {
+    evt.preventDefault();
+    const priceFormat = new RegExp(/^\d+$/);
+    if (!priceFormat.test(evt.target.value)) {
+      evt.target.setCustomValidity('Price should be a whole integer');
+      evt.target.reportValidity();
+      return;
+    }
+    this.updateState(
+      {
+        basePrice: parseInt(evt.target.value, 10),
+      }, true);
   }
 
   _destinationToggleHandler(evt) {
@@ -150,6 +168,7 @@ export default class TripEventEdit extends AbstractView {
       {
         destination: newDestination,
         hasDestination: newDestination !== null,
+        hasDescription: newDestination.description.length > 0,
         hasImages: newDestination.pictures.length !== 0,
       },
     );
@@ -179,7 +198,7 @@ export default class TripEventEdit extends AbstractView {
     return createEditPointTemplate(this._availableOfers, this._state);
   }
 
-  updateState(update) {
+  updateState(update, justStateUpdating) {
     if (!update) {
       return;
     }
@@ -189,6 +208,10 @@ export default class TripEventEdit extends AbstractView {
       this._state,
       update,
     );
+
+    if (justStateUpdating) {
+      return;
+    }
 
     this.updateElement();
   }
@@ -240,6 +263,7 @@ export default class TripEventEdit extends AbstractView {
       {
         hasOffers: OFFER_TYPES.get(tripEvent.type).length !== 0,
         hasDestination: tripEvent.destination !== null,
+        hasDescription: tripEvent.destination !== null && tripEvent.destination.description.length > 0,
         hasImages: tripEvent.destination !== null && tripEvent.destination.pictures.length !== 0,
       },
     );
@@ -263,6 +287,7 @@ export default class TripEventEdit extends AbstractView {
     delete state.hasImages;
     delete state.hasOffers;
     delete state.hasDestination;
+    delete state.hasDescription;
 
     return state;
   }
