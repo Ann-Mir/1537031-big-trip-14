@@ -35,7 +35,15 @@ const createDestinationsOptionsTemplate = () => {
   }).join('');
 };
 
-export const createEditPointTemplate = (point=DEFAULT_POINT) => {
+const createPhotosList = (photosList) => {
+  return photosList ? `<div class="event__photos-container">
+  <div class="event__photos-tape">
+    ${photosList.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`)}
+  </div>
+</div>` : '';
+};
+
+const createEditPointTemplate = (point=DEFAULT_POINT) => {
   const hasOffers = point.offers.length > 0;
   const type = capitalizeFirstLetter(point.type);
   return `<li class="trip-events__item">
@@ -96,9 +104,10 @@ export const createEditPointTemplate = (point=DEFAULT_POINT) => {
                   </div>
                 </section>
 
-                <section class="event__section  event__section--destination">
+                <section class="event__section  event__section--destination ${point.destination ? '' : 'visually-hidden'}">
                   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                   <p class="event__destination-description">${point.destination.description}</p>
+                  ${createPhotosList(point.destination.pictures)}
                 </section>
               </section>
             </form>
