@@ -158,6 +158,7 @@ export default class TripEventEdit extends AbstractView {
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setCloseEditFormHandler(this._callback.formClose);
   }
 
   _eventTypeToggleHandler(evt) {
