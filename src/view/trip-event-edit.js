@@ -126,6 +126,20 @@ export default class TripEventEdit extends AbstractView {
     return createEditPointTemplate(this._state);
   }
 
+  updateState(update) {
+    if (!update) {
+      return;
+    }
+
+    this._state = Object.assign(
+      {},
+      this._state,
+      update,
+    );
+
+    this.updateElement();
+  }
+
   updateElement() {
     const prevElement = this.getElement();
     const parent = prevElement.parentElement;
