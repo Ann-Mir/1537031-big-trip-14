@@ -3,7 +3,7 @@ import {DEFAULT_POINT, DESTINATIONS, OFFER_TYPES} from '../data.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import {humanizeFullDateAndTime} from '../utils/trip-event.js';
 
-const createOffersTypesTemplate = (availableOffers, currentOfferType) => {
+const createOffersTypesTemplate = (availableOffers) => {
   const offerTypesArray = Array.from(availableOffers.keys());
   return offerTypesArray.map((type) => {
     return `<div class="event__type-item">
@@ -145,7 +145,6 @@ export default class TripEventEdit extends AbstractView {
     }
   }
   _offersSelectionHandler(evt) {
-    // evt.preventDefault();
     const option = evt.target.closest('[data-title]');
     const clickedOfferTitle = option.dataset.title;
     const currentType = (this._state.type);
@@ -157,7 +156,9 @@ export default class TripEventEdit extends AbstractView {
       const index = currentOffers.indexOf(chosenOffer);
       currentOffers.splice(index, 1);
     } else {
-      chosenOffer = this._availableOfers.get(currentType).find((item) => item.title === clickedOfferTitle);
+      chosenOffer = this._availableOfers.get(currentType).find((item) => {
+        return item.title === clickedOfferTitle;
+      });
       currentOffers.push(chosenOffer);
     }
     this.updateState ({
@@ -182,7 +183,9 @@ export default class TripEventEdit extends AbstractView {
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     const destinationName = evt.target.value;
-    const newDestination = DESTINATIONS.find((item) => item.name === destinationName);
+    const newDestination = DESTINATIONS.find((item) => {
+      return item.name === destinationName;
+    });
 
     if (!newDestination) {
       evt.target.setCustomValidity('The destination is unavailable');
