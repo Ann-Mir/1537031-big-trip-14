@@ -1,8 +1,10 @@
-import AbstractView from './abstract.js';
 import {DEFAULT_POINT, DESTINATIONS, OFFER_TYPES} from '../data.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import {humanizeFullDateAndTime} from '../utils/trip-event.js';
 import SmartView from './smart.js';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createOffersTypesTemplate = (availableOffers) => {
   const offerTypesArray = Array.from(availableOffers.keys());
@@ -119,6 +121,8 @@ export default class TripEventEdit extends SmartView {
   constructor(tripEvent = DEFAULT_POINT) {
     super();
     this._state = TripEventEdit.parseTripEventToState(tripEvent);
+    this._startDatePicker = null;
+    this._endDatePicker = null;
     this._availableOfers = OFFER_TYPES;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeEditFormHandler = this._closeEditFormHandler.bind(this);
@@ -126,6 +130,10 @@ export default class TripEventEdit extends SmartView {
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
     this._priceChangeHAndler = this._priceChangeHAndler.bind(this);
     this._offersSelectionHandler = this._offersSelectionHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+    this._setStartDatePicker();
+    this._setEndDatePicker();
     this._setInnerHandlers();
   }
 
@@ -144,6 +152,54 @@ export default class TripEventEdit extends SmartView {
         .querySelector('.event__available-offers')
         .addEventListener('click', this._offersSelectionHandler);
     }
+  }
+
+  _startDateChangeHandler([userDate]) {
+    this.updateState({
+      dateFrom: userDate,
+    });
+  }
+
+  _setStartDatePicker() {
+    if (this._startDatePicker) {
+      this._startDatePicker.destroy();
+      this._startDatePicker = null;
+    }
+
+    this._startDatePicker = flatpickr(
+      this.getElement().querySelector('input[name="event-start-time"]'),
+      {
+        enableTime: true,
+        minDate: 'today',
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.dateFrom,
+        onChange: this._startDateChangeHandler,
+      },
+    );
+  }
+
+  _endDateChangeHandler([userDate]) {
+    this.updateState({
+      dateTo: userDate,
+    });
+  }
+
+  _setEndDatePicker() {
+    if (this._endDatePicker) {
+      this._endDatePicker.destroy();
+      this._endDatePicker = null;
+    }
+
+    this._endDatePicker = flatpickr(
+      this.getElement().querySelector('input[name="event-end-time"]'),
+      {
+        enableTime: true,
+        minDate: this._state.dateFrom,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.dateTo,
+        onChange: this._endDateChangeHandler,
+      },
+    );
   }
 
   _offersSelectionHandler(evt) {
@@ -209,6 +265,8 @@ export default class TripEventEdit extends SmartView {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setCloseEditFormHandler(this._callback.formClose);
+    this._setStartDatePicker();
+    this._setEndDatePicker();
   }
 
   _eventTypeToggleHandler(evt) {
