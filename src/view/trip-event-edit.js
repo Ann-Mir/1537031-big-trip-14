@@ -138,7 +138,7 @@ export default class TripEventEdit extends AbstractView {
     this.getElement()
       .querySelector('.event__input--price')
       .addEventListener('input', this._priceChangeHAndler);
-    if (this._availableOfers) {
+    if (this._state.hasOffers) {
       this.getElement()
         .querySelector('.event__available-offers')
         .addEventListener('click', this._offersSelectionHandler);
@@ -215,7 +215,7 @@ export default class TripEventEdit extends AbstractView {
       {
         type,
         offers,
-        hasOffers: offers.length > 0 ? true : false,
+        hasOffers: this._availableOfers.get(type).length > 0 ? true : false,
       },
     );
   }
