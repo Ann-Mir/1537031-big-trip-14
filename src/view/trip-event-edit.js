@@ -16,10 +16,10 @@ const createOffersTypesTemplate = (availableOffers, currentOfferType) => {
 const createAvailableOffersTemplate = (availableOffers, type, checkedOffers) => {
   const offers = availableOffers.get(type);
   return offers.map((offer) => {
-    const isOfferChecked = checkedOffers ? checkedOffers.some((item) => item.id === offer.id) : false;
+    const isOfferChecked = checkedOffers ? checkedOffers.includes(offer) : false;
     return `<div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="event-offer-${offer.title}" ${isOfferChecked ? 'checked' : ''}>
-              <label class="event__offer-label" for="event-offer-${offer.title}-${offer.title}-${offer.id}">
+              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="event-offer-${offer.title}" data-title="${offer.title}" ${isOfferChecked ? 'checked' : ''}>
+              <label class="event__offer-label" for="event-offer-${offer.title}-${offer.title}-${offer.id}" data-title="${offer.title}">
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
                 <span class="event__offer-price">${offer.price}</span>
@@ -124,6 +124,7 @@ export default class TripEventEdit extends AbstractView {
     this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
     this._priceChangeHAndler = this._priceChangeHAndler.bind(this);
+    this._offersSelectionHandler = this._offersSelectionHandler.bind(this);
     this._setInnerHandlers();
   }
 
@@ -137,6 +138,31 @@ export default class TripEventEdit extends AbstractView {
     this.getElement()
       .querySelector('.event__input--price')
       .addEventListener('input', this._priceChangeHAndler);
+    if (this._availableOfers) {
+      this.getElement()
+        .querySelector('.event__available-offers')
+        .addEventListener('click', this._offersSelectionHandler);
+    }
+  }
+  _offersSelectionHandler(evt) {
+    evt.preventDefault();
+    const option = evt.target.closest('[data-title]');
+    const clickedOfferTitle = option.dataset.title;
+    const currentType = (this._state.type);
+    const currentOffers = this._state.offers;
+    let chosenOffer = currentOffers.find((item) => {
+      return item.title === clickedOfferTitle;
+    });
+    if (chosenOffer) {
+      const index = currentOffers.indexOf(chosenOffer);
+      currentOffers.splice(index, 1);
+    } else {
+      chosenOffer = this._availableOfers.get(currentType).find((item) => item.title === clickedOfferTitle);
+      currentOffers.push(chosenOffer);
+    }
+    this.updateState ({
+      offers: currentOffers,
+    });
   }
 
   _priceChangeHAndler(evt) {
