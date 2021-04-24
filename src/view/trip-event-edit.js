@@ -208,7 +208,7 @@ export default class TripEventEdit extends SmartView {
     const currentType = (this._state.type);
     const currentOffers = this._state.offers;
     let chosenOffer = currentOffers.find((item) => {
-      return item.title === clickedOfferTitle;
+      return item.title.toLowerCase() === clickedOfferTitle.toLowerCase();
     });
     if (chosenOffer) {
       const index = currentOffers.indexOf(chosenOffer);
