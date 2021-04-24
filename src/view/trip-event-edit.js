@@ -145,7 +145,7 @@ export default class TripEventEdit extends AbstractView {
     }
   }
   _offersSelectionHandler(evt) {
-    evt.preventDefault();
+    // evt.preventDefault();
     const option = evt.target.closest('[data-title]');
     const clickedOfferTitle = option.dataset.title;
     const currentType = (this._state.type);
@@ -214,8 +214,7 @@ export default class TripEventEdit extends AbstractView {
     this.updateState(
       {
         type,
-        offers,
-        hasOffers: this._availableOfers.get(type).length > 0 ? true : false,
+        hasOffers: offers.length > 0 ? true : false,
       },
     );
   }
