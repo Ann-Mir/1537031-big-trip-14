@@ -2,6 +2,7 @@ import AbstractView from './abstract.js';
 import {DEFAULT_POINT, DESTINATIONS, OFFER_TYPES} from '../data.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import {humanizeFullDateAndTime} from '../utils/trip-event.js';
+import SmartView from './smart.js';
 
 const createOffersTypesTemplate = (availableOffers) => {
   const offerTypesArray = Array.from(availableOffers.keys());
@@ -114,7 +115,7 @@ const createEditPointTemplate = (availableOffers, state) => {
 };
 
 
-export default class TripEventEdit extends AbstractView {
+export default class TripEventEdit extends SmartView {
   constructor(tripEvent = DEFAULT_POINT) {
     super();
     this._state = TripEventEdit.parseTripEventToState(tripEvent);
@@ -144,6 +145,7 @@ export default class TripEventEdit extends AbstractView {
         .addEventListener('click', this._offersSelectionHandler);
     }
   }
+
   _offersSelectionHandler(evt) {
     const option = evt.target.closest('[data-title]');
     const clickedOfferTitle = option.dataset.title;
@@ -226,35 +228,6 @@ export default class TripEventEdit extends AbstractView {
     return createEditPointTemplate(this._availableOfers, this._state);
   }
 
-  updateState(update, justStateUpdating) {
-    if (!update) {
-      return;
-    }
-
-    this._state = Object.assign(
-      {},
-      this._state,
-      update,
-    );
-
-    if (justStateUpdating) {
-      return;
-    }
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    const prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-    this.restoreHandlers();
-  }
-
   _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.formSubmit(TripEventEdit.parseStateToTripEvent(this._state));
@@ -285,6 +258,7 @@ export default class TripEventEdit extends AbstractView {
   }
 
   static parseTripEventToState(tripEvent) {
+
     return Object.assign(
       {},
       tripEvent,
