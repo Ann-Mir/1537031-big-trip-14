@@ -257,6 +257,12 @@ export default class TripEventEdit extends SmartView {
     }
   }
 
+  reset(tripEvent) {
+    this.updateState(
+      TripEventEdit.parseTripEventToState(tripEvent),
+    );
+  }
+
   static parseTripEventToState(tripEvent) {
 
     return Object.assign(
