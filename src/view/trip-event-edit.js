@@ -5,6 +5,8 @@ import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import {DATEPICKER_SETTINGS} from '../utils/constants';
+
 
 const createOffersTypesTemplate = (availableOffers) => {
   const offerTypesArray = Array.from(availableOffers.keys());
@@ -158,6 +160,9 @@ export default class TripEventEdit extends SmartView {
     this.updateState({
       dateFrom: userDate,
     });
+    this.updateState({
+      dateTo: this._state.dateFrom > this._state.dateTo ? userDate : this._state.dateTo,
+    });
   }
 
   _setStartDatePicker() {
@@ -168,13 +173,14 @@ export default class TripEventEdit extends SmartView {
 
     this._startDatePicker = flatpickr(
       this.getElement().querySelector('input[name="event-start-time"]'),
-      {
-        enableTime: true,
-        minDate: 'today',
-        dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dateFrom,
-        onChange: this._startDateChangeHandler,
-      },
+      Object.assign(
+        {},
+        DATEPICKER_SETTINGS,
+        {
+          defaultDate: this._state.dateFrom,
+          onChange: this._startDateChangeHandler,
+        },
+      ),
     );
   }
 
@@ -192,35 +198,33 @@ export default class TripEventEdit extends SmartView {
 
     this._endDatePicker = flatpickr(
       this.getElement().querySelector('input[name="event-end-time"]'),
-      {
-        enableTime: true,
-        minDate: this._state.dateFrom,
-        dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dateTo,
-        onChange: this._endDateChangeHandler,
-      },
+      Object.assign(
+        {},
+        DATEPICKER_SETTINGS,
+        {
+          minDate: this._state.dateFrom,
+          defaultDate: this._state.dateTo,
+          onChange: this._endDateChangeHandler,
+        },
+      ),
     );
   }
 
   _offersSelectionHandler(evt) {
-    const option = evt.target.closest('[data-title]');
-    const clickedOfferTitle = option.dataset.title;
-    const currentType = (this._state.type);
+    const clickedOfferTitle = evt.target.closest('[data-title]').dataset.title;
+    const availableOffersByType = this._availableOfers.get(this._state.type);
     const currentOffers = this._state.offers;
-    let chosenOffer = currentOffers.find((item) => {
-      return item.title.toLowerCase() === clickedOfferTitle.toLowerCase();
-    });
-    if (chosenOffer) {
-      const index = currentOffers.indexOf(chosenOffer);
-      currentOffers.splice(index, 1);
-    } else {
-      chosenOffer = this._availableOfers.get(currentType).find((item) => {
-        return item.title === clickedOfferTitle;
-      });
-      currentOffers.push(chosenOffer);
-    }
+
+    const chosenOffer = availableOffersByType.find(
+      (item) => item.title.toLowerCase() === clickedOfferTitle.toLowerCase());
+
+    const selectedOffers = currentOffers.find(
+      (item) => item.title.toLowerCase() === clickedOfferTitle.toLowerCase()) ?
+      currentOffers.filter((item) => item.title !== clickedOfferTitle) :
+      [...currentOffers.slice(), chosenOffer];
+
     this.updateState ({
-      offers: currentOffers,
+      offers: selectedOffers,
     });
   }
 
@@ -241,9 +245,7 @@ export default class TripEventEdit extends SmartView {
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     const destinationName = evt.target.value;
-    const newDestination = DESTINATIONS.find((item) => {
-      return item.name === destinationName;
-    });
+    const newDestination = DESTINATIONS.find((item) => item.name === destinationName);
 
     if (!newDestination) {
       evt.target.setCustomValidity('The destination is unavailable');
