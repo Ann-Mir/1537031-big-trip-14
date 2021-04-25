@@ -5,6 +5,8 @@ import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import {DATEPICKER_SETTINGS} from '../utils/constants';
+
 
 const createOffersTypesTemplate = (availableOffers) => {
   const offerTypesArray = Array.from(availableOffers.keys());
@@ -168,13 +170,14 @@ export default class TripEventEdit extends SmartView {
 
     this._startDatePicker = flatpickr(
       this.getElement().querySelector('input[name="event-start-time"]'),
-      {
-        enableTime: true,
-        minDate: 'today',
-        dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dateFrom,
-        onChange: this._startDateChangeHandler,
-      },
+      Object.assign(
+        {},
+        DATEPICKER_SETTINGS,
+        {
+          defaultDate: this._state.dateFrom,
+          onChange: this._startDateChangeHandler,
+        },
+      ),
     );
   }
 
@@ -192,13 +195,15 @@ export default class TripEventEdit extends SmartView {
 
     this._endDatePicker = flatpickr(
       this.getElement().querySelector('input[name="event-end-time"]'),
-      {
-        enableTime: true,
-        minDate: this._state.dateFrom,
-        dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dateTo,
-        onChange: this._endDateChangeHandler,
-      },
+      Object.assign(
+        {},
+        DATEPICKER_SETTINGS,
+        {
+          minDate: this._state.dateFrom,
+          defaultDate: this._state.dateTo,
+          onChange: this._endDateChangeHandler,
+        },
+      ),
     );
   }
 
