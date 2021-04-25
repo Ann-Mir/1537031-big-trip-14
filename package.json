@@ -19,5 +19,10 @@
   },
   "engines": {
     "node": "10"
+  },
+  "dependencies": {
+    "css-loader": "5.2.4",
+    "flatpickr": "4.6.9",
+    "style-loader": "2.0.0"
   }
 }

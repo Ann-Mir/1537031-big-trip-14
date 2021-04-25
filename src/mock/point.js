@@ -1,5 +1,6 @@
 import {getRandomInteger, getRandomValueFromArray, MAX_PRICE, MIN_PRICE, types} from './utils.js';
-import {getRandomDate} from '../utils/common';
+import {getRandomDate} from '../utils/common.js';
+import {getRandomLengthArray} from './utils.js';
 
 
 let pointId = 0;
@@ -17,7 +18,7 @@ const getPoint = (destination, offerTypes) => {
     isFavorite: Boolean(getRandomInteger(0, 1)),
     type: getRandomValueFromArray(types),
   };
-  const offers = offerTypes.get(point.type);
+  const offers = getRandomLengthArray(offerTypes.get(point.type));
   point.offers = offers;
   return point;
 };
