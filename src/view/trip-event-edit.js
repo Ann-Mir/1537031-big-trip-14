@@ -207,16 +207,12 @@ export default class TripEventEdit extends SmartView {
     const clickedOfferTitle = option.dataset.title;
     const currentType = (this._state.type);
     const currentOffers = this._state.offers;
-    let chosenOffer = currentOffers.find((item) => {
-      return item.title.toLowerCase() === clickedOfferTitle.toLowerCase();
-    });
+    let chosenOffer = currentOffers.find((item) => item.title.toLowerCase() === clickedOfferTitle.toLowerCase());
     if (chosenOffer) {
       const index = currentOffers.indexOf(chosenOffer);
       currentOffers.splice(index, 1);
     } else {
-      chosenOffer = this._availableOfers.get(currentType).find((item) => {
-        return item.title === clickedOfferTitle;
-      });
+      chosenOffer = this._availableOfers.get(currentType).find((item) => item.title === clickedOfferTitle);
       currentOffers.push(chosenOffer);
     }
     this.updateState ({
@@ -241,9 +237,7 @@ export default class TripEventEdit extends SmartView {
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     const destinationName = evt.target.value;
-    const newDestination = DESTINATIONS.find((item) => {
-      return item.name === destinationName;
-    });
+    const newDestination = DESTINATIONS.find((item) => item.name === destinationName);
 
     if (!newDestination) {
       evt.target.setCustomValidity('The destination is unavailable');
