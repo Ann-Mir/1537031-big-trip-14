@@ -211,20 +211,20 @@ export default class TripEventEdit extends SmartView {
   }
 
   _offersSelectionHandler(evt) {
-    const option = evt.target.closest('[data-title]');
-    const clickedOfferTitle = option.dataset.title;
-    const currentType = (this._state.type);
+    const clickedOfferTitle = evt.target.closest('[data-title]').dataset.title;
+    const availableOffersByType = this._availableOfers.get(this._state.type);
     const currentOffers = this._state.offers;
-    let chosenOffer = currentOffers.find((item) => item.title.toLowerCase() === clickedOfferTitle.toLowerCase());
-    if (chosenOffer) {
-      const index = currentOffers.indexOf(chosenOffer);
-      currentOffers.splice(index, 1);
-    } else {
-      chosenOffer = this._availableOfers.get(currentType).find((item) => item.title === clickedOfferTitle);
-      currentOffers.push(chosenOffer);
-    }
+
+    const chosenOffer = availableOffersByType.find(
+      (item) => item.title.toLowerCase() === clickedOfferTitle.toLowerCase());
+
+    const selectedOffers = currentOffers.find(
+      (item) => item.title.toLowerCase() === clickedOfferTitle.toLowerCase()) ?
+      currentOffers.filter((item) => item.title !== clickedOfferTitle) :
+      [...currentOffers.slice(), chosenOffer];
+
     this.updateState ({
-      offers: currentOffers,
+      offers: selectedOffers,
     });
   }
 
