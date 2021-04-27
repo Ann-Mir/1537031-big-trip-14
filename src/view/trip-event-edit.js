@@ -5,7 +5,7 @@ import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import {DATEPICKER_SETTINGS} from '../utils/constants';
+import {DATEPICKER_SETTINGS} from '../utils/constants.js';
 
 
 const createOffersTypesTemplate = (availableOffers) => {
@@ -128,6 +128,7 @@ export default class TripEventEdit extends SmartView {
     this._availableOfers = OFFER_TYPES;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeEditFormHandler = this._closeEditFormHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
     this._priceChangeHAndler = this._priceChangeHAndler.bind(this);
@@ -137,6 +138,15 @@ export default class TripEventEdit extends SmartView {
     this._setStartDatePicker();
     this._setEndDatePicker();
     this._setInnerHandlers();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
   }
 
   _setInnerHandlers() {
@@ -269,6 +279,7 @@ export default class TripEventEdit extends SmartView {
     this.setCloseEditFormHandler(this._callback.formClose);
     this._setStartDatePicker();
     this._setEndDatePicker();
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _eventTypeToggleHandler(evt) {
@@ -358,5 +369,17 @@ export default class TripEventEdit extends SmartView {
     delete state.hasDescription;
 
     return state;
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(TripEventEdit.parseStateToTripEvent(this._state));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement()
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this._formDeleteClickHandler);
   }
 }

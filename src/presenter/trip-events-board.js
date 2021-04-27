@@ -4,7 +4,6 @@ import EventsListView from '../view/events-list.js';
 import NoEventsView from '../view/no-events.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
 import TripEventPresenter from './trip-event.js';
-import {SortType} from '../utils/constants.js';
 import {sortByPrice, sortByTime} from '../utils/trip-event.js';
 import {SortType, UpdateType, UserAction} from '../utils/constants.js';
 
@@ -48,9 +47,7 @@ export default class TripEventsBoard {
       return;
     }
     this._currentSortType = sortType;
-    // this._clearEventsList();
-    // this._renderBoard();
-    this._clearBoard({resetRenderedTaskCount: true});
+    this._clearBoard({resetSortType: true});
     this._renderBoard();
   }
 
@@ -90,14 +87,6 @@ export default class TripEventsBoard {
     render(this._tripEventsListComponent, this._noEventsComponent, RenderPosition.BEFOREEND);
   }
 
-  _clearEventsList() {
-    Object
-      .values(this._tripEventPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._tripEventPresenter = {};
-    remove(this._sortComponent);
-  }
-
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
@@ -113,19 +102,19 @@ export default class TripEventsBoard {
   }
 
   _handleModelEvent(updateType, data) {
-      switch (updateType) {
-        case UpdateType.PATCH:
-          this._tripEventPresenter[data.id].init(data);
-          break;
-        case UpdateType.MINOR:
-          this._clearBoard();
-          this._renderBoard();
-          break;
-        case UpdateType.MAJOR:
-          this._clearBoard({resetSortType: true});
-          this._renderBoard();
-          break;
-      }
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this._tripEventPresenter[data.id].init(data);
+        break;
+      case UpdateType.MINOR:
+        this._clearBoard();
+        this._renderBoard();
+        break;
+      case UpdateType.MAJOR:
+        this._clearBoard({resetSortType: true});
+        this._renderBoard();
+        break;
+    }
   }
 
   _renderBoard() {
@@ -138,8 +127,6 @@ export default class TripEventsBoard {
   }
 
   _clearBoard({resetSortType = false} = {}) {
-   // const taskCount = this._getTasks().length;
-
     Object
       .values(this._tripEventPresenter)
       .forEach((presenter) => presenter.destroy());
@@ -147,16 +134,6 @@ export default class TripEventsBoard {
 
     remove(this._sortComponent);
     remove(this._noEventsComponent);
-   // remove(this._loadMoreButtonComponent);
-
-    // if (resetRenderedTaskCount) {
-    //   this._renderedTaskCount = TASK_COUNT_PER_STEP;
-    // } else {
-    //   // На случай, если перерисовка доски вызвана
-    //   // уменьшением количества задач (например, удаление или перенос в архив)
-    //   // нужно скорректировать число показанных задач
-    //   this._renderedTaskCount = Math.min(taskCount, this._renderedTaskCount);
-    // }
 
     if (resetSortType) {
       this._currentSortType = SortType.DAY;

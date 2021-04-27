@@ -78,6 +78,10 @@ const sortByTime = (firstEvent, secondEvent) => {
   return secondDuration - firstDuration;
 };
 
+const areDatesEqual = (dateA, dateB) => {
+  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'millisecond');
+};
+
 export {
   getEventPeriod,
   humanizeDay,
@@ -90,5 +94,6 @@ export {
   isEventComing,
   sumValues,
   sortByPrice,
-  sortByTime
+  sortByTime,
+  areDatesEqual
 };
