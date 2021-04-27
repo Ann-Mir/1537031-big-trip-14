@@ -11,7 +11,7 @@ const isEventComing = (point) => {
 
 const isEventExpired = (point) => {
   const today = dayjs();
-  return today.isBefore(dayjs(point.dateFrom), 'd');
+  return today.isBefore(dayjs(point.dateTo), 'd');
 };
 
 const humanizeFullDateAndTime = (date) => {
