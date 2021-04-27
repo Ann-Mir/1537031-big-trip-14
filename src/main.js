@@ -9,8 +9,13 @@ import FilterView from './view/filter.js';
 import NewEventButtonView from './view/new-event-button.js';
 import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import {render, RenderPosition} from './utils/render.js';
+import TripEventsModel from './model/trip-events.js';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
+
+const tripEventsModel = new TripEventsModel();
+tripEventsModel.setTripEvents(points);
+
 const siteHeaderElement = document.querySelector('.page-header');
 const tripControls = new TripControlsView();
 const tripMainElement = siteHeaderElement.querySelector('.trip-main');
@@ -19,7 +24,7 @@ const tripControlsFilters = new TripControlsFiltersView();
 const tripFilters = new FilterView();
 const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
-const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement);
+const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel);
 
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
 render(tripMainElement, tripControls, RenderPosition.BEFOREEND);

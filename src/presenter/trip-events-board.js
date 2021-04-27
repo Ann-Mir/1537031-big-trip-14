@@ -9,7 +9,8 @@ import {SortType} from '../utils/constants.js';
 import {sortByPrice, sortByTime} from '../utils/trip-event.js';
 
 export default class TripEventsBoard {
-  constructor(container) {
+  constructor(container, tripEventsModel) {
+    this._tripEventsModel = tripEventsModel;
     this._container = container;
     this._tripEventPresenter = {};
     this._boardComponent = new TripEventsBoardView();
@@ -21,6 +22,10 @@ export default class TripEventsBoard {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleTripEventEdit = this._handleTripEventEdit.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+  }
+
+  _getTripEvents() {
+    return this._tripEventsModel.getTripEvents();
   }
 
   init(eventsList) {
