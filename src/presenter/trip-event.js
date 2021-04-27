@@ -1,7 +1,8 @@
 import TripEventView from '../view/trip-event.js';
 import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
-import {cloneObjectValue} from '../utils/common';
+import {cloneObjectValue} from '../utils/common.js';
+import {UserAction, UpdateType} from '../utils/constants.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -100,7 +101,12 @@ export default class TripEvent {
     this._replaceCardToForm();
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(tripEvent) {
+    this._changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      tripEvent,
+    );
     this._replaceFormToCard();
   }
 
@@ -112,6 +118,8 @@ export default class TripEvent {
 
   _handleFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
       cloneObjectValue(this._tripEvent, {isFavorite: !this._tripEvent.isFavorite}),
     );
   }
