@@ -33,4 +33,4 @@ render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
 render(tripControlsFilters, tripFilters, RenderPosition.BEFOREEND);
 render(tripMainElement, new NewEventButtonView(), RenderPosition.BEFOREEND);
 render(tripControlsNavigation, new SiteMenuView(), RenderPosition.BEFOREEND);
-tripEventsBoardPresenter.init(points);
+tripEventsBoardPresenter.init();

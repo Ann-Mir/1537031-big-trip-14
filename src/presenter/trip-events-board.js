@@ -25,15 +25,28 @@ export default class TripEventsBoard {
   }
 
   _getTripEvents() {
+    switch (this._currentSortType) {
+      case SortType.PRICE:
+        return this._tripEventsModel.getTripEvents().slice().sort(sortByPrice);
+      case SortType.TIME:
+        return this._tripEventsModel.getTripEvents().slice().sort(sortByTime);
+    }
     return this._tripEventsModel.getTripEvents();
   }
 
-  init(eventsList) {
-    this._eventsList = eventsList.slice();
-    this._sourcedEventsList = eventsList.slice();
+  // init(eventsList) {
+  //   this._eventsList = eventsList.slice();
+  //   this._sourcedEventsList = eventsList.slice();
+  //
+  //   render(this._container, this._boardComponent, RenderPosition.AFTERBEGIN);
+  //   render(this._boardComponent, this._tripEventsListComponent, RenderPosition.BEFOREEND);
+  //   this._renderBoard();
+  // }
 
+  init() {
     render(this._container, this._boardComponent, RenderPosition.AFTERBEGIN);
     render(this._boardComponent, this._tripEventsListComponent, RenderPosition.BEFOREEND);
+
     this._renderBoard();
   }
 
@@ -41,7 +54,8 @@ export default class TripEventsBoard {
     if (this._currentSortType === sortType) {
       return;
     }
-    this._sortEvents(sortType);
+    // this._sortEvents(sortType);
+    this._currentSortType = sortType;
     this._clearEventsList();
     this._renderBoard();
   }
@@ -72,9 +86,9 @@ export default class TripEventsBoard {
     this._tripEventPresenter[tripEvent.id] = tripEventPresenter;
   }
 
-  _renderEvents(events) {
-    events.forEach((event) => {
-      this._renderEvent(event);
+  _renderEvents(tripEvents) {
+    tripEvents.forEach((tripEvent) => {
+      this._renderEvent(tripEvent);
     });
   }
 
@@ -91,31 +105,31 @@ export default class TripEventsBoard {
   }
 
   _handleTripEventEdit(updatedTripEvent) {
-    this._eventsList = updateItem(this._eventsList, updatedTripEvent);
-    this._sourcedEventsList = updateItem(this._sourcedEventsList, updatedTripEvent);
+    // this._eventsList = updateItem(this._eventsList, updatedTripEvent);
+    // this._sourcedEventsList = updateItem(this._sourcedEventsList, updatedTripEvent);
     this._tripEventPresenter[updatedTripEvent.id].init(updatedTripEvent);
   }
 
-  _sortEvents(sortType) {
-    switch (sortType) {
-      case SortType.PRICE:
-        this._eventsList.sort(sortByPrice);
-        break;
-      case SortType.TIME:
-        this._eventsList.sort(sortByTime);
-        break;
-      default:
-        this._eventsList = this._sourcedEventsList.slice();
-    }
-    this._currentSortType = sortType;
-  }
+  // _sortEvents(sortType) {
+  //   switch (sortType) {
+  //     case SortType.PRICE:
+  //       this._eventsList.sort(sortByPrice);
+  //       break;
+  //     case SortType.TIME:
+  //       this._eventsList.sort(sortByTime);
+  //       break;
+  //     default:
+  //       this._eventsList = this._sourcedEventsList.slice();
+  //   }
+  //   this._currentSortType = sortType;
+  // }
 
   _renderBoard() {
-    if (this._eventsList === 0) {
+    if (this._getTripEvents().length === 0) {
       this._renderNoEvents();
       return ;
     }
     this._renderSort();
-    this._renderEvents(this._eventsList);
+    this._renderEvents(this._tripEventsModel);
   }
 }
