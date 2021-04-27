@@ -48,7 +48,9 @@ export default class TripEventsBoard {
       return;
     }
     this._currentSortType = sortType;
-    this._clearEventsList();
+    // this._clearEventsList();
+    // this._renderBoard();
+    this._clearBoard({resetRenderedTaskCount: true});
     this._renderBoard();
   }
 
@@ -113,14 +115,15 @@ export default class TripEventsBoard {
   _handleModelEvent(updateType, data) {
       switch (updateType) {
         case UpdateType.PATCH:
-          // - обновить часть списка (например, когда поменялось описание)
           this._tripEventPresenter[data.id].init(data);
           break;
         case UpdateType.MINOR:
-          // - обновить список (например, когда задача ушла в архив)
+          this._clearBoard();
+          this._renderBoard();
           break;
         case UpdateType.MAJOR:
-          // - обновить всю доску (например, при переключении фильтра)
+          this._clearBoard({resetSortType: true});
+          this._renderBoard();
           break;
       }
   }
@@ -132,5 +135,31 @@ export default class TripEventsBoard {
     }
     this._renderSort();
     this._renderEvents(this._tripEventsModel);
+  }
+
+  _clearBoard({resetSortType = false} = {}) {
+   // const taskCount = this._getTasks().length;
+
+    Object
+      .values(this._tripEventPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._tripEventPresenter = {};
+
+    remove(this._sortComponent);
+    remove(this._noEventsComponent);
+   // remove(this._loadMoreButtonComponent);
+
+    // if (resetRenderedTaskCount) {
+    //   this._renderedTaskCount = TASK_COUNT_PER_STEP;
+    // } else {
+    //   // На случай, если перерисовка доски вызвана
+    //   // уменьшением количества задач (например, удаление или перенос в архив)
+    //   // нужно скорректировать число показанных задач
+    //   this._renderedTaskCount = Math.min(taskCount, this._renderedTaskCount);
+    // }
+
+    if (resetSortType) {
+      this._currentSortType = SortType.DAY;
+    }
   }
 }
