@@ -6,6 +6,7 @@ import {remove, render, RenderPosition} from '../utils/render.js';
 import TripEventPresenter from './trip-event.js';
 import {SortType} from '../utils/constants.js';
 import {sortByPrice, sortByTime} from '../utils/trip-event.js';
+import {SortType, UpdateType, UserAction} from '../utils/constants.js';
 
 export default class TripEventsBoard {
   constructor(container, tripEventsModel) {
@@ -96,19 +97,32 @@ export default class TripEventsBoard {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
+    switch (actionType) {
+      case UserAction.UPDATE_EVENT:
+        this._tripEventsModel.updateTripEvent(updateType, update);
+        break;
+      case UserAction.ADD_EVENT:
+        this._tripEventsModel.addTripEvent(updateType, update);
+        break;
+      case UserAction.DELETE_EVENT:
+        this._tripEventsModel.deleteTask(updateType, update);
+        break;
+    }
   }
 
   _handleModelEvent(updateType, data) {
-    console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
+      switch (updateType) {
+        case UpdateType.PATCH:
+          // - обновить часть списка (например, когда поменялось описание)
+          this._tripEventPresenter[data.id].init(data);
+          break;
+        case UpdateType.MINOR:
+          // - обновить список (например, когда задача ушла в архив)
+          break;
+        case UpdateType.MAJOR:
+          // - обновить всю доску (например, при переключении фильтра)
+          break;
+      }
   }
 
   _renderBoard() {
