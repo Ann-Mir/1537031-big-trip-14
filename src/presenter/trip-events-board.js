@@ -4,9 +4,11 @@ import EventsListView from '../view/events-list.js';
 import NoEventsView from '../view/no-events.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
 import TripEventPresenter from './trip-event.js';
+import TripEventAddPresenter from './trip-event-add.js';
 import {sortByPrice, sortByTime} from '../utils/trip-event.js';
 import {SortType, UpdateType, UserAction} from '../utils/constants.js';
 import {tripEventsFilter} from '../filter.js';
+import {FilterType} from '../utils/constants.js';
 
 export default class TripEventsBoard {
   constructor(container, tripEventsModel, filterModel) {
@@ -26,6 +28,13 @@ export default class TripEventsBoard {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._tripEventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._tripEventAddPresenter = new TripEventAddPresenter(this._tripEventsListComponent, this._handleViewAction);
+  }
+
+  createTripEvent() {
+    this._currentSortType = SortType.DAY;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._tripEventAddPresenter.init();
   }
 
   _getTripEvents() {
@@ -59,6 +68,7 @@ export default class TripEventsBoard {
   }
 
   _handleModeChange() {
+    this._tripEventAddPresenter.destroy();
     Object
       .values(this._tripEventPresenter)
       .forEach((presenter) => presenter.resetView());

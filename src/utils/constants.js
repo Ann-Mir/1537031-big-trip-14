@@ -1,3 +1,9 @@
+import {getPoint} from '../mock/point';
+import {DESTINATIONS, OFFER_TYPES} from '../data';
+import {getRandomInteger, getRandomValueFromArray, MAX_PRICE, MIN_PRICE, types} from '../mock/utils';
+import {nanoid} from 'nanoid';
+import dayjs from 'dayjs';
+
 export const SortType = {
   DAY: 'day',
   PRICE: 'price',
@@ -27,4 +33,21 @@ export const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PAST: 'past',
+};
+
+export const Mode = {
+  EDIT: 'edit',
+  ADD: 'add',
+};
+
+//export const DEFAULT_POINT = getPoint(DESTINATIONS[0], OFFER_TYPES);
+export const DEFAULT_POINT = {
+  basePrice: 0,
+  dateFrom: dayjs(),
+  dateTo: dayjs(),
+  destination: {},
+  id: nanoid(),
+  isFavorite: false,
+  type: 'taxi',
+  offers: OFFER_TYPES.get('taxi'),
 };

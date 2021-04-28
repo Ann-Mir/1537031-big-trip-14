@@ -41,4 +41,10 @@ render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
 //render(tripControlsFilters, new FilterView(tripEventsFilter, 'all'), RenderPosition.BEFOREEND);
 render(tripMainElement, new NewEventButtonView(), RenderPosition.BEFOREEND);
 render(tripControlsNavigation, new SiteMenuView(), RenderPosition.BEFOREEND);
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  tripEventsBoardPresenter.createTripEvent();
+});
+
 tripEventsBoardPresenter.init();

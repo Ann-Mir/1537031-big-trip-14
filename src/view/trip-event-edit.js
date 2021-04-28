@@ -1,11 +1,12 @@
-import {DEFAULT_POINT, DESTINATIONS, OFFER_TYPES} from '../data.js';
+import {DESTINATIONS, OFFER_TYPES} from '../data.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import {humanizeFullDateAndTime} from '../utils/trip-event.js';
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
-
+import he from 'he';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import {DATEPICKER_SETTINGS} from '../utils/constants.js';
+import {DATEPICKER_SETTINGS, DEFAULT_POINT} from '../utils/constants.js';
+import {Mode} from '../utils/constants';
 
 
 const createOffersTypesTemplate = (availableOffers) => {
@@ -47,7 +48,7 @@ const createPhotosList = (photosList) => {
 </div>`;
 };
 
-const createEditPointTemplate = (availableOffers, state) => {
+const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
   const {basePrice, type, hasOffers, hasDestination, hasDescription, hasImages, offers, destination, dateFrom, dateTo} = state;
   const typeName = capitalizeFirstLetter(type);
   return `<li class="trip-events__item">
@@ -72,7 +73,7 @@ const createEditPointTemplate = (availableOffers, state) => {
                   <label class="event__label  event__type-output" for="event-destination-1">
                     ${typeName}
                   </label>
-                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${hasDestination ? destination.name : ''}" list="destination-list-1">
+                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${hasDestination ? he.encode(destination.name) : ''}" list="destination-list-1">
                   <datalist id="destination-list-1">
                     ${createDestinationsOptionsTemplate()}
                   </datalist>
@@ -91,12 +92,12 @@ const createEditPointTemplate = (availableOffers, state) => {
                     <span class="visually-hidden">Price</span>
                     &euro;
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+                  <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}">
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                <button class="event__reset-btn" type="reset">Delete</button>
-                <button class="event__rollup-btn" type="button">
+                <button class="event__reset-btn" type="reset">${mode === Mode.EDIT ? 'Delete' : 'Cancel'}</button>
+                <button class="event__rollup-btn ${mode === Mode.EDIT ? '' : 'visually-hidden'}" type="button">
                   <span class="visually-hidden">Open event</span>
                 </button>
               </header>
@@ -120,9 +121,10 @@ const createEditPointTemplate = (availableOffers, state) => {
 
 
 export default class TripEventEdit extends SmartView {
-  constructor(tripEvent = DEFAULT_POINT) {
+  constructor(tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
     super();
     this._state = TripEventEdit.parseTripEventToState(tripEvent);
+    this._mode = mode;
     this._startDatePicker = null;
     this._endDatePicker = null;
     this._availableOfers = OFFER_TYPES;
@@ -296,7 +298,7 @@ export default class TripEventEdit extends SmartView {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._availableOfers, this._state);
+    return createEditPointTemplate(this._availableOfers, this._state, this._mode);
   }
 
   _formSubmitHandler(evt) {
