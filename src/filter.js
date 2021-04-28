@@ -22,4 +22,4 @@ const generateFilter = (tripEvents) => {
   });
 };
 
-export { generateFilter };
+export { tripEventsFilter };

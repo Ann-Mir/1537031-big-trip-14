@@ -11,15 +11,11 @@ import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import {render, RenderPosition} from './utils/render.js';
 import TripEventsModel from './model/trip-events.js';
 import FilterModel from './model/filter.js';
+import FilterPresenter from './presenter/filter.js';
+import {tripEventsFilter} from './filter.js';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
-const filters = [
-  {
-    type: 'everything',
-    name: 'EVERYTHING',
-    count: 0,
-  },
-];
+
 const tripEventsModel = new TripEventsModel();
 tripEventsModel.setTripEvents(points);
 
@@ -35,11 +31,14 @@ const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel);
 
+const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
+filterPresenter.init();
+
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
 render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
 render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
 render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
-render(tripControlsFilters, new FilterView(filters, 'all'), RenderPosition.BEFOREEND);
+//render(tripControlsFilters, new FilterView(tripEventsFilter, 'all'), RenderPosition.BEFOREEND);
 render(tripMainElement, new NewEventButtonView(), RenderPosition.BEFOREEND);
 render(tripControlsNavigation, new SiteMenuView(), RenderPosition.BEFOREEND);
 tripEventsBoardPresenter.init();
