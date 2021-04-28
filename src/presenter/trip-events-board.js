@@ -6,10 +6,12 @@ import {remove, render, RenderPosition} from '../utils/render.js';
 import TripEventPresenter from './trip-event.js';
 import {sortByPrice, sortByTime} from '../utils/trip-event.js';
 import {SortType, UpdateType, UserAction} from '../utils/constants.js';
+import {tripEventsFilter} from '../filter.js';
 
 export default class TripEventsBoard {
-  constructor(container, tripEventsModel) {
+  constructor(container, tripEventsModel, filterModel) {
     this._tripEventsModel = tripEventsModel;
+    this._filterModel = filterModel;
     this._container = container;
     this._tripEventPresenter = {};
     this._boardComponent = new TripEventsBoardView();
@@ -23,16 +25,21 @@ export default class TripEventsBoard {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._tripEventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   _getTripEvents() {
+    const filterType = this._filterModel.getFilter();
+    const tripEvents = this._tripEventsModel.getTripEvents();
+    const filteredTripEvents = tripEventsFilter[filterType](tripEvents);
+
     switch (this._currentSortType) {
       case SortType.PRICE:
-        return this._tripEventsModel.getTripEvents().slice().sort(sortByPrice);
+        return filteredTripEvents.sort(sortByPrice);
       case SortType.TIME:
-        return this._tripEventsModel.getTripEvents().slice().sort(sortByTime);
+        return filteredTripEvents.sort(sortByTime);
     }
-    return this._tripEventsModel.getTripEvents();
+    return filteredTripEvents;
   }
 
   init() {

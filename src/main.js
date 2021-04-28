@@ -29,7 +29,7 @@ const tripControlsFilters = new TripControlsFiltersView();
 //const tripFilters = new FilterView(filters, 'all');
 const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
-const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel);
+const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel, filterModel);
 
 const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
 filterPresenter.init();
