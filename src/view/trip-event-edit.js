@@ -9,6 +9,12 @@ import {DATEPICKER_SETTINGS, DEFAULT_POINT} from '../utils/constants.js';
 import {Mode} from '../utils/constants';
 
 
+const createRollUpButtonTemplate = (mode) => {
+  return mode === Mode.EDIT ? `<button class="event__rollup-btn" type="button">
+                                <span class="visually-hidden">Open event</span>
+                               </button>`: '';
+};
+
 const createOffersTypesTemplate = (availableOffers) => {
   const offerTypesArray = Array.from(availableOffers.keys());
   return offerTypesArray.map((type) => {
@@ -49,7 +55,18 @@ const createPhotosList = (photosList) => {
 };
 
 const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
-  const {basePrice, type, hasOffers, hasDestination, hasDescription, hasImages, offers, destination, dateFrom, dateTo} = state;
+  const {
+    basePrice,
+    type,
+    hasOffers,
+    hasDestination,
+    hasDescription,
+    hasImages,
+    offers,
+    destination,
+    dateFrom,
+    dateTo,
+  } = state;
   const typeName = capitalizeFirstLetter(type);
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -69,7 +86,7 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
                   </div>
                 </div>
 
-                <div class="event__field-group  event__field-group--destination ${hasDestination ? '' : 'visually-hidden'}">
+                <div class="event__field-group  event__field-group--destination">
                   <label class="event__label  event__type-output" for="event-destination-1">
                     ${typeName}
                   </label>
@@ -97,9 +114,10 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                 <button class="event__reset-btn" type="reset">${mode === Mode.EDIT ? 'Delete' : 'Cancel'}</button>
-                <button class="event__rollup-btn ${mode === Mode.EDIT ? '' : 'visually-hidden'}" type="button">
-                  <span class="visually-hidden">Open event</span>
-                </button>
+<!--                <button class="event__rollup-btn" type="button">-->
+<!--                  <span class="visually-hidden">Open event</span>-->
+<!--                </button>-->
+                ${createRollUpButtonTemplate(mode)}
               </header>
               <section class="event__details">
                 <section class="event__section  event__section--offers ${hasOffers ? '' : 'visually-hidden'}">
@@ -111,7 +129,7 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
 
                 <section class="event__section  event__section--destination ${hasDestination ? '' : 'visually-hidden'}">
                   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                  <p class="event__destination-description ${hasDescription ? '' : 'visually-hidden'}">${destination.description}</p>
+                  <p class="event__destination-description ${hasDescription ? '' : 'visually-hidden'}">${hasDescription ? destination.description : ''}</p>
                   ${hasImages ? createPhotosList(destination.pictures) : ''}
                 </section>
               </section>
@@ -123,6 +141,7 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
 export default class TripEventEdit extends SmartView {
   constructor(tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
     super();
+    console.log(tripEvent);
     this._state = TripEventEdit.parseTripEventToState(tripEvent);
     this._mode = mode;
     this._startDatePicker = null;
@@ -269,7 +288,7 @@ export default class TripEventEdit extends SmartView {
       {
         destination: newDestination,
         hasDestination: newDestination !== null,
-        hasDescription: newDestination.description.length > 0,
+        hasDescription: newDestination && newDestination.description.length > 0,
         hasImages: newDestination.pictures.length !== 0,
       },
     );

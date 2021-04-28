@@ -43,11 +43,16 @@ export const Mode = {
 //export const DEFAULT_POINT = getPoint(DESTINATIONS[0], OFFER_TYPES);
 export const DEFAULT_POINT = {
   basePrice: 0,
-  dateFrom: dayjs(),
-  dateTo: dayjs(),
-  destination: {},
+  dateFrom: new Date(),
+  dateTo: new Date(),
+  destination: null,
   id: nanoid(),
   isFavorite: false,
   type: 'taxi',
-  offers: OFFER_TYPES.get('taxi'),
+  offers: [],
+};
+
+export const MenuItem = {
+  TABLE: 'TABLE',
+  STATS: 'STATS',
 };

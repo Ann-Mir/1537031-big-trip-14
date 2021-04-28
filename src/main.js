@@ -13,6 +13,7 @@ import TripEventsModel from './model/trip-events.js';
 import FilterModel from './model/filter.js';
 import FilterPresenter from './presenter/filter.js';
 import {tripEventsFilter} from './filter.js';
+import {MenuItem} from './utils/constants.js';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
 
@@ -30,21 +31,49 @@ const tripControlsFilters = new TripControlsFiltersView();
 const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel, filterModel);
+const siteMenuComponent = new SiteMenuView();
 
 const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
 filterPresenter.init();
 
-render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
+const tripInfoComponent = new TripInfoView(points);
+
+render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
 render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
 render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
 render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
 //render(tripControlsFilters, new FilterView(tripEventsFilter, 'all'), RenderPosition.BEFOREEND);
 render(tripMainElement, new NewEventButtonView(), RenderPosition.BEFOREEND);
-render(tripControlsNavigation, new SiteMenuView(), RenderPosition.BEFOREEND);
+render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
+
+
+
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.TABLE:
+      // Скрыть статистику
+      // Показать доску
+      // Показать форму добавления новой задачи
+      // Убрать выделение с ADD NEW TASK после сохранения
+      break;
+    case MenuItem.STATS:
+      // Показать доску
+      // Скрыть статистику
+      break;
+  }
+};
+
+const handleTaskNewFormClose = () => {
+  siteMenuComponent.getElement().querySelector(`#${MenuItem.TABLE}`).classList.add('trip-tabs__btn--active');
+  siteMenuComponent.setMenuItem(MenuItem.TABLE);
+};
+
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
-  tripEventsBoardPresenter.createTripEvent();
+  tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
 });
+
+siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 tripEventsBoardPresenter.init();

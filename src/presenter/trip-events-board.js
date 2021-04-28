@@ -31,10 +31,10 @@ export default class TripEventsBoard {
     this._tripEventAddPresenter = new TripEventAddPresenter(this._tripEventsListComponent, this._handleViewAction);
   }
 
-  createTripEvent() {
+  createTripEvent(callback) {
     this._currentSortType = SortType.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._tripEventAddPresenter.init();
+    this._tripEventAddPresenter.init(callback);
   }
 
   _getTripEvents() {

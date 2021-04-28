@@ -1,4 +1,5 @@
 import TripEventView from '../view/trip-event.js';
+import TripEventEditView from '../view/trip-event-edit.js';
 import {nanoid} from 'nanoid';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {UserAction, UpdateType, DEFAULT_POINT} from '../utils/constants.js';
@@ -9,17 +10,21 @@ export default class TripEventAdd {
     this._tripEventsListContainer = tripEventsListContainer;
     this._changeData = changeData;
     this._tripEventAddComponent = null;
+    this._destroyCallback = null;
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init() {
+  init(callback) {
+    this._destroyCallback = callback;
+
     if (this._tripEventAddComponent !== null) {
       return;
     }
 
-    this._tripEventAddComponent = new TripEventView(DEFAULT_POINT, Mode.ADD);
+    this._tripEventAddComponent = new TripEventEditView(DEFAULT_POINT, Mode.ADD);
+    console.log(this._tripEventAddComponent);
     this._tripEventAddComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEventAddComponent.setDeleteClickHandler(this._handleDeleteClick);
 
@@ -30,6 +35,10 @@ export default class TripEventAdd {
   destroy() {
     remove(this._tripEventAddComponent);
     this._tripEventAddComponent = null;
+
+    if (this._destroyCallback !== null) {
+      this._destroyCallback();
+    }
 
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
