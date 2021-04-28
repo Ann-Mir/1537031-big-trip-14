@@ -6,12 +6,12 @@ const sumValues = (accumulator, currentValue) => {
 
 const isEventComing = (point) => {
   const today = dayjs();
-  return (today.isAfter(dayjs(point.dateFrom), 'd') || today.isSame(dayjs(point.dateFrom), 'd'));
+  return (today.isBefore(dayjs(point.dateFrom), 'd') || today.isSame(dayjs(point.dateFrom), 'd'));
 };
 
 const isEventExpired = (point) => {
   const today = dayjs();
-  return today.isBefore(dayjs(point.dateTo), 'd');
+  return today.isAfter(dayjs(point.dateTo), 'd');
 };
 
 const humanizeFullDateAndTime = (date) => {
@@ -79,7 +79,7 @@ const sortByTime = (firstEvent, secondEvent) => {
 };
 
 const areDatesEqual = (dateA, dateB) => {
-  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'millisecond');
+  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'D');
 };
 
 export {
