@@ -124,7 +124,7 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
             fontColor: '#000000',
             padding: 5,
             fontSize: 13,
-            callback: (val) => `${val.toUpperCase()}`
+            callback: (val) => `${val.toUpperCase()}`,
           },
           gridLines: {
             display: false,

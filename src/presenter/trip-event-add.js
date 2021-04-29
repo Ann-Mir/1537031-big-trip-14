@@ -1,4 +1,3 @@
-import TripEventView from '../view/trip-event.js';
 import TripEventEditView from '../view/trip-event-edit.js';
 import {nanoid} from 'nanoid';
 import {render, RenderPosition, remove} from '../utils/render.js';
