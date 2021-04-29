@@ -30,11 +30,20 @@ export default class SiteMenu extends AbstractView {
   }
 
   setMenuItem(menuItem) {
-    const item = this.getElement().querySelector(`#${menuItem}`);
-
-    if (item !== null) {
-      item.classList.toggle('trip-tabs__btn--active');
-    }
+    const items = this.getElement().querySelectorAll('.trip-tabs__btn');
+    items.forEach((item) => {
+      if (item.getAttribute('id') === menuItem) {
+        console.log(item);
+        item.classList.add('trip-tabs__btn--active');
+      } else {
+        item.classList.remove('trip-tabs__btn--active');
+      }
+    });
+    // const item = this.getElement().querySelector(`#${menuItem}`);
+    //
+    // if (item !== null) {
+    //   item.classList.add('trip-tabs__btn--active');
+    // }
   }
 }
 

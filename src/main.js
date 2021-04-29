@@ -14,6 +14,7 @@ import FilterModel from './model/filter.js';
 import FilterPresenter from './presenter/filter.js';
 import {tripEventsFilter} from './filter.js';
 import {MenuItem} from './utils/constants.js';
+import {FilterType, UpdateType} from './utils/constants';
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
 
@@ -51,12 +52,14 @@ render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
+      tripEventsBoardPresenter.init();
       // Скрыть статистику
       // Показать доску
       // Показать форму добавления новой задачи
       // Убрать выделение с ADD NEW TASK после сохранения
       break;
     case MenuItem.STATS:
+      tripEventsBoardPresenter.destroy();
       // Показать доску
       // Скрыть статистику
       break;
@@ -64,13 +67,16 @@ const handleSiteMenuClick = (menuItem) => {
 };
 
 const handleTaskNewFormClose = () => {
-  siteMenuComponent.getElement().querySelector(`#${MenuItem.TABLE}`).classList.add('trip-tabs__btn--active');
+  // siteMenuComponent.getElement().querySelector(`#${MenuItem.TABLE}`).classList.add('trip-tabs__btn--active');
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
 };
 
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
+  tripEventsBoardPresenter.destroy();
+  filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+  tripEventsBoardPresenter.init();
   tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
 });
 

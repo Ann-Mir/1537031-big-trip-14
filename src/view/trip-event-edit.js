@@ -109,7 +109,7 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
                     <span class="visually-hidden">Price</span>
                     &euro;
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-1" type="number" min="1" step="1" name="event-price" value="${he.encode(String(basePrice))}">
+                  <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" step="1" name="event-price" value="${he.encode(String(basePrice))}">
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

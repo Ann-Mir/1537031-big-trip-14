@@ -55,7 +55,20 @@ export default class TripEventsBoard {
     render(this._container, this._boardComponent, RenderPosition.AFTERBEGIN);
     render(this._boardComponent, this._tripEventsListComponent, RenderPosition.BEFOREEND);
 
+    this._tripEventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
     this._renderBoard();
+  }
+
+  destroy() {
+    this._clearBoard({resetSortType: true});
+
+    remove(this._tripEventsListComponent);
+    remove(this._boardComponent);
+
+    this._tripEventsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _handleSortTypeChange(sortType) {
