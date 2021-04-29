@@ -78,8 +78,8 @@ const sortByTime = (firstEvent, secondEvent) => {
   return secondDuration - firstDuration;
 };
 
-const areDatesEqual = (dateA, dateB) => {
-  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'D');
+const areDatesEqual = (firstEvent, secondEvent) => {
+  return new Date(firstEvent.dateFrom) - new Date(secondEvent.dateFrom);
 };
 
 export {

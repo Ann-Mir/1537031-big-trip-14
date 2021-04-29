@@ -24,7 +24,6 @@ export default class TripEventAdd {
     }
 
     this._tripEventAddComponent = new TripEventEditView(DEFAULT_POINT, Mode.ADD);
-    console.log(this._tripEventAddComponent);
     this._tripEventAddComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEventAddComponent.setDeleteClickHandler(this._handleDeleteClick);
 

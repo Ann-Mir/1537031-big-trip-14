@@ -15,11 +15,11 @@ const createRollUpButtonTemplate = (mode) => {
                                </button>`: '';
 };
 
-const createOffersTypesTemplate = (availableOffers) => {
+const createOffersTypesTemplate = (availableOffers, currentType) => {
   const offerTypesArray = Array.from(availableOffers.keys());
   return offerTypesArray.map((type) => {
     return `<div class="event__type-item">
-              <input id="event-type-${type}-${availableOffers.get(type).id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+              <input id="event-type-${type}-${availableOffers.get(type).id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === currentType ? 'checked' : ''}>
               <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${availableOffers.get(type).id}" data-type="${type}">${capitalizeFirstLetter(type)}</label>
             </div>`;
   }).join('');
@@ -109,7 +109,7 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
                     <span class="visually-hidden">Price</span>
                     &euro;
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}">
+                  <input class="event__input  event__input--price" id="event-price-1" type="number" min="1" step="1" name="event-price" value="${he.encode(String(basePrice))}">
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -141,7 +141,6 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
 export default class TripEventEdit extends SmartView {
   constructor(tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
     super();
-    console.log(tripEvent);
     this._state = TripEventEdit.parseTripEventToState(tripEvent);
     this._mode = mode;
     this._startDatePicker = null;
@@ -179,7 +178,7 @@ export default class TripEventEdit extends SmartView {
       .addEventListener('blur', this._destinationToggleHandler);
     this.getElement()
       .querySelector('.event__input--price')
-      .addEventListener('input', this._priceChangeHAndler);
+      .addEventListener('change', this._priceChangeHAndler);
     if (this._state.hasOffers) {
       this.getElement()
         .querySelector('.event__available-offers')
@@ -261,15 +260,10 @@ export default class TripEventEdit extends SmartView {
 
   _priceChangeHAndler(evt) {
     evt.preventDefault();
-    const priceFormat = new RegExp(/^\d+$/);
-    if (!priceFormat.test(evt.target.value)) {
-      evt.target.setCustomValidity('Price should be a whole integer');
-      evt.target.reportValidity();
-      return;
-    }
+    evt.target.reportValidity();
     this.updateState(
       {
-        basePrice: parseInt(evt.target.value, 10),
+        basePrice: Number(evt.target.value),
       }, true);
   }
 
