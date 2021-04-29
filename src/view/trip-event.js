@@ -1,6 +1,6 @@
 import AbstractView from './abstract.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
-import {humanizeDate, humanizeDuration, humanizeFullDate, humanizeTime} from '../utils/trip-event.js';
+import {humanizeDate, humanizeDuration, humanizeFullDate, humanizeTime, getDuration} from '../utils/trip-event.js';
 
 const createOffersTemplate = (offers) => {
   const offersList = offers.map((offer) => {
@@ -16,7 +16,7 @@ const createOffersTemplate = (offers) => {
 const createEventTemplate = (point) => {
   const type = capitalizeFirstLetter(point.type);
   const favoriteButtonClasses = point.isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
-  const duration = humanizeDuration(point.dateFrom, point.dateTo);
+  const duration = humanizeDuration(getDuration(point.dateFrom, point.dateTo));
 
   const offersList = createOffersTemplate(point.offers);
   return `<li class="trip-events__item">

@@ -8,6 +8,7 @@ import TripControlsFiltersView from './view/trip-controls-filters.js';
 import FilterView from './view/filter.js';
 import NewEventButtonView from './view/new-event-button.js';
 import TripEventsBoardPresenter from './presenter/trip-events-board.js';
+import StatisticsView from './view/statistics.js';
 import {render, RenderPosition} from './utils/render.js';
 import TripEventsModel from './model/trip-events.js';
 import FilterModel from './model/filter.js';
@@ -15,6 +16,10 @@ import FilterPresenter from './presenter/filter.js';
 import {tripEventsFilter} from './filter.js';
 import {MenuItem} from './utils/constants.js';
 import {FilterType, UpdateType} from './utils/constants';
+import {remove} from './utils/render';
+
+
+let statisticsComponent = null;
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
 
@@ -48,26 +53,26 @@ render(tripMainElement, new NewEventButtonView(), RenderPosition.BEFOREEND);
 render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
 
 
-
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
+      remove(statisticsComponent);
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripEventsBoardPresenter.init();
-      // Скрыть статистику
-      // Показать доску
-      // Показать форму добавления новой задачи
-      // Убрать выделение с ADD NEW TASK после сохранения
+      siteMenuComponent.setMenuItem(MenuItem.TABLE);
       break;
     case MenuItem.STATS:
       tripEventsBoardPresenter.destroy();
-      // Показать доску
-      // Скрыть статистику
+      statisticsComponent = new StatisticsView(tripEventsModel.getTripEvents());
+      render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+      siteMenuComponent.setMenuItem(MenuItem.STATS);
       break;
   }
 };
 
 const handleTaskNewFormClose = () => {
   // siteMenuComponent.getElement().querySelector(`#${MenuItem.TABLE}`).classList.add('trip-tabs__btn--active');
+  remove(statisticsComponent);
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
 };
 

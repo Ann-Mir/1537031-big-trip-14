@@ -34,8 +34,7 @@ const getDuration = (startDate, endDate) => {
   return dayjs(endDate).diff(dayjs(startDate));
 };
 
-const humanizeDuration = (dateFrom, dateTo) => {
-  const duration = getDuration(dateFrom, dateTo);
+const humanizeDuration = (duration) => {
   let minutes = parseInt(duration / (1000 * 60) % 60);
   let hours = parseInt(duration / (1000 * 60 * 60) % 24);
   let days = parseInt(duration / (1000 * 60 * 60 * 24));
@@ -95,5 +94,6 @@ export {
   sumValues,
   sortByPrice,
   sortByTime,
-  areDatesEqual
+  areDatesEqual,
+  getDuration
 };
