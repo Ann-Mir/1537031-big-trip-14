@@ -58,7 +58,7 @@ export default class TripEventsBoard {
     this._tripEventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
-    this._renderBoard();
+    this._handleModelEvent(UpdateType.MAJOR);
   }
 
   destroy() {
@@ -165,7 +165,6 @@ export default class TripEventsBoard {
     this._tripEventPresenter = {};
 
     remove(this._sortComponent);
-    remove(this._noEventsComponent);
     remove(this._noEventsComponent);
 
     if (resetSortType) {

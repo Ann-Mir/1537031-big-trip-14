@@ -1,4 +1,4 @@
-import {getDuration, humanizeDuration} from './trip-event';
+import {getDuration} from './trip-event';
 
 const getUniqueItems = (items) => [...new Set(items)];
 

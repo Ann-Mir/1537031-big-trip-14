@@ -5,7 +5,6 @@ import {generatePoints} from './mock/point.js';
 import TripControlsView from './view/trip-controls.js';
 import TripControlsNavigationView from './view/trip-controls-navigation.js';
 import TripControlsFiltersView from './view/trip-controls-filters.js';
-import FilterView from './view/filter.js';
 import NewEventButtonView from './view/new-event-button.js';
 import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import StatisticsView from './view/statistics.js';
@@ -13,10 +12,9 @@ import {render, RenderPosition} from './utils/render.js';
 import TripEventsModel from './model/trip-events.js';
 import FilterModel from './model/filter.js';
 import FilterPresenter from './presenter/filter.js';
-import {tripEventsFilter} from './filter.js';
 import {MenuItem} from './utils/constants.js';
-import {FilterType, UpdateType} from './utils/constants';
-import {remove} from './utils/render';
+import {FilterType, UpdateType} from './utils/constants.js';
+import {remove} from './utils/render.js';
 
 
 let statisticsComponent = null;
@@ -33,7 +31,6 @@ const tripControls = new TripControlsView();
 const tripMainElement = siteHeaderElement.querySelector('.trip-main');
 const tripControlsNavigation = new TripControlsNavigationView();
 const tripControlsFilters = new TripControlsFiltersView();
-//const tripFilters = new FilterView(filters, 'all');
 const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel, filterModel);
@@ -48,7 +45,6 @@ render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
 render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
 render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
 render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
-//render(tripControlsFilters, new FilterView(tripEventsFilter, 'all'), RenderPosition.BEFOREEND);
 render(tripMainElement, new NewEventButtonView(), RenderPosition.BEFOREEND);
 render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
 
@@ -71,7 +67,6 @@ const handleSiteMenuClick = (menuItem) => {
 };
 
 const handleTaskNewFormClose = () => {
-  // siteMenuComponent.getElement().querySelector(`#${MenuItem.TABLE}`).classList.add('trip-tabs__btn--active');
   remove(statisticsComponent);
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
 };

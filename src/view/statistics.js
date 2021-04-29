@@ -34,7 +34,7 @@ const renderMoneyChart = (moneyCtx, events) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          formatter: (val) => `€ ${val}`
+          formatter: (val) => `€ ${val}`,
         },
       },
       title: {
