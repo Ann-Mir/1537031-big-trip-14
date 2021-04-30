@@ -28,7 +28,10 @@ export default class TripEventsBoard {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._tripEventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-    this._tripEventAddPresenter = new TripEventAddPresenter(this._tripEventsListComponent, this._handleViewAction);
+    this._tripEventAddPresenter = new TripEventAddPresenter(
+      this._tripEventsListComponent,
+      this._handleViewAction,
+    );
   }
 
   createTripEvent(callback) {
@@ -52,8 +55,16 @@ export default class TripEventsBoard {
   }
 
   init() {
-    render(this._container, this._boardComponent, RenderPosition.AFTERBEGIN);
-    render(this._boardComponent, this._tripEventsListComponent, RenderPosition.BEFOREEND);
+    render(
+      this._container,
+      this._boardComponent,
+      RenderPosition.AFTERBEGIN,
+    );
+    render(
+      this._boardComponent,
+      this._tripEventsListComponent,
+      RenderPosition.BEFOREEND,
+    );
 
     this._tripEventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);

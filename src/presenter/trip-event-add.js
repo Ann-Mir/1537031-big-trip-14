@@ -2,7 +2,7 @@ import TripEventEditView from '../view/trip-event-edit.js';
 import {nanoid} from 'nanoid';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {UserAction, UpdateType, DEFAULT_POINT} from '../utils/constants.js';
-import {Mode} from '../utils/constants';
+import {Mode} from '../utils/constants.js';
 
 export default class TripEventAdd {
   constructor(tripEventsListContainer, changeData) {
@@ -26,7 +26,11 @@ export default class TripEventAdd {
     this._tripEventAddComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEventAddComponent.setDeleteClickHandler(this._handleDeleteClick);
 
-    render(this._tripEventsListContainer , this._tripEventAddComponent, RenderPosition.AFTERBEGIN);
+    render(
+      this._tripEventsListContainer,
+      this._tripEventAddComponent,
+      RenderPosition.AFTERBEGIN,
+    );
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
 

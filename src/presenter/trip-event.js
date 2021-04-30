@@ -126,7 +126,9 @@ export default class TripEvent {
     this._changeData(
       UserAction.UPDATE_EVENT,
       UpdateType.MINOR,
-      cloneObjectValue(this._tripEvent, {isFavorite: !this._tripEvent.isFavorite}),
+      cloneObjectValue(
+        this._tripEvent,
+        {isFavorite: !this._tripEvent.isFavorite}),
     );
   }
 
