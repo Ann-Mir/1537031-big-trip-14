@@ -76,3 +76,9 @@ export const MenuItem = {
   TABLE: 'TABLE',
   STATS: 'STATS',
 };
+
+export const TIMINGS = {
+  millisecondsPerMinute: 60000,
+  minutesPerHour: 60,
+  hoursPerDay: 24,
+};
