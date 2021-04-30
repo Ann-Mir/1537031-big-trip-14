@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {TIMINGS} from './constants';
+import {TIMINGS} from './constants.js';
 
 const sumValues = (accumulator, currentValue) => {
   return accumulator + currentValue;

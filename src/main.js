@@ -40,12 +40,13 @@ const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tr
 filterPresenter.init();
 
 const tripInfoComponent = new TripInfoView(points);
+const newEventButtonComponent = new NewEventButtonView();
 
 render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
 render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
 render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
 render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
-render(tripMainElement, new NewEventButtonView(), RenderPosition.BEFOREEND);
+render(tripMainElement, newEventButtonComponent, RenderPosition.BEFOREEND);
 render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
 
 
@@ -71,9 +72,7 @@ const handleTaskNewFormClose = () => {
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
 };
 
-
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
-  evt.preventDefault();
+newEventButtonComponent.setClickHandler(() => {
   tripEventsBoardPresenter.destroy();
   filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
   tripEventsBoardPresenter.init();
