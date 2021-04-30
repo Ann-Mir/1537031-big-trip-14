@@ -5,8 +5,7 @@ import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import he from 'he';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import {DATEPICKER_SETTINGS, DEFAULT_POINT} from '../utils/constants.js';
-import {Mode} from '../utils/constants';
+import {DATEPICKER_SETTINGS, DEFAULT_POINT, Mode} from '../utils/constants.js';
 
 
 const createRollUpButtonTemplate = (mode) => {
@@ -114,9 +113,6 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                 <button class="event__reset-btn" type="reset">${mode === Mode.EDIT ? 'Delete' : 'Cancel'}</button>
-<!--                <button class="event__rollup-btn" type="button">-->
-<!--                  <span class="visually-hidden">Open event</span>-->
-<!--                </button>-->
                 ${createRollUpButtonTemplate(mode)}
               </header>
               <section class="event__details">
