@@ -206,7 +206,7 @@ export default class TripEventEdit extends SmartView {
         DATEPICKER_SETTINGS,
         {
           defaultDate: this._state.dateFrom,
-          onChange: this._startDateChangeHandler,
+          onClose: this._startDateChangeHandler,
         },
       ),
     );
@@ -232,7 +232,7 @@ export default class TripEventEdit extends SmartView {
         {
           minDate: this._state.dateFrom,
           defaultDate: this._state.dateTo,
-          onChange: this._endDateChangeHandler,
+          onClose: this._endDateChangeHandler,
         },
       ),
     );

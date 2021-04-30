@@ -1,8 +1,4 @@
-import {getPoint} from '../mock/point';
-import {DESTINATIONS, OFFER_TYPES} from '../data';
-import {getRandomInteger, getRandomValueFromArray, MAX_PRICE, MIN_PRICE, types} from '../mock/utils';
 import {nanoid} from 'nanoid';
-import dayjs from 'dayjs';
 
 export const SortType = {
   DAY: 'day',
