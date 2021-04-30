@@ -19,20 +19,6 @@ const getRandomDate = () => {
     .toDate();
 };
 
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 const cloneObjectValue = (obj, value) => {
   return Object.assign(
     {},
@@ -45,7 +31,6 @@ const cloneObjectValue = (obj, value) => {
 export {
   getRandomDate,
   capitalizeFirstLetter,
-  updateItem,
   cloneObjectValue,
   MIN_DAYS_GAP,
   MAX_DAYS_GAP

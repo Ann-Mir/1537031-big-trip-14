@@ -1,7 +1,9 @@
 import TripEventView from '../view/trip-event.js';
 import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
-import {cloneObjectValue} from '../utils/common';
+import {cloneObjectValue} from '../utils/common.js';
+import {UserAction, UpdateType} from '../utils/constants.js';
+import {areDatesEqual} from '../utils/trip-event.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -22,6 +24,7 @@ export default class TripEvent {
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleEditFormClose = this._handleEditFormClose.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -38,6 +41,7 @@ export default class TripEvent {
     this._tripEventComponent.setEditClickHandler(this._handleEditClick);
     this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEventEditComponent.setCloseEditFormHandler(this._handleEditFormClose);
+    this._tripEventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevTripEventComponent === null || prevTripEventEditComponent === null) {
       render(this._tripEventsListContainer, this._tripEventComponent, RenderPosition.BEFOREEND);
@@ -100,7 +104,15 @@ export default class TripEvent {
     this._replaceCardToForm();
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(update) {
+    const isMinorUpdate =
+      !areDatesEqual(this._tripEvent.dateFrom, update.dateFrom);
+
+    this._changeData(
+      UserAction.UPDATE_EVENT,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update,
+    );
     this._replaceFormToCard();
   }
 
@@ -112,7 +124,17 @@ export default class TripEvent {
 
   _handleFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
       cloneObjectValue(this._tripEvent, {isFavorite: !this._tripEvent.isFavorite}),
+    );
+  }
+
+  _handleDeleteClick(tripEvent) {
+    this._changeData(
+      UserAction.DELETE_EVENT,
+      UpdateType.MINOR,
+      tripEvent,
     );
   }
 }

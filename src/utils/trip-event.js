@@ -6,12 +6,12 @@ const sumValues = (accumulator, currentValue) => {
 
 const isEventComing = (point) => {
   const today = dayjs();
-  return (today.isAfter(dayjs(point.dateFrom), 'd') || today.isSame(dayjs(point.dateFrom), 'd'));
+  return (today.isBefore(dayjs(point.dateFrom), 'd') || today.isSame(dayjs(point.dateFrom), 'd'));
 };
 
 const isEventExpired = (point) => {
   const today = dayjs();
-  return today.isBefore(dayjs(point.dateFrom), 'd');
+  return today.isAfter(dayjs(point.dateTo), 'd');
 };
 
 const humanizeFullDateAndTime = (date) => {
@@ -34,8 +34,7 @@ const getDuration = (startDate, endDate) => {
   return dayjs(endDate).diff(dayjs(startDate));
 };
 
-const humanizeDuration = (dateFrom, dateTo) => {
-  const duration = getDuration(dateFrom, dateTo);
+const humanizeDuration = (duration) => {
   let minutes = parseInt(duration / (1000 * 60) % 60);
   let hours = parseInt(duration / (1000 * 60 * 60) % 24);
   let days = parseInt(duration / (1000 * 60 * 60 * 24));
@@ -78,6 +77,10 @@ const sortByTime = (firstEvent, secondEvent) => {
   return secondDuration - firstDuration;
 };
 
+const areDatesEqual = (firstEvent, secondEvent) => {
+  return new Date(firstEvent.dateFrom) - new Date(secondEvent.dateFrom);
+};
+
 export {
   getEventPeriod,
   humanizeDay,
@@ -90,5 +93,7 @@ export {
   isEventComing,
   sumValues,
   sortByPrice,
-  sortByTime
+  sortByTime,
+  areDatesEqual,
+  getDuration
 };

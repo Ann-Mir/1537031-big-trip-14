@@ -1,24 +1,25 @@
 import {isEventComing, isEventExpired} from './utils/trip-event.js';
+import {FilterType} from './utils/constants.js';
 
-const pointsToFilterMap = {
-  everything: (points) => {
-    return points.length;
+const tripEventsFilter = {
+  [FilterType.EVERYTHING]: (tripEvents) => {
+    return tripEvents;
   },
-  past: (points) => {
-    return points.filter((point) => isEventExpired(point)).length;
+  [FilterType.PAST]: (tripEvents) => {
+    return tripEvents.filter((tripEvent) => isEventExpired(tripEvent));
   },
-  future: (points) => {
-    return points.filter((point) => isEventComing(point)).length;
+  [FilterType.FUTURE]: (tripEvents) => {
+    return tripEvents.filter((tripEvent) => isEventComing(tripEvent));
   },
 };
 
-const generateFilter = (points) => {
-  return Object.entries(pointsToFilterMap).map(([filterName, pointsCount]) => {
+const generateFilter = (tripEvents) => {
+  return Object.entries(tripEventsFilter).map(([filterName, tripEventsCount]) => {
     return {
       name: filterName,
-      count: pointsCount(points),
+      count: tripEventsCount(tripEvents),
     };
   });
 };
 
-export { generateFilter };
+export { tripEventsFilter, generateFilter };
