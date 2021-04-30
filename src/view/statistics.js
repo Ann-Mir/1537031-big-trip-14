@@ -1,62 +1,67 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {getUniqueItems, getCostsByTripType, countEventsByTripType, getDurationByTripType} from '../utils/statistics.js';
+import {
+  getUniqueItems,
+  getCostsByTripType,
+  countEventsByTripType,
+  getDurationByTripType
+} from '../utils/statistics.js';
 import SmartView from './smart.js';
-import {humanizeDuration} from '../utils/trip-event';
+import {humanizeDuration} from '../utils/trip-event.js';
+import {StatiscticsTitles, STATISTICS_SETTINGS} from '../utils/constants.js';
 
-const BAR_HEIGHT = 55;
 
 const renderMoneyChart = (moneyCtx, events) => {
   const eventsTypes = events.map((event) => event.type);
   const uniqTypes = getUniqueItems(eventsTypes);
   const moneyByTypes = uniqTypes.map((type) => getCostsByTripType(events, type));
 
-  moneyCtx.height = uniqTypes.length * BAR_HEIGHT;
+  moneyCtx.height = uniqTypes.length * STATISTICS_SETTINGS.barHeight;
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
-    type: 'horizontalBar',
+    type: STATISTICS_SETTINGS.type,
     data: {
       labels: uniqTypes,
       datasets: [{
         data: moneyByTypes,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
+        backgroundColor: STATISTICS_SETTINGS.backgroundColor,
+        hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
+        anchor: STATISTICS_SETTINGS.dataAnchor,
       }],
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 13,
+            size: STATISTICS_SETTINGS.basicFontSize,
           },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
+          color: STATISTICS_SETTINGS.datalabelsColor,
+          anchor: STATISTICS_SETTINGS.datalabelsAnchor,
+          align: STATISTICS_SETTINGS.datalabelsAlign,
           formatter: (val) => `€ ${val}`,
         },
       },
       title: {
         display: true,
-        text: 'MONEY',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
+        text: StatiscticsTitles.MONEY,
+        fontColor: STATISTICS_SETTINGS.fontColor,
+        fontSize: STATISTICS_SETTINGS.titleFontSize,
+        position: STATISTICS_SETTINGS.titlePosition,
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
+            fontColor: STATISTICS_SETTINGS.fontColor,
+            padding: STATISTICS_SETTINGS.padding,
+            fontSize: STATISTICS_SETTINGS.basicFontSize,
             callback: (val) => `${val.toUpperCase()}`,
           },
           gridLines: {
             display: false,
             drawBorder: false,
           },
-          barThickness: 44,
+          barThickness: STATISTICS_SETTINGS.barThickness,
         }],
         xAxes: [{
           ticks: {
@@ -67,7 +72,7 @@ const renderMoneyChart = (moneyCtx, events) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: 50,
+          minBarLength: STATISTICS_SETTINGS.minBarLength,
         }],
       },
       legend: {
@@ -85,52 +90,52 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
   const uniqueTypes = getUniqueItems(eventTypes);
   const eventsByTypeCounts = uniqueTypes.map((type) => countEventsByTripType(tripEvents, type));
 
-  typeCtx.height = uniqueTypes.length * BAR_HEIGHT;
+  typeCtx.height = uniqueTypes.length * STATISTICS_SETTINGS.barHeight;
 
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
-    type: 'horizontalBar',
+    type: STATISTICS_SETTINGS.type,
     data: {
       labels: uniqueTypes,
       datasets: [{
         data: eventsByTypeCounts,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
+        backgroundColor: STATISTICS_SETTINGS.backgroundColor,
+        hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
+        anchor: STATISTICS_SETTINGS.dataAnchor,
       }],
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 13,
+            size: STATISTICS_SETTINGS.basicFontSize,
           },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
+          color: STATISTICS_SETTINGS.datalabelsColor,
+          anchor: STATISTICS_SETTINGS.datalabelsAnchor,
+          align: STATISTICS_SETTINGS.datalabelsAlign,
           formatter: (val) => `${val}x`,
         },
       },
       title: {
         display: true,
-        text: 'TYPE',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
+        text: StatiscticsTitles.TYPE,
+        fontColor: STATISTICS_SETTINGS.fontColor,
+        fontSize: STATISTICS_SETTINGS.titleFontSize,
+        position: STATISTICS_SETTINGS.titlePosition,
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
+            fontColor: STATISTICS_SETTINGS.fontColor,
+            padding: STATISTICS_SETTINGS.padding,
+            fontSize: STATISTICS_SETTINGS.basicFontSize,
             callback: (val) => `${val.toUpperCase()}`,
           },
           gridLines: {
             display: false,
             drawBorder: false,
           },
-          barThickness: BAR_HEIGHT,
+          barThickness: STATISTICS_SETTINGS.barThickness,
         }],
         xAxes: [{
           ticks: {
@@ -141,7 +146,7 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: 50,
+          minBarLength: STATISTICS_SETTINGS.minBarLength,
         }],
       },
       legend: {
@@ -159,52 +164,52 @@ const renderTimeChart = (timeCtx, tripEvents) => {
   const uniqueTypes = getUniqueItems(eventTypes);
   const durationsByTripTypes = uniqueTypes.map((type) => getDurationByTripType(tripEvents, type));
 
-  timeCtx.height = uniqueTypes.length * BAR_HEIGHT;
+  timeCtx.height = uniqueTypes.length * STATISTICS_SETTINGS.barHeight;
 
   return new Chart(timeCtx, {
     plugins: [ChartDataLabels],
-    type: 'horizontalBar',
+    type: STATISTICS_SETTINGS.type,
     data: {
       labels: uniqueTypes,
       datasets: [{
         data: durationsByTripTypes,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
+        backgroundColor: STATISTICS_SETTINGS.backgroundColor,
+        hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
+        anchor: STATISTICS_SETTINGS.dataAnchor,
       }],
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 13,
+            size: STATISTICS_SETTINGS.basicFontSize,
           },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
+          color: STATISTICS_SETTINGS.datalabelsColor,
+          anchor: STATISTICS_SETTINGS.datalabelsAnchor,
+          align: STATISTICS_SETTINGS.datalabelsAlign,
           formatter: (val) => `${humanizeDuration(val)}`,
         },
       },
       title: {
         display: true,
-        text: 'TIME-SPENT',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
+        text: StatiscticsTitles.TIME_SPENT,
+        fontColor: STATISTICS_SETTINGS.fontColor,
+        fontSize: STATISTICS_SETTINGS.basicFontSize,
+        position: STATISTICS_SETTINGS.titlePosition,
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
+            fontColor: STATISTICS_SETTINGS.fontColor,
+            padding: STATISTICS_SETTINGS.padding,
+            fontSize: STATISTICS_SETTINGS.basicFontSize,
             callback: (val) => `${val.toUpperCase()}`,
           },
           gridLines: {
             display: false,
             drawBorder: false,
           },
-          barThickness: 44,
+          barThickness: STATISTICS_SETTINGS.barThickness,
         }],
         xAxes: [{
           ticks: {
@@ -215,7 +220,7 @@ const renderTimeChart = (timeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: 50,
+          minBarLength: STATISTICS_SETTINGS.minBarLength,
         }],
       },
       legend: {

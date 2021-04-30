@@ -19,6 +19,31 @@ export const UserAction = {
   DELETE_EVENT: 'DELETE_EVENT',
 };
 
+export const STATISTICS_SETTINGS = {
+  type: 'horizontalBar',
+  backgroundColor: '#ffffff',
+  hoverBackgroundColor: '#ffffff',
+  dataAnchor: 'start',
+  basicFontSize: 13,
+  datalabelsColor: '#000000',
+  fontColor: '#000000',
+  datalabelsAnchor: 'end',
+  datalabelsAlign: 'start',
+  titleFontSize: 23,
+  titlePosition: 'left',
+  padding: 5,
+  minBarLength: 50,
+  barHeight: 55,
+  barThickness: 44,
+
+};
+
+export const StatiscticsTitles = {
+  TYPE: 'TYPE',
+  MONEY: 'MONEY',
+  TIME_SPENT: 'TIME-SPENT',
+};
+
 export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
@@ -36,7 +61,6 @@ export const Mode = {
   ADD: 'add',
 };
 
-//export const DEFAULT_POINT = getPoint(DESTINATIONS[0], OFFER_TYPES);
 export const DEFAULT_POINT = {
   basePrice: 0,
   dateFrom: new Date(),
