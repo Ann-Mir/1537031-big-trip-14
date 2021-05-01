@@ -18,7 +18,9 @@ const createTripInfoTemplate = (points) => {
   const route = getRoute(points);
   let totalPrice = 0;
   points.forEach((point) => {
-    totalPrice = totalPrice + point.offers.map((offer) => offer.price).reduce(sumValues, point.basePrice);
+    totalPrice = totalPrice + point.offers
+      .map((offer) => offer.price)
+      .reduce(sumValues, point.basePrice);
   });
 
   return `<section class="trip-main__trip-info  trip-info">

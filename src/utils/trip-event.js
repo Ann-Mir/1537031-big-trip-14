@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {TIMINGS} from './constants.js';
 
 const sumValues = (accumulator, currentValue) => {
   return accumulator + currentValue;
@@ -35,9 +36,11 @@ const getDuration = (startDate, endDate) => {
 };
 
 const humanizeDuration = (duration) => {
-  let minutes = parseInt(duration / (1000 * 60) % 60);
-  let hours = parseInt(duration / (1000 * 60 * 60) % 24);
-  let days = parseInt(duration / (1000 * 60 * 60 * 24));
+  let minutes = Math.trunc(duration / TIMINGS.millisecondsPerMinute % TIMINGS.minutesPerHour);
+  let hours = Math.trunc(duration / (
+    TIMINGS.millisecondsPerMinute * TIMINGS.minutesPerHour) % TIMINGS.hoursPerDay);
+  let days = Math.trunc(duration / (
+    TIMINGS.millisecondsPerMinute * TIMINGS.minutesPerHour * TIMINGS.hoursPerDay));
 
   days = (days < 10) ? '0' + days : days;
   hours = (hours < 10) ? '0' + hours : hours;
@@ -61,9 +64,11 @@ const getEventPeriod = (startingPoint, endingPoint) => {
   const monthStart = dayjs(startingPoint.dateFrom).month();
   const monthEnd = dayjs(endingPoint.dateTo).month();
   if (monthStart == monthEnd) {
-    return `${humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDay(endingPoint.dateTo)}`;
+    return `${
+      humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDay(endingPoint.dateTo)}`;
   }
-  return `${humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDate(endingPoint.dateTo)}`;
+  return `${
+    humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDate(endingPoint.dateTo)}`;
 };
 
 const sortByPrice = (firstEvent, secondEvent) => {

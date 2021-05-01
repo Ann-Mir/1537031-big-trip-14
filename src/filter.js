@@ -13,13 +13,4 @@ const tripEventsFilter = {
   },
 };
 
-const generateFilter = (tripEvents) => {
-  return Object.entries(tripEventsFilter).map(([filterName, tripEventsCount]) => {
-    return {
-      name: filterName,
-      count: tripEventsCount(tripEvents),
-    };
-  });
-};
-
-export { tripEventsFilter, generateFilter };
+export { tripEventsFilter };

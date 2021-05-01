@@ -5,8 +5,7 @@ import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import he from 'he';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import {DATEPICKER_SETTINGS, DEFAULT_POINT} from '../utils/constants.js';
-import {Mode} from '../utils/constants';
+import {DATEPICKER_SETTINGS, DEFAULT_POINT, Mode} from '../utils/constants.js';
 
 
 const createRollUpButtonTemplate = (mode) => {
@@ -114,9 +113,6 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
 
                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                 <button class="event__reset-btn" type="reset">${mode === Mode.EDIT ? 'Delete' : 'Cancel'}</button>
-<!--                <button class="event__rollup-btn" type="button">-->
-<!--                  <span class="visually-hidden">Open event</span>-->
-<!--                </button>-->
                 ${createRollUpButtonTemplate(mode)}
               </header>
               <section class="event__details">
@@ -206,7 +202,7 @@ export default class TripEventEdit extends SmartView {
         DATEPICKER_SETTINGS,
         {
           defaultDate: this._state.dateFrom,
-          onChange: this._startDateChangeHandler,
+          onClose: this._startDateChangeHandler,
         },
       ),
     );
@@ -232,7 +228,7 @@ export default class TripEventEdit extends SmartView {
         {
           minDate: this._state.dateFrom,
           defaultDate: this._state.dateTo,
-          onChange: this._endDateChangeHandler,
+          onClose: this._endDateChangeHandler,
         },
       ),
     );
