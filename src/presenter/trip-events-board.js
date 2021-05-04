@@ -5,7 +5,7 @@ import NoEventsView from '../view/no-events.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
 import TripEventPresenter from './trip-event.js';
 import TripEventAddPresenter from './trip-event-add.js';
-import {areDatesEqual, sortByPrice, sortByTime} from '../utils/trip-event.js';
+import {sortByDate, sortByPrice, sortByTime} from '../utils/trip-event.js';
 import {SortType, UpdateType, UserAction} from '../utils/constants.js';
 import {tripEventsFilter} from '../filter.js';
 import {FilterType} from '../utils/constants.js';
@@ -51,7 +51,7 @@ export default class TripEventsBoard {
       case SortType.TIME:
         return filteredTripEvents.sort(sortByTime);
     }
-    return filteredTripEvents.sort(areDatesEqual);
+    return filteredTripEvents.sort(sortByDate);
   }
 
   init() {
@@ -99,10 +99,6 @@ export default class TripEventsBoard {
   }
 
   _renderSort() {
-    if (this._sortComponent !== null) {
-      this._sortComponent = null;
-    }
-
     this._sortComponent = new SortView(this._currentSortType);
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);

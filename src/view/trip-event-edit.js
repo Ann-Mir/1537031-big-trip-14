@@ -210,6 +210,7 @@ export default class TripEventEdit extends SmartView {
 
   _endDateChangeHandler([userDate]) {
     this.updateState({
+      dateFrom: userDate < this._state.dateFrom ? userDate : this._state.dateFrom,
       dateTo: userDate,
     });
   }

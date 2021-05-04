@@ -3,7 +3,7 @@ import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {cloneObjectValue} from '../utils/common.js';
 import {UserAction, UpdateType} from '../utils/constants.js';
-import {areDatesEqual} from '../utils/trip-event.js';
+import {sortByDate} from '../utils/trip-event.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -106,7 +106,7 @@ export default class TripEvent {
 
   _handleFormSubmit(update) {
     const isMinorUpdate =
-      !areDatesEqual(this._tripEvent.dateFrom, update.dateFrom);
+      !(sortByDate(this._tripEvent.dateFrom, update.dateFrom) === 0);
 
     this._changeData(
       UserAction.UPDATE_EVENT,

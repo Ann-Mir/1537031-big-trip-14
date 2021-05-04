@@ -10,7 +10,6 @@ export const DATEPICKER_SETTINGS = {
   enableTime: true,
   dateFormat: 'd/m/y H:i',
   time_24hr: true,
-  minDate: 'today',
 };
 
 export const UserAction = {

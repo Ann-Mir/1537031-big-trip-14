@@ -82,8 +82,8 @@ const sortByTime = (firstEvent, secondEvent) => {
   return secondDuration - firstDuration;
 };
 
-const areDatesEqual = (firstEvent, secondEvent) => {
-  return new Date(firstEvent.dateFrom) - new Date(secondEvent.dateFrom);
+const sortByDate = (firstEvent, secondEvent) => {
+  return firstEvent.dateFrom - secondEvent.dateFrom;
 };
 
 export {
@@ -99,6 +99,6 @@ export {
   sumValues,
   sortByPrice,
   sortByTime,
-  areDatesEqual,
+  sortByDate,
   getDuration
 };
