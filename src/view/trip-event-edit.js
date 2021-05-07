@@ -295,12 +295,14 @@ export default class TripEventEdit extends SmartView {
   _eventTypeToggleHandler(evt) {
     evt.preventDefault();
     const type = evt.target.dataset.type;
-    const offers = this._availableOfers.get(type);
+    const availableOffers = this._availableOfers.get(type);
+    const offers = type === this._state.type ? this._state.offers : [];
 
     this.updateState(
       {
+        offers,
         type,
-        hasOffers: offers.length > 0 ? true : false,
+        hasOffers: availableOffers.length > 0 ? true : false,
       },
     );
   }
