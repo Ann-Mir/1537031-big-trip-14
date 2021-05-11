@@ -6,8 +6,9 @@ export default class TripEvents extends Observer {
     this._tripEvents = [];
   }
 
-  setTripEvents(tripEvents) {
+  setTripEvents(updateType, tripEvents) {
     this._tripEvents = tripEvents.slice();
+    this._notify(updateType);
   }
 
   getTripEvents() {
