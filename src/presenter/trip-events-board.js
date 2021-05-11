@@ -1,5 +1,6 @@
 import TripEventsBoardView from '../view/trip-events-board.js';
 import SortView from '../view/sort.js';
+import LoadingView from '../view/loading.js';
 import EventsListView from '../view/events-list.js';
 import NoEventsView from '../view/no-events.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
@@ -19,8 +20,10 @@ export default class TripEventsBoard {
     this._boardComponent = new TripEventsBoardView();
     this._tripEventsListComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView();
+    this._isLoading = true;
     this._currentSortType = SortType.DAY;
     this._sortComponent = null;
+    this._loadingComponent = new LoadingView();
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -124,6 +127,10 @@ export default class TripEventsBoard {
     render(this._tripEventsListComponent, this._noEventsComponent, RenderPosition.BEFOREEND);
   }
 
+  _renderLoading() {
+    render(this._tripEventsListComponent, this._loadingComponent, RenderPosition.BEFOREEND);
+  }
+
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
@@ -151,10 +158,20 @@ export default class TripEventsBoard {
         this._clearBoard({resetSortType: true});
         this._renderBoard();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        this._clearBoard();
+        this._renderBoard();
+        break;
     }
   }
 
   _renderBoard() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     if (this._getTripEvents().length === 0) {
       this._renderNoEvents();
       return ;
@@ -172,6 +189,7 @@ export default class TripEventsBoard {
     this._tripEventPresenter = {};
 
     remove(this._sortComponent);
+    remove(this._loadingComponent);
     remove(this._noEventsComponent);
 
     if (resetSortType) {
