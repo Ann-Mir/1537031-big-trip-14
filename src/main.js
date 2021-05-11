@@ -15,11 +15,24 @@ import FilterPresenter from './presenter/filter.js';
 import {MenuItem} from './utils/constants.js';
 import {FilterType, UpdateType} from './utils/constants.js';
 import {remove} from './utils/render.js';
+import Api from './api.js';
 
+const AUTHORIZATION = 'Basic hfbh48fcn9w934avd';
+const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 
 let statisticsComponent = null;
 
 const points = generatePoints(POINTS_COUNT, DESTINATIONS, OFFER_TYPES);
+
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getTripEvents().then((tripEvents) => {
+  console.log(tripEvents);
+  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
+  // а ещё на сервере используется snake_case, а у нас camelCase.
+  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
+  // Есть вариант получше - паттерн "Адаптер"
+});
 
 const tripEventsModel = new TripEventsModel();
 tripEventsModel.setTripEvents(points);

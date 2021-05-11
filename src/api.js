@@ -1,3 +1,5 @@
+import TripEventsModel from './model/trip-events.js';
+
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
@@ -16,17 +18,19 @@ export default class Api {
 
   getTripEvents() {
     return this._load({url: 'points'})
-      .then(Api.toJSON);
+      .then(Api.toJSON)
+      .then((tripEvents) => tripEvents.map(TripEventsModel.adaptToClient));
   }
 
   updateTask(tripEvent) {
     return this._load({
       url: `points/${tripEvent.id}`,
       method: Method.PUT,
-      body: JSON.stringify(tripEvent),
+      body: JSON.stringify(TripEventsModel.adaptToServer(tripEvent)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
-      .then(Api.toJSON);
+      .then(Api.toJSON)
+      .then(TripEventsModel.adaptToClient);
   }
 
   _load({
