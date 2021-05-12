@@ -1,5 +1,4 @@
 import TripEventsModel from './model/trip-events.js';
-import OffersModel from './model/offers.js';
 
 const Method = {
   GET: 'GET',
