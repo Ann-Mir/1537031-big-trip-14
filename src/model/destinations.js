@@ -4,7 +4,7 @@ export default class Destinations {
   }
 
   setDestinations(destinations) {
-    offers.forEach((offer) => this._destinations.set(offer.type, offer.offers));
+    this._destinations = destinations.slice();
   }
 
   getDestinations() {

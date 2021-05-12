@@ -42,8 +42,6 @@ export default class TripEvents extends Observer {
   }
 
   deleteTripEvent(updateType, update) {
-    console.log(this._tripEvents);
-    console.log(update);
     const index = this._tripEvents.findIndex(
       (tripEvent) => tripEvent.id === update.id);
 

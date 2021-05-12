@@ -11,6 +11,7 @@ import TripEventsModel from './model/trip-events.js';
 import FilterModel from './model/filter.js';
 import FilterPresenter from './presenter/filter.js';
 import OffersModel from './model/offers.js';
+import DestinationsModel from './model/destinations.js';
 import {MenuItem} from './utils/constants.js';
 import {FilterType, UpdateType} from './utils/constants.js';
 import {remove} from './utils/render.js';
@@ -26,6 +27,7 @@ const api = new Api(END_POINT, AUTHORIZATION);
 const tripEventsModel = new TripEventsModel();
 const offersModel = new OffersModel();
 const filterModel = new FilterModel();
+const destinationsModel = new DestinationsModel();
 
 const siteHeaderElement = document.querySelector('.page-header');
 const tripControls = new TripControlsView();
@@ -65,13 +67,12 @@ const handleTaskNewFormClose = () => {
 api.getOffers()
   .then((offers) => offersModel.setOffers(offers))
   .catch(() => offersModel.setOffers([]))
+  .then (() => api.getDestinations())
+  .then((destinations) => destinationsModel.setDestinations(destinations))
+  .catch(() => destinationsModel.setDestinations([]))
   .then(() => api.getTripEvents())
-  .then((tripEvents) => {
-    tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents);
-  })
-  .catch(() => {
-    tripEventsModel.setTripEvents(UpdateType.INIT, []);
-  })
+  .then((tripEvents) => tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents))
+  .catch(() => tripEventsModel.setTripEvents(UpdateType.INIT, []))
   .finally(() => {
     const tripInfoComponent = new TripInfoView(tripEventsModel.getTripEvents());
     const newEventButtonComponent = new NewEventButtonView();
