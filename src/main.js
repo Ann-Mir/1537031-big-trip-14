@@ -38,9 +38,10 @@ const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel, offersModel, destinationsModel, filterModel, api);
 const siteMenuComponent = new SiteMenuView();
-
 const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
+
 filterPresenter.init();
+tripEventsBoardPresenter.init();
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -89,7 +90,4 @@ api.getOffers()
       tripEventsBoardPresenter.init();
       tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
     });
-    tripEventsBoardPresenter.init();
   });
-
-
