@@ -27,7 +27,7 @@ const createOffersTypesTemplate = (availableOffers, currentType) => {
 const createAvailableOffersTemplate = (availableOffers, type, checkedOffers) => {
   const offers = availableOffers.get(type);
   return offers.map((offer) => {
-    const isOfferChecked = checkedOffers ? checkedOffers.includes(offer) : false;
+    const isOfferChecked = checkedOffers ? checkedOffers.some((eventOffer) => eventOffer.title === offer.title && eventOffer.price === offer.price) : false;
     return `<div class="event__offer-selector">
               <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="event-offer-${offer.title}" data-title="${offer.title}" ${isOfferChecked ? 'checked' : ''}>
               <label class="event__offer-label" for="event-offer-${offer.title}-${offer.title}-${offer.id}" data-title="${offer.title}">
