@@ -135,16 +135,20 @@ export default class TripEventsBoard {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
-        //this._tripEventsModel.updateTripEvent(updateType, update);
         this._api.updateTripEvent(update).then((response) => {
           this._tripEventsModel.updateTripEvent(updateType, response);
         });
         break;
       case UserAction.ADD_EVENT:
-        this._tripEventsModel.addTripEvent(updateType, update);
+        this._api.addTripEvent(update).then((response) => {
+          this._tripEventsModel.addTripEvent(updateType, response);
+        });
         break;
       case UserAction.DELETE_EVENT:
         this._tripEventsModel.deleteTripEvent(updateType, update);
+        this._api.deleteTripEvent(update).then(() => {
+          this._tripEventsModel.deleteTripEvent(updateType, update);
+        });
         break;
     }
   }

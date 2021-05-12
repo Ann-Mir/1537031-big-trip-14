@@ -1,5 +1,4 @@
 import TripEventEditView from '../view/trip-event-edit.js';
-import {nanoid} from 'nanoid';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {UserAction, UpdateType, DEFAULT_POINT} from '../utils/constants.js';
 import {Mode} from '../utils/constants.js';
@@ -56,7 +55,7 @@ export default class TripEventAdd {
     this._changeData(
       UserAction.ADD_EVENT,
       UpdateType.MINOR,
-      Object.assign({id: nanoid()}, tripEvent),
+      tripEvent,
     );
     this.destroy();
   }
