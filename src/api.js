@@ -22,7 +22,7 @@ export default class Api {
       .then((tripEvents) => tripEvents.map(TripEventsModel.adaptToClient));
   }
 
-  updateTask(tripEvent) {
+  updateTripEvent(tripEvent) {
     return this._load({
       url: `points/${tripEvent.id}`,
       method: Method.PUT,

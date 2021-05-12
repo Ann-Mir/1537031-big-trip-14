@@ -12,7 +12,7 @@ import {tripEventsFilter} from '../filter.js';
 import {FilterType} from '../utils/constants.js';
 
 export default class TripEventsBoard {
-  constructor(container, tripEventsModel, filterModel) {
+  constructor(container, tripEventsModel, filterModel, api) {
     this._tripEventsModel = tripEventsModel;
     this._filterModel = filterModel;
     this._container = container;
@@ -21,6 +21,7 @@ export default class TripEventsBoard {
     this._tripEventsListComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView();
     this._isLoading = true;
+    this._api = api;
     this._currentSortType = SortType.DAY;
     this._sortComponent = null;
     this._loadingComponent = new LoadingView();
@@ -134,13 +135,16 @@ export default class TripEventsBoard {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
-        this._tripEventsModel.updateTripEvent(updateType, update);
+        //this._tripEventsModel.updateTripEvent(updateType, update);
+        this._api.updateTripEvent(update).then((response) => {
+          this._tripEventsModel.updateTripEvent(updateType, response);
+        });
         break;
       case UserAction.ADD_EVENT:
         this._tripEventsModel.addTripEvent(updateType, update);
         break;
       case UserAction.DELETE_EVENT:
-        this._tripEventsModel.deleteTask(updateType, update);
+        this._tripEventsModel.deleteTripEvent(updateType, update);
         break;
     }
   }

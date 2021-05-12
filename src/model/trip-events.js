@@ -41,7 +41,7 @@ export default class TripEvents extends Observer {
     this._notify(updateType, update);
   }
 
-  deleteTask(updateType, update) {
+  deleteTripEvent(updateType, update) {
     const index = this._tripEvents.findIndex(
       (tripEvent) => tripEvent.id === update.id);
 

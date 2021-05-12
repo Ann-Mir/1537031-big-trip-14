@@ -28,13 +28,7 @@ const api = new Api(END_POINT, AUTHORIZATION);
 
 const tripEventsModel = new TripEventsModel();
 // tripEventsModel.setTripEvents(tripEvents);
-api.getTripEvents()
-  .then((tripEvents) => {
-    tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents);
-  })
-  .catch(() => {
-    tripEventsModel.setTripEvents(UpdateType.INIT, []);
-  });
+
 
 const filterModel = new FilterModel();
 
@@ -45,7 +39,7 @@ const tripControlsNavigation = new TripControlsNavigationView();
 const tripControlsFilters = new TripControlsFiltersView();
 const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
-const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel, filterModel);
+const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel, filterModel, api);
 const siteMenuComponent = new SiteMenuView();
 
 const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
@@ -53,14 +47,6 @@ filterPresenter.init();
 
 const tripInfoComponent = new TripInfoView(tripEvents);
 const newEventButtonComponent = new NewEventButtonView();
-
-render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
-render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
-render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
-render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
-render(tripMainElement, newEventButtonComponent, RenderPosition.BEFOREEND);
-render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
-
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -84,13 +70,27 @@ const handleTaskNewFormClose = () => {
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
 };
 
-newEventButtonComponent.setClickHandler(() => {
-  tripEventsBoardPresenter.destroy();
-  filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-  tripEventsBoardPresenter.init();
-  tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
-});
+api.getTripEvents()
+  .then((tripEvents) => {
+    tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents);
+  })
+  .catch(() => {
+    tripEventsModel.setTripEvents(UpdateType.INIT, []);
+  })
+  .finally(() => {
+    render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
+    render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
+    render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
+    render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
+    render(tripMainElement, newEventButtonComponent, RenderPosition.BEFOREEND);
+    render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
+    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+    newEventButtonComponent.setClickHandler(() => {
+      tripEventsBoardPresenter.destroy();
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      tripEventsBoardPresenter.init();
+      tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
+    });
+    tripEventsBoardPresenter.init();
+  });
 
-siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-
-tripEventsBoardPresenter.init();
