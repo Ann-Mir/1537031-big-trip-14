@@ -1,4 +1,3 @@
-import {DESTINATIONS} from '../data.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import {humanizeFullDateAndTime} from '../utils/trip-event.js';
 import SmartView from './smart.js';
@@ -39,8 +38,8 @@ const createAvailableOffersTemplate = (availableOffers, type, checkedOffers) => 
   }).join('');
 };
 
-const createDestinationsOptionsTemplate = () => {
-  return DESTINATIONS.map((destination) => {
+const createDestinationsOptionsTemplate = (destinations) => {
+  return destinations.map((destination) => {
     return `<option value="${destination.name}"></option>`;
   }).join('');
 };
@@ -53,7 +52,7 @@ const createPhotosList = (photosList) => {
 </div>`;
 };
 
-const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
+const createEditPointTemplate = (availableOffers, destinations, state, mode= Mode.EDIT) => {
   const {
     basePrice,
     type,
@@ -91,7 +90,7 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
                   </label>
                   <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${hasDestination ? he.encode(destination.name) : ''}" list="destination-list-1">
                   <datalist id="destination-list-1">
-                    ${createDestinationsOptionsTemplate()}
+                    ${createDestinationsOptionsTemplate(destinations)}
                   </datalist>
                 </div>
 
@@ -135,9 +134,10 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
 
 
 export default class TripEventEdit extends SmartView {
-  constructor(availableOffers, tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
+  constructor(availableOffers, destinationsModel, tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
     super();
     this._availableOffers = availableOffers;
+    this._destinationsModel = destinationsModel;
     this._state = TripEventEdit.parseTripEventToState(tripEvent, this._availableOffers);
     this._mode = mode;
     this._startDatePicker = null;
@@ -236,6 +236,9 @@ export default class TripEventEdit extends SmartView {
   }
 
   _offersSelectionHandler(evt) {
+    if (!evt.target.closest('.event__offer-selector')) {
+      return;
+    }
     const clickedOfferTitle = evt.target.closest('[data-title]').dataset.title;
     const availableOffersByType = this._availableOffers.get(this._state.type);
     const currentOffers = this._state.offers;
@@ -265,7 +268,7 @@ export default class TripEventEdit extends SmartView {
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     const destinationName = evt.target.value;
-    const newDestination = DESTINATIONS.find((item) => item.name === destinationName);
+    const newDestination = this._destinationsModel.getDestinations().find((item) => item.name === destinationName);
 
     if (!newDestination) {
       evt.target.setCustomValidity('The destination is unavailable');
@@ -308,7 +311,7 @@ export default class TripEventEdit extends SmartView {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._availableOffers, this._state, this._mode);
+    return createEditPointTemplate(this._availableOffers, this._destinationsModel.getDestinations(), this._state, this._mode);
   }
 
   _formSubmitHandler(evt) {

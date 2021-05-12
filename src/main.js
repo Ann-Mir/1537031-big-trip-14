@@ -36,7 +36,7 @@ const tripControlsNavigation = new TripControlsNavigationView();
 const tripControlsFilters = new TripControlsFiltersView();
 const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
-const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel, offersModel, filterModel, api);
+const tripEventsBoardPresenter = new TripEventsBoardPresenter(bodyContainerElement, tripEventsModel, offersModel, destinationsModel, filterModel, api);
 const siteMenuComponent = new SiteMenuView();
 
 const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);

@@ -11,9 +11,10 @@ const Mode = {
 };
 
 export default class TripEvent {
-  constructor(tripEventsListContainer, availableOffers, changeData, changeMode) {
+  constructor(tripEventsListContainer, availableOffers, destinationsModel, changeData, changeMode) {
     this._tripEventsListContainer = tripEventsListContainer;
     this._availableOffers = availableOffers;
+    this._destinationsModel = destinationsModel;
     this._changeData = changeData;
     this._changeMode = changeMode;
 
@@ -36,7 +37,7 @@ export default class TripEvent {
     const prevTripEventEditComponent = this._tripEventEditComponent;
 
     this._tripEventComponent = new TripEventView(tripEvent);
-    this._tripEventEditComponent = new TripEventEditView(this._availableOffers, tripEvent);
+    this._tripEventEditComponent = new TripEventEditView(this._availableOffers, this._destinationsModel, tripEvent);
 
     this._tripEventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._tripEventComponent.setEditClickHandler(this._handleEditClick);
