@@ -1,4 +1,5 @@
 import TripEventsModel from './model/trip-events.js';
+import OffersModel from './model/offers.js';
 
 const Method = {
   GET: 'GET',
@@ -22,6 +23,16 @@ export default class Api {
     return this._load({url: 'points'})
       .then(Api.toJSON)
       .then((tripEvents) => tripEvents.map(TripEventsModel.adaptToClient));
+  }
+
+  getOffers() {
+    return this._load({url: 'offers'})
+      .then(Api.toJSON);
+  }
+
+  getDestinations() {
+    return this._load({url: 'destinations'})
+      .then(Api.toJSON);
   }
 
   updateTripEvent(tripEvent) {

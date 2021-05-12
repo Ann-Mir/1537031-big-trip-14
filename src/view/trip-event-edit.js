@@ -1,4 +1,4 @@
-import {DESTINATIONS, OFFER_TYPES} from '../data.js';
+import {DESTINATIONS} from '../data.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import {humanizeFullDateAndTime} from '../utils/trip-event.js';
 import SmartView from './smart.js';
@@ -135,13 +135,13 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
 
 
 export default class TripEventEdit extends SmartView {
-  constructor(tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
+  constructor(availableOffers, tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
     super();
-    this._state = TripEventEdit.parseTripEventToState(tripEvent);
+    this._availableOffers = availableOffers;
+    this._state = TripEventEdit.parseTripEventToState(tripEvent, this._availableOffers);
     this._mode = mode;
     this._startDatePicker = null;
     this._endDatePicker = null;
-    this._availableOfers = OFFER_TYPES;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeEditFormHandler = this._closeEditFormHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
@@ -237,7 +237,7 @@ export default class TripEventEdit extends SmartView {
 
   _offersSelectionHandler(evt) {
     const clickedOfferTitle = evt.target.closest('[data-title]').dataset.title;
-    const availableOffersByType = this._availableOfers.get(this._state.type);
+    const availableOffersByType = this._availableOffers.get(this._state.type);
     const currentOffers = this._state.offers;
 
     const chosenOffer = availableOffersByType.find(
@@ -295,7 +295,7 @@ export default class TripEventEdit extends SmartView {
   _eventTypeToggleHandler(evt) {
     evt.preventDefault();
     const type = evt.target.dataset.type;
-    const availableOffers = this._availableOfers.get(type);
+    const availableOffers = this._availableOffers.get(type);
     const offers = type === this._state.type ? this._state.offers : [];
 
     this.updateState(
@@ -308,7 +308,7 @@ export default class TripEventEdit extends SmartView {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._availableOfers, this._state, this._mode);
+    return createEditPointTemplate(this._availableOffers, this._state, this._mode);
   }
 
   _formSubmitHandler(evt) {
@@ -342,17 +342,16 @@ export default class TripEventEdit extends SmartView {
 
   reset(tripEvent) {
     this.updateState(
-      TripEventEdit.parseTripEventToState(tripEvent),
+      TripEventEdit.parseTripEventToState(tripEvent, this._availableOffers),
     );
   }
 
-  static parseTripEventToState(tripEvent) {
-
+  static parseTripEventToState(tripEvent, availableOffers) {
     return Object.assign(
       {},
       tripEvent,
       {
-        hasOffers: OFFER_TYPES.get(tripEvent.type).length !== 0,
+        hasOffers: availableOffers.get(tripEvent.type).length !== 0,
         hasDestination: tripEvent.destination !== null,
         hasDescription: tripEvent.destination !== null && tripEvent.destination.description.length > 0,
         hasImages: tripEvent.destination !== null && tripEvent.destination.pictures.length !== 0,
