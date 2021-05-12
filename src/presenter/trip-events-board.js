@@ -148,7 +148,6 @@ export default class TripEventsBoard {
         });
         break;
       case UserAction.DELETE_EVENT:
-        this._tripEventsModel.deleteTripEvent(updateType, update);
         this._api.deleteTripEvent(update).then(() => {
           this._tripEventsModel.deleteTripEvent(updateType, update);
         });
