@@ -21,11 +21,11 @@ const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 
 let statisticsComponent = null;
 
-const api = new Api(END_POINT, AUTHORIZATION);
-
 const tripEventsModel = new TripEventsModel();
 const filterModel = new FilterModel();
 const storeModel = new StoreModel();
+
+const api = new Api(storeModel, END_POINT, AUTHORIZATION);
 
 const siteHeaderElement = document.querySelector('.page-header');
 const tripControls = new TripControlsView();
@@ -69,16 +69,11 @@ const handleTaskNewFormClose = () => {
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
 };
 
-api.getOffers()
-  .then((offers) => storeModel.setOffers(offers))
-  .catch(() => storeModel.setOffers([]))
-  .then (() => api.getDestinations())
-  .then((destinations) => storeModel.setDestinations(destinations))
-  .catch(() => storeModel.setDestinations([]))
-  .then(() => api.getTripEvents())
+api
+  .getData()
   .then((tripEvents) => tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents))
   .catch(() => tripEventsModel.setTripEvents(UpdateType.INIT, []))
-  .finally(() => {
+  .finally(() => {console.log('entered finally');
     const tripInfoComponent = new TripInfoView(tripEventsModel.getTripEvents());
     const newEventButtonComponent = new NewEventButtonView();
     render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
