@@ -47,9 +47,9 @@ const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tr
 
 tripEventsBoardPresenter.init();
 
-const tripInfoComponent = new TripInfoView(tripEventsModel.getTripEvents());
+
 const newEventButtonComponent = new NewEventButtonView();
-render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
+
 render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
 render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
 render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
@@ -83,6 +83,8 @@ api
   .then((tripEvents) => tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents))
   .catch(() => tripEventsModel.setTripEvents(UpdateType.INIT, []))
   .finally(() => {
+    const tripInfoComponent = new TripInfoView(tripEventsModel.getTripEvents());
+    render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
     filterPresenter.init();
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
     newEventButtonComponent.setClickHandler(() => {
