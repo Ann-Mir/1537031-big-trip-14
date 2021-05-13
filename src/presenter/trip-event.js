@@ -13,6 +13,7 @@ const Mode = {
 export const State = {
   SAVING: 'SAVING',
   DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
 };
 
 export default class TripEvent {
@@ -87,6 +88,14 @@ export default class TripEvent {
   }
 
   setViewState(state) {
+    const resetFormState = () => {
+      this._tripEventEditComponent.updateState({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
     switch (state) {
       case State.SAVING:
         this._tripEventEditComponent.updateState({
@@ -99,6 +108,10 @@ export default class TripEvent {
           isDisabled: true,
           isDeleting: true,
         });
+        break;
+      case State.ABORTING:
+        this._tripEventEditComponent.shake(resetFormState);
+        this._tripEventEditComponent.shake(resetFormState);
         break;
     }
   }

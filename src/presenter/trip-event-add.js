@@ -70,4 +70,16 @@ export default class TripEventAdd {
       isSaving: true,
     });
   }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._tripEventAddComponent.updateState({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._tripEventAddComponent.shake(resetFormState);
+  }
 }

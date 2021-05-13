@@ -139,21 +139,33 @@ export default class TripEventsBoard {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
         this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.SAVING);
-        this._api.updateTripEvent(update).then((response) => {
-          this._tripEventsModel.updateTripEvent(updateType, response);
-        });
+        this._api.updateTripEvent(update)
+          .then((response) => {
+            this._tripEventsModel.updateTripEvent(updateType, response);
+          })
+          .catch(() => {
+            this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.ABORTING);
+          });
         break;
       case UserAction.ADD_EVENT:
         this._tripEventAddPresenter.setSaving();
-        this._api.addTripEvent(update).then((response) => {
-          this._tripEventsModel.addTripEvent(updateType, response);
-        });
+        this._api.addTripEvent(update)
+          .then((response) => {
+            this._tripEventsModel.addTripEvent(updateType, response);
+          })
+          .catch(() => {
+            this._tripEventAddPresenter.setAborting();
+          });
         break;
       case UserAction.DELETE_EVENT:
         this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.DELETING);
-        this._api.deleteTripEvent(update).then(() => {
-          this._tripEventsModel.deleteTripEvent(updateType, update);
-        });
+        this._api.deleteTripEvent(update)
+          .then(() => {
+            this._tripEventsModel.deleteTripEvent(updateType, update);
+          })
+          .catch(() => {
+            this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.ABORTING);
+          });
         break;
     }
   }
