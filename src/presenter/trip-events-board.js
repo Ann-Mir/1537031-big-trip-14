@@ -4,7 +4,7 @@ import LoadingView from '../view/loading.js';
 import EventsListView from '../view/events-list.js';
 import NoEventsView from '../view/no-events.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
-import TripEventPresenter from './trip-event.js';
+import TripEventPresenter, {State as TripEventPresenterViewState} from './trip-event.js';
 import TripEventAddPresenter from './trip-event-add.js';
 import {sortByDate, sortByPrice, sortByTime} from '../utils/trip-event.js';
 import {SortType, UpdateType, UserAction} from '../utils/constants.js';
@@ -138,16 +138,19 @@ export default class TripEventsBoard {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
+        this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.SAVING);
         this._api.updateTripEvent(update).then((response) => {
           this._tripEventsModel.updateTripEvent(updateType, response);
         });
         break;
       case UserAction.ADD_EVENT:
+        this._tripEventAddPresenter.setSaving();
         this._api.addTripEvent(update).then((response) => {
           this._tripEventsModel.addTripEvent(updateType, response);
         });
         break;
       case UserAction.DELETE_EVENT:
+        this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.DELETING);
         this._api.deleteTripEvent(update).then(() => {
           this._tripEventsModel.deleteTripEvent(updateType, update);
         });
