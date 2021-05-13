@@ -14,7 +14,7 @@ import {StatiscticsTitles, STATISTICS_SETTINGS} from '../utils/constants.js';
 const renderMoneyChart = (moneyCtx, events) => {
   const eventsTypes = events.map((event) => event.type);
   const uniqTypes = getUniqueItems(eventsTypes);
-  const moneyByTypes = uniqTypes.map((type) => getCostsByTripType(events, type));
+  const moneyByTypes = uniqTypes.map((type) => getCostsByTripType(events, type)).sort((first, second) => second - first);
 
   moneyCtx.height = uniqTypes.length * STATISTICS_SETTINGS.barHeight;
 
@@ -88,7 +88,7 @@ const renderMoneyChart = (moneyCtx, events) => {
 const renderChartByTripType = (typeCtx, tripEvents) => {
   const eventTypes = tripEvents.map((tripEvent) => tripEvent.type);
   const uniqueTypes = getUniqueItems(eventTypes);
-  const eventsByTypeCounts = uniqueTypes.map((type) => countEventsByTripType(tripEvents, type));
+  const eventsByTypeCounts = uniqueTypes.map((type) => countEventsByTripType(tripEvents, type)).sort((first, second) => second - first);
 
   typeCtx.height = uniqueTypes.length * STATISTICS_SETTINGS.barHeight;
 
@@ -162,7 +162,7 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
 const renderTimeChart = (timeCtx, tripEvents) => {
   const eventTypes = tripEvents.map((tripEvent) => tripEvent.type);
   const uniqueTypes = getUniqueItems(eventTypes);
-  const durationsByTripTypes = uniqueTypes.map((type) => getDurationByTripType(tripEvents, type));
+  const durationsByTripTypes = uniqueTypes.map((type) => getDurationByTripType(tripEvents, type)).sort((duration1, duration2) => duration2 - duration1);
 
   timeCtx.height = uniqueTypes.length * STATISTICS_SETTINGS.barHeight;
 
@@ -192,7 +192,7 @@ const renderTimeChart = (timeCtx, tripEvents) => {
       },
       title: {
         display: true,
-        text: StatiscticsTitles.MONEY,
+        text: StatiscticsTitles.TIME_SPENT,
         fontColor: STATISTICS_SETTINGS.fontColor,
         fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,
