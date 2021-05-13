@@ -25,7 +25,6 @@ export default class NewEventButton extends AbstractView {
     this._callback.buttonClick = callback;
     this
       .getElement()
-      //.querySelector('.trip-main__event-add-btn')
       .addEventListener('click', this._clickHandler);
   }
 }

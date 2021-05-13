@@ -1,12 +1,13 @@
 import TripEventEditView from '../view/trip-event-edit.js';
-import {nanoid} from 'nanoid';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {UserAction, UpdateType, DEFAULT_POINT} from '../utils/constants.js';
 import {Mode} from '../utils/constants.js';
 
 export default class TripEventAdd {
-  constructor(tripEventsListContainer, changeData) {
+  constructor(tripEventsListContainer, availableOffers, destinationsModel, changeData) {
     this._tripEventsListContainer = tripEventsListContainer;
+    this._availableOffers = availableOffers;
+    this._destinationsModel = destinationsModel;
     this._changeData = changeData;
     this._tripEventAddComponent = null;
     this._destroyCallback = null;
@@ -22,7 +23,7 @@ export default class TripEventAdd {
       return;
     }
 
-    this._tripEventAddComponent = new TripEventEditView(DEFAULT_POINT, Mode.ADD);
+    this._tripEventAddComponent = new TripEventEditView(this._availableOffers, this._destinationsModel, DEFAULT_POINT, Mode.ADD);
     this._tripEventAddComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEventAddComponent.setDeleteClickHandler(this._handleDeleteClick);
 
@@ -56,7 +57,7 @@ export default class TripEventAdd {
     this._changeData(
       UserAction.ADD_EVENT,
       UpdateType.MINOR,
-      Object.assign({id: nanoid()}, tripEvent),
+      tripEvent,
     );
     this.destroy();
   }

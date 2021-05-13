@@ -26,7 +26,6 @@
     "css-loader": "5.2.4",
     "flatpickr": "4.6.9",
     "he": "1.2.0",
-    "nanoid": "3.1.22",
     "style-loader": "2.0.0"
   }
 }

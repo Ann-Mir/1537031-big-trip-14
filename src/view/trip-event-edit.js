@@ -1,4 +1,3 @@
-import {DESTINATIONS, OFFER_TYPES} from '../data.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import {humanizeFullDateAndTime} from '../utils/trip-event.js';
 import SmartView from './smart.js';
@@ -27,7 +26,7 @@ const createOffersTypesTemplate = (availableOffers, currentType) => {
 const createAvailableOffersTemplate = (availableOffers, type, checkedOffers) => {
   const offers = availableOffers.get(type);
   return offers.map((offer) => {
-    const isOfferChecked = checkedOffers ? checkedOffers.includes(offer) : false;
+    const isOfferChecked = checkedOffers ? checkedOffers.some((eventOffer) => eventOffer.title === offer.title && eventOffer.price === offer.price) : false;
     return `<div class="event__offer-selector">
               <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="event-offer-${offer.title}" data-title="${offer.title}" ${isOfferChecked ? 'checked' : ''}>
               <label class="event__offer-label" for="event-offer-${offer.title}-${offer.title}-${offer.id}" data-title="${offer.title}">
@@ -39,8 +38,8 @@ const createAvailableOffersTemplate = (availableOffers, type, checkedOffers) => 
   }).join('');
 };
 
-const createDestinationsOptionsTemplate = () => {
-  return DESTINATIONS.map((destination) => {
+const createDestinationsOptionsTemplate = (destinations) => {
+  return destinations.map((destination) => {
     return `<option value="${destination.name}"></option>`;
   }).join('');
 };
@@ -53,7 +52,7 @@ const createPhotosList = (photosList) => {
 </div>`;
 };
 
-const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
+const createEditPointTemplate = (availableOffers, destinations, state, mode= Mode.EDIT) => {
   const {
     basePrice,
     type,
@@ -89,9 +88,9 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
                   <label class="event__label  event__type-output" for="event-destination-1">
                     ${typeName}
                   </label>
-                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${hasDestination ? he.encode(destination.name) : ''}" list="destination-list-1">
+                  <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${hasDestination ? he.encode(destination.name) : ''}" list="destination-list-1" required>
                   <datalist id="destination-list-1">
-                    ${createDestinationsOptionsTemplate()}
+                    ${createDestinationsOptionsTemplate(destinations)}
                   </datalist>
                 </div>
 
@@ -135,13 +134,14 @@ const createEditPointTemplate = (availableOffers, state, mode= Mode.EDIT) => {
 
 
 export default class TripEventEdit extends SmartView {
-  constructor(tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
+  constructor(availableOffers, destinationsModel, tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
     super();
-    this._state = TripEventEdit.parseTripEventToState(tripEvent);
+    this._availableOffers = availableOffers;
+    this._destinationsModel = destinationsModel;
+    this._state = TripEventEdit.parseTripEventToState(tripEvent, this._availableOffers);
     this._mode = mode;
     this._startDatePicker = null;
     this._endDatePicker = null;
-    this._availableOfers = OFFER_TYPES;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeEditFormHandler = this._closeEditFormHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
@@ -210,6 +210,7 @@ export default class TripEventEdit extends SmartView {
 
   _endDateChangeHandler([userDate]) {
     this.updateState({
+      dateFrom: userDate < this._state.dateFrom ? userDate : this._state.dateFrom,
       dateTo: userDate,
     });
   }
@@ -235,8 +236,11 @@ export default class TripEventEdit extends SmartView {
   }
 
   _offersSelectionHandler(evt) {
+    if (!evt.target.closest('.event__offer-selector')) {
+      return;
+    }
     const clickedOfferTitle = evt.target.closest('[data-title]').dataset.title;
-    const availableOffersByType = this._availableOfers.get(this._state.type);
+    const availableOffersByType = this._availableOffers.get(this._state.type);
     const currentOffers = this._state.offers;
 
     const chosenOffer = availableOffersByType.find(
@@ -264,7 +268,7 @@ export default class TripEventEdit extends SmartView {
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     const destinationName = evt.target.value;
-    const newDestination = DESTINATIONS.find((item) => item.name === destinationName);
+    const newDestination = this._destinationsModel.getDestinations().find((item) => item.name === destinationName);
 
     if (!newDestination) {
       evt.target.setCustomValidity('The destination is unavailable');
@@ -294,18 +298,20 @@ export default class TripEventEdit extends SmartView {
   _eventTypeToggleHandler(evt) {
     evt.preventDefault();
     const type = evt.target.dataset.type;
-    const offers = this._availableOfers.get(type);
+    const availableOffers = this._availableOffers.get(type);
+    const offers = type === this._state.type ? this._state.offers : [];
 
     this.updateState(
       {
+        offers,
         type,
-        hasOffers: offers.length > 0 ? true : false,
+        hasOffers: availableOffers.length > 0 ? true : false,
       },
     );
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._availableOfers, this._state, this._mode);
+    return createEditPointTemplate(this._availableOffers, this._destinationsModel.getDestinations(), this._state, this._mode);
   }
 
   _formSubmitHandler(evt) {
@@ -339,17 +345,16 @@ export default class TripEventEdit extends SmartView {
 
   reset(tripEvent) {
     this.updateState(
-      TripEventEdit.parseTripEventToState(tripEvent),
+      TripEventEdit.parseTripEventToState(tripEvent, this._availableOffers),
     );
   }
 
-  static parseTripEventToState(tripEvent) {
-
+  static parseTripEventToState(tripEvent, availableOffers) {
     return Object.assign(
       {},
       tripEvent,
       {
-        hasOffers: OFFER_TYPES.get(tripEvent.type).length !== 0,
+        hasOffers: availableOffers.get(tripEvent.type).length !== 0,
         hasDestination: tripEvent.destination !== null,
         hasDescription: tripEvent.destination !== null && tripEvent.destination.description.length > 0,
         hasImages: tripEvent.destination !== null && tripEvent.destination.pictures.length !== 0,

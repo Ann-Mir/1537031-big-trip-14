@@ -3,7 +3,7 @@ import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {cloneObjectValue} from '../utils/common.js';
 import {UserAction, UpdateType} from '../utils/constants.js';
-import {areDatesEqual} from '../utils/trip-event.js';
+import {sortByDate} from '../utils/trip-event.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -11,8 +11,10 @@ const Mode = {
 };
 
 export default class TripEvent {
-  constructor(tripEventsListContainer, changeData, changeMode) {
+  constructor(tripEventsListContainer, availableOffers, destinationsModel, changeData, changeMode) {
     this._tripEventsListContainer = tripEventsListContainer;
+    this._availableOffers = availableOffers;
+    this._destinationsModel = destinationsModel;
     this._changeData = changeData;
     this._changeMode = changeMode;
 
@@ -35,7 +37,7 @@ export default class TripEvent {
     const prevTripEventEditComponent = this._tripEventEditComponent;
 
     this._tripEventComponent = new TripEventView(tripEvent);
-    this._tripEventEditComponent = new TripEventEditView(tripEvent);
+    this._tripEventEditComponent = new TripEventEditView(this._availableOffers, this._destinationsModel, tripEvent);
 
     this._tripEventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._tripEventComponent.setEditClickHandler(this._handleEditClick);
@@ -106,7 +108,7 @@ export default class TripEvent {
 
   _handleFormSubmit(update) {
     const isMinorUpdate =
-      !areDatesEqual(this._tripEvent.dateFrom, update.dateFrom);
+      !(sortByDate(this._tripEvent.dateFrom, update.dateFrom) === 0);
 
     this._changeData(
       UserAction.UPDATE_EVENT,
