@@ -353,7 +353,7 @@ export default class TripEventEdit extends SmartView {
       {},
       tripEvent,
       {
-        hasOffers: availableOffers.get(tripEvent.type).length !== 0,
+        hasOffers: availableOffers.size > 0 && availableOffers.get(tripEvent.type).length !== 0,
         hasDestination: tripEvent.destination !== null,
         hasDescription: tripEvent.destination !== null && tripEvent.destination.description.length > 0,
         hasImages: tripEvent.destination !== null && tripEvent.destination.pictures.length !== 0,

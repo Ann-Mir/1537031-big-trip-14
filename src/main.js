@@ -44,8 +44,17 @@ const tripEventsBoardPresenter = new TripEventsBoardPresenter(
 const siteMenuComponent = new SiteMenuView();
 const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
 
-filterPresenter.init();
+
 tripEventsBoardPresenter.init();
+
+const tripInfoComponent = new TripInfoView(tripEventsModel.getTripEvents());
+const newEventButtonComponent = new NewEventButtonView();
+render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
+render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
+render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
+render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
+render(tripMainElement, newEventButtonComponent, RenderPosition.BEFOREEND);
+render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -73,15 +82,8 @@ api
   .getData()
   .then((tripEvents) => tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents))
   .catch(() => tripEventsModel.setTripEvents(UpdateType.INIT, []))
-  .finally(() => {console.log('entered finally');
-    const tripInfoComponent = new TripInfoView(tripEventsModel.getTripEvents());
-    const newEventButtonComponent = new NewEventButtonView();
-    render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
-    render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
-    render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
-    render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
-    render(tripMainElement, newEventButtonComponent, RenderPosition.BEFOREEND);
-    render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
+  .finally(() => {
+    filterPresenter.init();
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
     newEventButtonComponent.setClickHandler(() => {
       tripEventsBoardPresenter.destroy();

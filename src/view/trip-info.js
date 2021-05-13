@@ -23,11 +23,11 @@ const createTripInfoTemplate = (points) => {
       .reduce(sumValues, point.basePrice);
   });
 
-  return `<section class="trip-main__trip-info  trip-info">
+  return `<section class="trip-main__trip-info  trip-info ${points.length > 0 ? '' : 'visually-hidden'}">
             <div class="trip-info__main">
               <h1 class="trip-info__title">${route}</h1>
 
-              <p class="trip-info__dates">${getEventPeriod(points[0], points[points.length - 1])}</p>
+              <p class="trip-info__dates">${points.length > 0? getEventPeriod(points[0], points[points.length - 1]) : ''}</p>
             </div>
 
             <p class="trip-info__cost">

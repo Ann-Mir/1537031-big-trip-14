@@ -20,7 +20,7 @@ export default class TripEventsBoard {
     this._tripEventPresenter = {};
     this._boardComponent = new TripEventsBoardView();
     this._tripEventsListComponent = new EventsListView();
-    this._noEventsComponent = new NoEventsView();
+    this._noEventsComponent = new NoEventsView(storeModel);
     this._isLoading = true;
     this._api = api;
     this._currentSortType = SortType.DAY;

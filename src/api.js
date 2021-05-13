@@ -49,6 +49,9 @@ export default class Api {
       .catch(() => {
         this._store.setDestinations([]);
         this._store.setOffers([]);
+        document
+          .querySelector('.trip-main__event-add-btn')
+          .setAttribute('disabled', 'disabled');
       });
   }
 
