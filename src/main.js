@@ -1,5 +1,4 @@
 import SiteMenuView from './view/site-menu.js';
-import TripInfoView from './view/trip-info.js';
 import TripControlsView from './view/trip-controls.js';
 import TripControlsNavigationView from './view/trip-controls-navigation.js';
 import TripControlsFiltersView from './view/trip-controls-filters.js';
@@ -11,6 +10,7 @@ import TripEventsModel from './model/trip-events.js';
 import FilterModel from './model/filter.js';
 import StoreModel from './model/store.js';
 import FilterPresenter from './presenter/filter.js';
+import TripInfoPresenter from './presenter/trip-info.js';
 import {MenuItem} from './utils/constants.js';
 import {FilterType, UpdateType} from './utils/constants.js';
 import {remove} from './utils/render.js';
@@ -41,12 +41,13 @@ const tripEventsBoardPresenter = new TripEventsBoardPresenter(
   filterModel,
   api,
 );
-const siteMenuComponent = new SiteMenuView();
-const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
 
+const siteMenuComponent = new SiteMenuView();
+
+const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
+const tripInfoPresenter = new TripInfoPresenter(tripMainElement, tripEventsModel);
 
 tripEventsBoardPresenter.init();
-
 
 const newEventButtonComponent = new NewEventButtonView();
 
@@ -83,8 +84,7 @@ api
   .then((tripEvents) => tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents))
   .catch(() => tripEventsModel.setTripEvents(UpdateType.INIT, []))
   .finally(() => {
-    const tripInfoComponent = new TripInfoView(tripEventsModel.getTripEvents());
-    render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
+    tripInfoPresenter.init();
     filterPresenter.init();
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
     newEventButtonComponent.setClickHandler(() => {

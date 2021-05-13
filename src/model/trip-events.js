@@ -15,6 +15,13 @@ export default class TripEvents extends Observer {
     return this._tripEvents;
   }
 
+  getTotalCost() {
+    const totalCost = this._tripEvents.reduce((sum, item) => {
+      return item.basePrice + sum;
+    }, 0);
+    return totalCost;
+  }
+
   updateTripEvent(updateType, update) {
     const index = this._tripEvents.findIndex(
       (tripEvent) => tripEvent.id === update.id);
