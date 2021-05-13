@@ -192,9 +192,9 @@ const renderTimeChart = (timeCtx, tripEvents) => {
       },
       title: {
         display: true,
-        text: StatiscticsTitles.TIME_SPENT,
+        text: StatiscticsTitles.MONEY,
         fontColor: STATISTICS_SETTINGS.fontColor,
-        fontSize: STATISTICS_SETTINGS.basicFontSize,
+        fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,
       },
       scales: {
