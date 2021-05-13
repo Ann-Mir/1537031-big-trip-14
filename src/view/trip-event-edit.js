@@ -134,11 +134,10 @@ const createEditPointTemplate = (availableOffers, destinations, state, mode= Mod
 
 
 export default class TripEventEdit extends SmartView {
-  constructor(availableOffers, destinationsModel, tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
+  constructor(storeModel, tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
     super();
-    this._availableOffers = availableOffers;
-    this._destinationsModel = destinationsModel;
-    this._state = TripEventEdit.parseTripEventToState(tripEvent, this._availableOffers);
+    this._storeModel = storeModel;
+    this._state = TripEventEdit.parseTripEventToState(tripEvent, this._storeModel.getOffers());
     this._mode = mode;
     this._startDatePicker = null;
     this._endDatePicker = null;
@@ -240,7 +239,7 @@ export default class TripEventEdit extends SmartView {
       return;
     }
     const clickedOfferTitle = evt.target.closest('[data-title]').dataset.title;
-    const availableOffersByType = this._availableOffers.get(this._state.type);
+    const availableOffersByType = this._storeModel.getOffers().get(this._state.type);
     const currentOffers = this._state.offers;
 
     const chosenOffer = availableOffersByType.find(
@@ -268,7 +267,7 @@ export default class TripEventEdit extends SmartView {
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     const destinationName = evt.target.value;
-    const newDestination = this._destinationsModel.getDestinations().find((item) => item.name === destinationName);
+    const newDestination = this._storeModel.getDestinations().find((item) => item.name === destinationName);
 
     if (!newDestination) {
       evt.target.setCustomValidity('The destination is unavailable');
@@ -298,7 +297,7 @@ export default class TripEventEdit extends SmartView {
   _eventTypeToggleHandler(evt) {
     evt.preventDefault();
     const type = evt.target.dataset.type;
-    const availableOffers = this._availableOffers.get(type);
+    const availableOffers = this._storeModel.getOffers().get(type);
     const offers = type === this._state.type ? this._state.offers : [];
 
     this.updateState(
@@ -311,7 +310,7 @@ export default class TripEventEdit extends SmartView {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._availableOffers, this._destinationsModel.getDestinations(), this._state, this._mode);
+    return createEditPointTemplate(this._storeModel.getOffers(), this._storeModel.getDestinations(), this._state, this._mode);
   }
 
   _formSubmitHandler(evt) {
@@ -345,7 +344,7 @@ export default class TripEventEdit extends SmartView {
 
   reset(tripEvent) {
     this.updateState(
-      TripEventEdit.parseTripEventToState(tripEvent, this._availableOffers),
+      TripEventEdit.parseTripEventToState(tripEvent, this._storeModel.getOffers()),
     );
   }
 

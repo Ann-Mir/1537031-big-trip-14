@@ -1,6 +1,7 @@
-export default class Offers {
+export default class Store {
   constructor() {
     this._offers = new Map();
+    this._destinations = [];
   }
 
   setOffers(offers) {
@@ -9,5 +10,13 @@ export default class Offers {
 
   getOffers() {
     return this._offers;
+  }
+
+  setDestinations(destinations) {
+    this._destinations = destinations.slice();
+  }
+
+  getDestinations() {
+    return this._destinations;
   }
 }
