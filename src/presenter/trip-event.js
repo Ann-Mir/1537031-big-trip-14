@@ -10,6 +10,11 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+};
+
 export default class TripEvent {
   constructor(tripEventsListContainer, storeModel, changeData, changeMode) {
     this._tripEventsListContainer = tripEventsListContainer;
@@ -55,6 +60,7 @@ export default class TripEvent {
 
     if (this._mode === Mode.EDITING) {
       replace(this._tripEventEditComponent, prevTripEventEditComponent);
+      this._mode = Mode.DEFAULT;
     }
 
     if (this._tripEventsListContainer.getElement().contains(prevTripEventComponent.getElement())) {
@@ -77,6 +83,23 @@ export default class TripEvent {
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToCard();
+    }
+  }
+
+  setViewState(state) {
+    switch (state) {
+      case State.SAVING:
+        this._tripEventEditComponent.updateState({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this._tripEventEditComponent.updateState({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
     }
   }
 
@@ -114,7 +137,6 @@ export default class TripEvent {
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
     );
-    this._replaceFormToCard();
   }
 
   _handleEditFormClose() {

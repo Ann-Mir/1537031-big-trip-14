@@ -58,10 +58,16 @@ export default class TripEventAdd {
       UpdateType.MINOR,
       tripEvent,
     );
-    this.destroy();
   }
 
   _handleDeleteClick() {
     this.destroy();
+  }
+
+  setSaving() {
+    this._tripEventAddComponent.updateState({
+      isDisabled: true,
+      isSaving: true,
+    });
   }
 }
