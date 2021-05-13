@@ -67,6 +67,7 @@ const handleSiteMenuClick = (menuItem) => {
       break;
     case MenuItem.STATS:
       tripEventsBoardPresenter.destroy();
+      remove(statisticsComponent);
       statisticsComponent = new StatisticsView(tripEventsModel.getTripEvents());
       render(bodyContainerElement, statisticsComponent, RenderPosition.BEFOREEND);
       siteMenuComponent.setMenuItem(MenuItem.STATS);
