@@ -4,7 +4,7 @@ import LoadingView from '../view/loading.js';
 import EventsListView from '../view/events-list.js';
 import NoEventsView from '../view/no-events.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
-import TripEventPresenter from './trip-event.js';
+import TripEventPresenter, {State as TripEventPresenterViewState} from './trip-event.js';
 import TripEventAddPresenter from './trip-event-add.js';
 import {sortByDate, sortByPrice, sortByTime} from '../utils/trip-event.js';
 import {SortType, UpdateType, UserAction} from '../utils/constants.js';
@@ -12,16 +12,15 @@ import {tripEventsFilter} from '../filter.js';
 import {FilterType} from '../utils/constants.js';
 
 export default class TripEventsBoard {
-  constructor(container, tripEventsModel, offersModel, destinationsModel, filterModel, api) {
+  constructor(container, tripEventsModel, storeModel, filterModel, api) {
     this._tripEventsModel = tripEventsModel;
     this._filterModel = filterModel;
-    this._destinationsModel = destinationsModel;
+    this._storeModel = storeModel;
     this._container = container;
     this._tripEventPresenter = {};
-    this._availableOffers = offersModel.getOffers();
     this._boardComponent = new TripEventsBoardView();
     this._tripEventsListComponent = new EventsListView();
-    this._noEventsComponent = new NoEventsView();
+    this._noEventsComponent = new NoEventsView(storeModel);
     this._isLoading = true;
     this._api = api;
     this._currentSortType = SortType.DAY;
@@ -36,8 +35,7 @@ export default class TripEventsBoard {
     this._filterModel.addObserver(this._handleModelEvent);
     this._tripEventAddPresenter = new TripEventAddPresenter(
       this._tripEventsListComponent,
-      this._availableOffers,
-      this._destinationsModel,
+      this._storeModel,
       this._handleViewAction,
     );
   }
@@ -115,8 +113,7 @@ export default class TripEventsBoard {
   _renderEvent(tripEvent) {
     const tripEventPresenter = new TripEventPresenter(
       this._tripEventsListComponent,
-      this._availableOffers,
-      this._destinationsModel,
+      this._storeModel,
       this._handleViewAction,
       this._handleModeChange,
     );
@@ -141,19 +138,34 @@ export default class TripEventsBoard {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
-        this._api.updateTripEvent(update).then((response) => {
-          this._tripEventsModel.updateTripEvent(updateType, response);
-        });
+        this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.SAVING);
+        this._api.updateTripEvent(update)
+          .then((response) => {
+            this._tripEventsModel.updateTripEvent(updateType, response);
+          })
+          .catch(() => {
+            this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.ABORTING);
+          });
         break;
       case UserAction.ADD_EVENT:
-        this._api.addTripEvent(update).then((response) => {
-          this._tripEventsModel.addTripEvent(updateType, response);
-        });
+        this._tripEventAddPresenter.setSaving();
+        this._api.addTripEvent(update)
+          .then((response) => {
+            this._tripEventsModel.addTripEvent(updateType, response);
+          })
+          .catch(() => {
+            this._tripEventAddPresenter.setAborting();
+          });
         break;
       case UserAction.DELETE_EVENT:
-        this._api.deleteTripEvent(update).then(() => {
-          this._tripEventsModel.deleteTripEvent(updateType, update);
-        });
+        this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.DELETING);
+        this._api.deleteTripEvent(update)
+          .then(() => {
+            this._tripEventsModel.deleteTripEvent(updateType, update);
+          })
+          .catch(() => {
+            this._tripEventPresenter[update.id].setViewState(TripEventPresenterViewState.ABORTING);
+          });
         break;
     }
   }

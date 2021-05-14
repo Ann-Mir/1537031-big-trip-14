@@ -194,7 +194,7 @@ const renderTimeChart = (timeCtx, tripEvents) => {
         display: true,
         text: StatiscticsTitles.TIME_SPENT,
         fontColor: STATISTICS_SETTINGS.fontColor,
-        fontSize: STATISTICS_SETTINGS.basicFontSize,
+        fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,
       },
       scales: {

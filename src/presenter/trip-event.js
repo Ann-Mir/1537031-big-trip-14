@@ -10,11 +10,16 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
 export default class TripEvent {
-  constructor(tripEventsListContainer, availableOffers, destinationsModel, changeData, changeMode) {
+  constructor(tripEventsListContainer, storeModel, changeData, changeMode) {
     this._tripEventsListContainer = tripEventsListContainer;
-    this._availableOffers = availableOffers;
-    this._destinationsModel = destinationsModel;
+    this._storeModel = storeModel;
     this._changeData = changeData;
     this._changeMode = changeMode;
 
@@ -37,7 +42,7 @@ export default class TripEvent {
     const prevTripEventEditComponent = this._tripEventEditComponent;
 
     this._tripEventComponent = new TripEventView(tripEvent);
-    this._tripEventEditComponent = new TripEventEditView(this._availableOffers, this._destinationsModel, tripEvent);
+    this._tripEventEditComponent = new TripEventEditView(this._storeModel, tripEvent);
 
     this._tripEventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._tripEventComponent.setEditClickHandler(this._handleEditClick);
@@ -56,6 +61,7 @@ export default class TripEvent {
 
     if (this._mode === Mode.EDITING) {
       replace(this._tripEventEditComponent, prevTripEventEditComponent);
+      this._mode = Mode.DEFAULT;
     }
 
     if (this._tripEventsListContainer.getElement().contains(prevTripEventComponent.getElement())) {
@@ -78,6 +84,35 @@ export default class TripEvent {
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToCard();
+    }
+  }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._tripEventEditComponent.updateState({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._tripEventEditComponent.updateState({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this._tripEventEditComponent.updateState({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this._tripEventEditComponent.shake(resetFormState);
+        this._tripEventEditComponent.shake(resetFormState);
+        break;
     }
   }
 
@@ -115,7 +150,6 @@ export default class TripEvent {
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
     );
-    this._replaceFormToCard();
   }
 
   _handleEditFormClose() {
