@@ -1,4 +1,4 @@
-export default class Store {
+export default class Data {
   constructor() {
     this._offers = new Map();
     this._destinations = [];

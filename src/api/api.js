@@ -1,4 +1,4 @@
-import TripEventsModel from './model/trip-events.js';
+import TripEventsModel from '../model/trip-events.js';
 
 const Method = {
   GET: 'GET',

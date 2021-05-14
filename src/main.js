@@ -8,13 +8,13 @@ import StatisticsView from './view/statistics.js';
 import {render, RenderPosition} from './utils/render.js';
 import TripEventsModel from './model/trip-events.js';
 import FilterModel from './model/filter.js';
-import StoreModel from './model/store.js';
+import DataModel from './model/data.js';
 import FilterPresenter from './presenter/filter.js';
 import TripInfoPresenter from './presenter/trip-info.js';
 import {MenuItem} from './utils/constants.js';
 import {FilterType, UpdateType} from './utils/constants.js';
 import {remove} from './utils/render.js';
-import Api from './api.js';
+import Api from './api/api.js';
 
 const AUTHORIZATION = 'Basic hfbh48fcn9w934avd';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
@@ -23,9 +23,9 @@ let statisticsComponent = null;
 
 const tripEventsModel = new TripEventsModel();
 const filterModel = new FilterModel();
-const storeModel = new StoreModel();
+const dataModel = new DataModel();
 
-const api = new Api(storeModel, END_POINT, AUTHORIZATION);
+const api = new Api(dataModel, END_POINT, AUTHORIZATION);
 
 const siteHeaderElement = document.querySelector('.page-header');
 const tripControls = new TripControlsView();
@@ -37,7 +37,7 @@ const bodyContainerElement = siteMainElement.querySelector('.page-body__containe
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(
   bodyContainerElement,
   tripEventsModel,
-  storeModel,
+  dataModel,
   filterModel,
   api,
 );
@@ -95,3 +95,7 @@ api
       tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
     });
   });
+
+window.addEventListener('load', () => {
+  navigator.serviceWorker.register('/sw.js');
+});
