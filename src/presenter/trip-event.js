@@ -17,9 +17,9 @@ export const State = {
 };
 
 export default class TripEvent {
-  constructor(tripEventsListContainer, storeModel, changeData, changeMode) {
+  constructor(tripEventsListContainer, dataModel, changeData, changeMode) {
     this._tripEventsListContainer = tripEventsListContainer;
-    this._storeModel = storeModel;
+    this._dataModel = dataModel;
     this._changeData = changeData;
     this._changeMode = changeMode;
 
@@ -42,7 +42,7 @@ export default class TripEvent {
     const prevTripEventEditComponent = this._tripEventEditComponent;
 
     this._tripEventComponent = new TripEventView(tripEvent);
-    this._tripEventEditComponent = new TripEventEditView(this._storeModel, tripEvent);
+    this._tripEventEditComponent = new TripEventEditView(this._dataModel, tripEvent);
 
     this._tripEventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._tripEventComponent.setEditClickHandler(this._handleEditClick);

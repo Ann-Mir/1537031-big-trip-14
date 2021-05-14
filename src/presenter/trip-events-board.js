@@ -12,15 +12,15 @@ import {tripEventsFilter} from '../filter.js';
 import {FilterType} from '../utils/constants.js';
 
 export default class TripEventsBoard {
-  constructor(container, tripEventsModel, storeModel, filterModel, api) {
+  constructor(container, tripEventsModel, dataModel, filterModel, api) {
     this._tripEventsModel = tripEventsModel;
     this._filterModel = filterModel;
-    this._storeModel = storeModel;
+    this._dataModel = dataModel;
     this._container = container;
     this._tripEventPresenter = {};
     this._boardComponent = new TripEventsBoardView();
     this._tripEventsListComponent = new EventsListView();
-    this._noEventsComponent = new NoEventsView(storeModel);
+    this._noEventsComponent = new NoEventsView(dataModel);
     this._isLoading = true;
     this._api = api;
     this._currentSortType = SortType.DAY;
@@ -35,7 +35,7 @@ export default class TripEventsBoard {
     this._filterModel.addObserver(this._handleModelEvent);
     this._tripEventAddPresenter = new TripEventAddPresenter(
       this._tripEventsListComponent,
-      this._storeModel,
+      this._dataModel,
       this._handleViewAction,
     );
   }
@@ -113,7 +113,7 @@ export default class TripEventsBoard {
   _renderEvent(tripEvent) {
     const tripEventPresenter = new TripEventPresenter(
       this._tripEventsListComponent,
-      this._storeModel,
+      this._dataModel,
       this._handleViewAction,
       this._handleModeChange,
     );

@@ -4,9 +4,9 @@ import {UserAction, UpdateType, DEFAULT_POINT} from '../utils/constants.js';
 import {Mode} from '../utils/constants.js';
 
 export default class TripEventAdd {
-  constructor(tripEventsListContainer, storeModel, changeData) {
+  constructor(tripEventsListContainer, dataModel, changeData) {
     this._tripEventsListContainer = tripEventsListContainer;
-    this._storeModel = storeModel;
+    this._dataModel = dataModel;
     this._changeData = changeData;
     this._tripEventAddComponent = null;
     this._destroyCallback = null;
@@ -22,7 +22,7 @@ export default class TripEventAdd {
       return;
     }
 
-    this._tripEventAddComponent = new TripEventEditView(this._storeModel, DEFAULT_POINT, Mode.ADD);
+    this._tripEventAddComponent = new TripEventEditView(this._dataModel, DEFAULT_POINT, Mode.ADD);
     this._tripEventAddComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEventAddComponent.setDeleteClickHandler(this._handleDeleteClick);
 
