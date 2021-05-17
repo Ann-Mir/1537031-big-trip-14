@@ -5,6 +5,7 @@ import {cloneObjectValue} from '../utils/common.js';
 import {UserAction, UpdateType} from '../utils/constants.js';
 import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
+import {getDuration} from '../utils/trip-event';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -153,7 +154,10 @@ export default class TripEvent {
       return;
     }
 
-    const isMinorUpdate = this._tripEvent.dateFrom !== update.dateFrom;
+    const isMinorUpdate = (this._tripEvent.dateFrom !== update.dateFrom)
+      || (this._tripEvent.basePrice !== update.basePrice)
+      || (getDuration(this._tripEvent.dateFrom, this._tripEvent.dateTo)
+        !== getDuration(update.dateFrom, update.dateTo));
     this._changeData(
       UserAction.UPDATE_EVENT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,

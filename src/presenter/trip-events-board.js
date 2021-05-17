@@ -50,8 +50,9 @@ export default class TripEventsBoard {
     const filterType = this._filterModel.getFilter();
     const tripEvents = this._tripEventsModel.getTripEvents();
     const filteredTripEvents = tripEventsFilter[filterType](tripEvents);
-
     switch (this._currentSortType) {
+      case SortType.DAY:
+        return filteredTripEvents.sort(sortByDate);
       case SortType.PRICE:
         return filteredTripEvents.sort(sortByPrice);
       case SortType.TIME:
