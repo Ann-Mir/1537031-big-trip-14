@@ -72,12 +72,14 @@ const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
       remove(statisticsComponent);
+      newEventButtonComponent.enable();
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripEventsBoardPresenter.init();
       siteMenuComponent.setMenuItem(MenuItem.TABLE);
       break;
     case MenuItem.STATS:
       tripEventsBoardPresenter.destroy();
+      newEventButtonComponent.disable();
       remove(statisticsComponent);
       statisticsComponent = new StatisticsView(tripEventsModel.getTripEvents());
       render(bodyContainerElement, statisticsComponent, RenderPosition.BEFOREEND);
