@@ -112,6 +112,7 @@ apiWithProvider
     filterPresenter.init();
     tripInfoPresenter.init();
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+    newEventButtonComponent.enable();
     newEventButtonComponent.setClickHandler(handleNewEventButtonClick);
   });
 

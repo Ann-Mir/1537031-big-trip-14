@@ -128,16 +128,13 @@ export default class TripEventsBoard {
     this._getTripEvents().forEach((tripEvent) => {
       this._renderEvent(tripEvent);
     });
-    this._newEventButtonComponent.enable();
   }
 
   _renderNoEvents() {
-    this._newEventButtonComponent.enable();
     render(this._tripEventsListComponent, this._noEventsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderLoading() {
-    this._newEventButtonComponent.disable();
     render(this._tripEventsListComponent, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 
@@ -200,6 +197,7 @@ export default class TripEventsBoard {
   _renderBoard() {
     if (this._isLoading) {
       this._renderLoading();
+      this._newEventButtonComponent.disable();
       return;
     }
 
