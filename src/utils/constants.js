@@ -1,4 +1,4 @@
-import {nanoid} from 'nanoid';
+//import {nanoid} from 'nanoid';
 
 export const SortType = {
   DAY: 'day',
@@ -66,7 +66,7 @@ export const DEFAULT_POINT = {
   dateFrom: new Date(),
   dateTo: new Date(),
   destination: null,
-  id: nanoid(),
+  id: '',
   isFavorite: false,
   type: 'taxi',
   offers: [],

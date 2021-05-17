@@ -27,11 +27,15 @@ const cloneObjectValue = (obj, value) => {
   );
 };
 
+const isOnline = () => {
+  return window.navigator.onLine;
+};
 
 export {
   getRandomDate,
   capitalizeFirstLetter,
   cloneObjectValue,
+  isOnline,
   MIN_DAYS_GAP,
   MAX_DAYS_GAP
 };

@@ -4,6 +4,8 @@ import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {cloneObjectValue} from '../utils/common.js';
 import {UserAction, UpdateType} from '../utils/constants.js';
 import {sortByDate} from '../utils/trip-event.js';
+import {isOnline} from '../utils/common.js';
+import {showToast} from '../utils/toast.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -138,10 +140,20 @@ export default class TripEvent {
   }
 
   _handleEditClick() {
+    if (!isOnline()) {
+      showToast('You can\'t edit event offline');
+      return;
+    }
+
     this._replaceCardToForm();
   }
 
   _handleFormSubmit(update) {
+    if (!isOnline()) {
+      showToast('You can\'t save event offline');
+      return;
+    }
+
     const isMinorUpdate =
       !(sortByDate(this._tripEvent.dateFrom, update.dateFrom) === 0);
 
@@ -169,6 +181,10 @@ export default class TripEvent {
   }
 
   _handleDeleteClick(tripEvent) {
+    if (!isOnline()) {
+      showToast('You can\'t delete event offline');
+      return;
+    }
     this._changeData(
       UserAction.DELETE_EVENT,
       UpdateType.MINOR,
