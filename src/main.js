@@ -25,6 +25,7 @@ const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 const STORE_PREFIX = 'bigtrip-localstorage';
 const STORE_VER = 'v14';
 const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+const OFFLINE_TITLE = ' [offline]';
 
 let statisticsComponent = null;
 
@@ -119,10 +120,13 @@ window.addEventListener('load', () => {
 });
 
 window.addEventListener('online', () => {
-  document.title = document.title.replace(' [offline]', '');
+  newEventButtonComponent.enable();
+  document.title = document.title.replace(OFFLINE_TITLE, '');
   apiWithProvider.sync();
 });
 
 window.addEventListener('offline', () => {
-  document.title += ' [offline]';
+  newEventButtonComponent.disable();
+  showToast('Connection is lost');
+  document.title += OFFLINE_TITLE;
 });

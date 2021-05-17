@@ -1,9 +1,9 @@
 import TripEventsModel from '../model/trip-events.js';
 import {isOnline} from '../utils/common.js';
 
-const getSyncedTasks = (items) => {
+const getSyncedTripEvents = (items) => {
   return items.filter(({success}) => success)
-    .map(({payload}) => payload.tripEvent);
+    .map(({payload}) => payload.point);
 };
 
 const createStoreStructure = (items) => {

@@ -44,21 +44,14 @@ self.addEventListener('install', (evt) => {
 
 self.addEventListener('activate', (evt) => {
   evt.waitUntil(
-    // Получаем все названия кэшей
     caches.keys()
       .then(
-        // Перебираем их и составляем набор промисов на удаление
         (keys) => Promise.all(
           keys.map(
             (key) => {
-              // Удаляем только те кэши,
-              // которые начинаются с нашего префикса,
-              // но не совпадают по версии
               if (key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME) {
                 return caches.delete(key);
               }
-
-              // Остальные не обрабатываем
               return null;
             })
             .filter((key) => key !== null),
