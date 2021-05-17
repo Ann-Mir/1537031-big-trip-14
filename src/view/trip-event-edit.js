@@ -327,7 +327,7 @@ export default class TripEventEdit extends SmartView {
       {
         offers,
         type,
-        hasOffers: availableOffers.length > 0 ? true : false,
+        hasOffers: availableOffers && availableOffers.length > 0 ? true : false,
       },
     );
   }
