@@ -2,6 +2,8 @@ import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {UserAction, UpdateType, DEFAULT_POINT} from '../utils/constants.js';
 import {Mode} from '../utils/constants.js';
+import {isOnline} from '../utils/common.js';
+import {showToast} from '../utils/toast.js';
 
 export default class TripEventAdd {
   constructor(tripEventsListContainer, dataModel, changeData) {
@@ -53,6 +55,11 @@ export default class TripEventAdd {
   }
 
   _handleFormSubmit(tripEvent) {
+    if (!isOnline()) {
+      showToast('You can\'t save event offline');
+      return;
+    }
+
     this._changeData(
       UserAction.ADD_EVENT,
       UpdateType.MINOR,

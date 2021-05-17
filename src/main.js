@@ -107,7 +107,6 @@ apiWithProvider
   .catch(() => tripEventsModel.setTripEvents(UpdateType.INIT, []))
   .finally(() => {
     tripInfoPresenter.init();
-    filterPresenter.init();
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
     newEventButtonComponent.setClickHandler(handleNewEventButtonClick);
   });

@@ -3,7 +3,6 @@ import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {cloneObjectValue} from '../utils/common.js';
 import {UserAction, UpdateType} from '../utils/constants.js';
-import {sortByDate} from '../utils/trip-event.js';
 import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
 
@@ -154,14 +153,13 @@ export default class TripEvent {
       return;
     }
 
-    const isMinorUpdate =
-      !(sortByDate(this._tripEvent.dateFrom, update.dateFrom) === 0);
-
+    const isMinorUpdate = this._tripEvent.dateFrom !== update.dateFrom;
     this._changeData(
       UserAction.UPDATE_EVENT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
     );
+    this._replaceFormToCard();
   }
 
   _handleEditFormClose() {

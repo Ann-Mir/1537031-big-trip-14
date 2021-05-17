@@ -18,5 +18,5 @@ const isOnline = () => {
 export {
   capitalizeFirstLetter,
   cloneObjectValue,
-  isOnline,
+  isOnline
 };

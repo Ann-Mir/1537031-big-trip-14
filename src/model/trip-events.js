@@ -1,4 +1,5 @@
 import Observer from '../utils/observer.js';
+import {sortByDate} from '../utils/trip-event';
 
 export default class TripEvents extends Observer {
   constructor() {
