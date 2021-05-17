@@ -6,8 +6,9 @@ import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
 
 export default class TripEventAdd {
-  constructor(tripEventsListContainer, dataModel, changeData) {
+  constructor(tripEventsListContainer, newEventButtonComponent, dataModel, changeData) {
     this._tripEventsListContainer = tripEventsListContainer;
+    this._newEventButtonComponent = newEventButtonComponent;
     this._dataModel = dataModel;
     this._changeData = changeData;
     this._tripEventAddComponent = null;
@@ -60,6 +61,8 @@ export default class TripEventAdd {
       return;
     }
 
+    this._newEventButtonComponent.enable();
+
     this._changeData(
       UserAction.ADD_EVENT,
       UpdateType.MINOR,
@@ -68,6 +71,7 @@ export default class TripEventAdd {
   }
 
   _handleDeleteClick() {
+    this._newEventButtonComponent.enable();
     this.destroy();
   }
 

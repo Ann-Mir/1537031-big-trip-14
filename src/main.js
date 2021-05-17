@@ -43,11 +43,14 @@ const tripControlsNavigation = new TripControlsNavigationView();
 const tripControlsFilters = new TripControlsFiltersView();
 const siteMainElement = document.querySelector('.page-main');
 const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
+const newEventButtonComponent = new NewEventButtonView();
+
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(
   bodyContainerElement,
   tripEventsModel,
   dataModel,
   filterModel,
+  newEventButtonComponent,
   apiWithProvider,
 );
 
@@ -57,8 +60,6 @@ const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tr
 const tripInfoPresenter = new TripInfoPresenter(tripMainElement, tripEventsModel);
 
 tripEventsBoardPresenter.init();
-
-const newEventButtonComponent = new NewEventButtonView();
 
 render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
 render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
@@ -91,7 +92,7 @@ const handleTaskNewFormClose = () => {
 
 const handleNewEventButtonClick = () => {
   tripEventsBoardPresenter.destroy();
-  newEventButtonComponent.disableNewEventButton();
+  newEventButtonComponent.disable();
   filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
   tripEventsBoardPresenter.init();
   if (!isOnline()) {
@@ -107,6 +108,7 @@ apiWithProvider
   .then((tripEvents) => tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents))
   .catch(() => tripEventsModel.setTripEvents(UpdateType.INIT, []))
   .finally(() => {
+    filterPresenter.init();
     tripInfoPresenter.init();
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
     newEventButtonComponent.setClickHandler(handleNewEventButtonClick);

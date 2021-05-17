@@ -28,7 +28,11 @@ export default class NewEventButton extends AbstractView {
       .addEventListener('click', this._clickHandler);
   }
 
-  disableNewEventButton() {
+  disable() {
     this.getElement().setAttribute('disabled', 'disabled');
+  }
+
+  enable() {
+    this.getElement().removeAttribute('disabled');
   }
 }
