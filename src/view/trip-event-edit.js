@@ -320,6 +320,9 @@ export default class TripEventEdit extends SmartView {
   _eventTypeToggleHandler(evt) {
     evt.preventDefault();
     const type = evt.target.dataset.type;
+    if (!type) {
+      return;
+    }
     const availableOffers = this._dataModel.getOffers().get(type);
     const offers = type === this._state.type ? this._state.offers : [];
 
