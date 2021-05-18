@@ -110,7 +110,7 @@ export default class TripEventsBoard {
   _renderSort() {
     this._sortComponent = new SortView(this._currentSortType);
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
-    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._sortComponent.setTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderEvent(tripEvent) {

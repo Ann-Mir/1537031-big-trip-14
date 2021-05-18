@@ -73,7 +73,7 @@ const handleSiteMenuClick = (menuItem) => {
       newEventButtonComponent.enable();
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripEventsBoardPresenter.init();
-      siteMenuComponent.setMenuItem(MenuItem.TABLE);
+      siteMenuComponent.setItem(MenuItem.TABLE);
       break;
     case MenuItem.STATS:
       tripEventsBoardPresenter.destroy();
@@ -81,7 +81,7 @@ const handleSiteMenuClick = (menuItem) => {
       remove(statisticsComponent);
       statisticsComponent = new StatisticsView(tripEventsModel.getTripEvents());
       render(bodyContainerElement, statisticsComponent, RenderPosition.BEFOREEND);
-      siteMenuComponent.setMenuItem(MenuItem.STATS);
+      siteMenuComponent.setItem(MenuItem.STATS);
       break;
   }
 };
@@ -89,7 +89,7 @@ const handleSiteMenuClick = (menuItem) => {
 const handleTaskNewFormClose = () => {
   newEventButtonComponent.enable();
   remove(statisticsComponent);
-  siteMenuComponent.setMenuItem(MenuItem.TABLE);
+  siteMenuComponent.setItem(MenuItem.TABLE);
 };
 
 const handleNewEventButtonClick = () => {
@@ -99,7 +99,7 @@ const handleNewEventButtonClick = () => {
   tripEventsBoardPresenter.init();
   if (!isOnline()) {
     showToast('You can\'t create new event offline');
-    siteMenuComponent.setMenuItem(MenuItem.TABLE);
+    siteMenuComponent.setItem(MenuItem.TABLE);
     return;
   }
   tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
@@ -108,7 +108,7 @@ const handleNewEventButtonClick = () => {
 const handleDataReceived = () => {
   filterPresenter.init();
   tripInfoPresenter.init();
-  siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  siteMenuComponent.setClickHandler(handleSiteMenuClick);
   newEventButtonComponent.setClickHandler(handleNewEventButtonClick);
 };
 

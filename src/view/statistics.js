@@ -274,6 +274,7 @@ const createStatisticsTemplate = () => {
 };
 
 export default class Statistics extends SmartView {
+
   constructor(tripEvents) {
     super();
 
@@ -318,4 +319,5 @@ export default class Statistics extends SmartView {
     this._moneyChart = renderMoneyChart(moneyCtx, this._tripEvents);
     this._typeChart = renderChartByTripType(typeCtx, this._tripEvents);
   }
+
 }

@@ -19,8 +19,8 @@ export const State = {
 };
 
 export default class TripEvent {
-  constructor(tripEventsListContainer, dataModel, changeData, changeMode) {
-    this._tripEventsListContainer = tripEventsListContainer;
+  constructor(tripEventsContainer, dataModel, changeData, changeMode) {
+    this._tripEventsContainer = tripEventsContainer;
     this._dataModel = dataModel;
     this._changeData = changeData;
     this._changeMode = changeMode;
@@ -53,7 +53,7 @@ export default class TripEvent {
     this._tripEventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevTripEventComponent === null || prevTripEventEditComponent === null) {
-      render(this._tripEventsListContainer, this._tripEventComponent, RenderPosition.BEFOREEND);
+      render(this._tripEventsContainer, this._tripEventComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -66,11 +66,11 @@ export default class TripEvent {
       this._mode = Mode.DEFAULT;
     }
 
-    if (this._tripEventsListContainer.getElement().contains(prevTripEventComponent.getElement())) {
+    if (this._tripEventsContainer.getElement().contains(prevTripEventComponent.getElement())) {
       replace(this._tripEventComponent, prevTripEventComponent);
     }
 
-    if (this._tripEventsListContainer.getElement().contains(prevTripEventEditComponent.getElement())) {
+    if (this._tripEventsContainer.getElement().contains(prevTripEventEditComponent.getElement())) {
       replace(this._tripEventEditComponent, prevTripEventEditComponent);
     }
 
@@ -193,4 +193,5 @@ export default class TripEvent {
       tripEvent,
     );
   }
+
 }

@@ -1,4 +1,5 @@
 export default class Data {
+
   constructor() {
     this._offers = new Map();
     this._destinations = [];
@@ -19,4 +20,5 @@ export default class Data {
   getDestinations() {
     return this._destinations;
   }
+
 }

@@ -7,6 +7,7 @@ const createNewEventButtonTemplate = () => {
 };
 
 export default class NewEventButton extends AbstractView {
+
   constructor() {
     super();
     this._clickHandler = this._clickHandler.bind(this);
@@ -35,4 +36,5 @@ export default class NewEventButton extends AbstractView {
   enable() {
     this.getElement().removeAttribute('disabled');
   }
+
 }

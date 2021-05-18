@@ -6,13 +6,16 @@ import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
 
 export default class TripEventAdd {
+
   constructor(tripEventsListContainer, newEventButtonComponent, dataModel, changeData) {
     this._tripEventsListContainer = tripEventsListContainer;
     this._newEventButtonComponent = newEventButtonComponent;
-    this._dataModel = dataModel;
-    this._changeData = changeData;
     this._tripEventAddComponent = null;
     this._destroyCallback = null;
+
+    this._dataModel = dataModel;
+    this._changeData = changeData;
+
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
@@ -91,7 +94,7 @@ export default class TripEventAdd {
         isDeleting: false,
       });
     };
-
     this._tripEventAddComponent.shake(resetFormState);
   }
+
 }

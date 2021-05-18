@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 const POINTS_TO_SHOW = 3;
 
 export default class TripInfo {
+
   constructor(container, tripEventsModel) {
     this._tripEventsModel = tripEventsModel;
     this._totalCost = 0;
@@ -22,7 +23,8 @@ export default class TripInfo {
     this._totalCost = this._tripEventsModel.getTotalCost();
     this._route = this.getRoute();
     this._tripDates = this.getEventPeriod();
-    this._renderTripInfo();
+
+    this._render();
 
     this._tripEventsModel.addObserver(this._handleModelEvent);
     this._handleModelEvent();
@@ -37,7 +39,7 @@ export default class TripInfo {
     const endingPoint = tripEvents[tripEvents.length - 1];
     const monthStart = dayjs(startingPoint.dateFrom).month();
     const monthEnd = dayjs(endingPoint.dateTo).month();
-    if (monthStart == monthEnd) {
+    if (monthStart === monthEnd) {
       return `${
         humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDay(endingPoint.dateTo)}`;
     }
@@ -57,7 +59,7 @@ export default class TripInfo {
     return `${startingPoint.destination.name} &mdash; ... &mdash; ${endingPoint.destination.name}`;
   }
 
-  _renderTripInfo() {
+  _render() {
     remove(this._tripInfoComponent);
     this._tripInfoComponent = new TripInfoView(this._totalCost, this._route, this._tripDates);
     render(
@@ -79,6 +81,7 @@ export default class TripInfo {
     this._totalCost = totalPrice;
     this._route = route;
     this._tripDates = tripDates;
-    this._renderTripInfo();
+    this._render();
   }
+
 }

@@ -15,6 +15,7 @@ const createStoreStructure = (items) => {
 };
 
 export default class Provider {
+
   constructor(api, store) {
     this._api = api;
     this._store = store;
@@ -76,18 +77,14 @@ export default class Provider {
 
       return this._api.sync(storeTripEvents)
         .then((response) => {
-          // Забираем из ответа синхронизированные задачи
           const createdTripEvents = getSyncedTripEvents(response.created);
           const updatedTripEvents = getSyncedTripEvents(response.updated);
-
-          // Добавляем синхронизированные задачи в хранилище.
-          // Хранилище должно быть актуальным в любой момент.
           const items = createStoreStructure([...createdTripEvents, ...updatedTripEvents]);
 
           this._store.setItems(items);
         });
     }
-
     return Promise.reject(new Error('Sync data failed'));
   }
+
 }
