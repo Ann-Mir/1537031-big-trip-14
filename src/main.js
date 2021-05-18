@@ -100,9 +100,9 @@ const handleTaskNewFormClose = () => {
 
 const handleNewEventButtonClick = () => {
   tripEventsBoardPresenter.destroy();
+  tripEventsBoardPresenter.init();
   newEventButtonComponent.disable();
   filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-  tripEventsBoardPresenter.init();
   if (!isOnline()) {
     showToast(OfflineMessages.CREATE);
     siteMenuComponent.setItem(MenuItem.TABLE);

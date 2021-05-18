@@ -32,6 +32,8 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
+        barThickness: STATISTICS_SETTINGS.barThickness,
+        minBarLength: STATISTICS_SETTINGS.minBarLength,
       }],
     },
     options: {
@@ -65,7 +67,6 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          barThickness: STATISTICS_SETTINGS.barThickness,
         }],
         xAxes: [{
           ticks: {
@@ -76,7 +77,6 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: STATISTICS_SETTINGS.minBarLength,
         }],
       },
       legend: {
@@ -115,6 +115,8 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
+        barThickness: STATISTICS_SETTINGS.barThickness,
+        minBarLength: STATISTICS_SETTINGS.minBarLength,
       }],
     },
     options: {
@@ -148,7 +150,6 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          barThickness: STATISTICS_SETTINGS.barThickness,
         }],
         xAxes: [{
           ticks: {
@@ -159,7 +160,6 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: STATISTICS_SETTINGS.minBarLength,
         }],
       },
       legend: {
@@ -198,6 +198,8 @@ const renderTimeChart = (timeCtx, tripEvents) => {
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
+        barThickness: STATISTICS_SETTINGS.barThickness,
+        minBarLength: STATISTICS_SETTINGS.minBarLength,
       }],
     },
     options: {
@@ -231,7 +233,6 @@ const renderTimeChart = (timeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          barThickness: STATISTICS_SETTINGS.barThickness,
         }],
         xAxes: [{
           ticks: {
@@ -242,7 +243,6 @@ const renderTimeChart = (timeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: STATISTICS_SETTINGS.minBarLength,
         }],
       },
       legend: {

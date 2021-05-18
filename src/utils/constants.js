@@ -88,7 +88,7 @@ export const OfflineMessages = {
   EDIT: 'You can\'t edit event offline',
 };
 
-export const AUTHORIZATION = 'Basic hfbh48fcn9w934avd';
+export const AUTHORIZATION = 'Basic hfbhfmdkcn9wfdfdvd';
 export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 const STORE_PREFIX = 'bigtrip-localstorage';
 const STORE_VER = 'v14';
