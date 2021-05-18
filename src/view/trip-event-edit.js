@@ -156,7 +156,6 @@ const createEditPointTemplate = (availableOffers, destinations, state, mode= Mod
 };
 
 export default class TripEventEdit extends SmartView {
-
   constructor(dataModel, tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
     super();
     this._dataModel = dataModel;
@@ -429,5 +428,4 @@ export default class TripEventEdit extends SmartView {
 
     return state;
   }
-
 }

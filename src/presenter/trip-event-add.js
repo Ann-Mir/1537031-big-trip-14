@@ -1,13 +1,10 @@
 import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
-import {UserAction, UpdateType, DEFAULT_POINT} from '../utils/constants.js';
-import {Mode} from '../utils/constants.js';
+import {UserAction, UpdateType, DEFAULT_POINT, OfflineMessages, Mode} from '../utils/constants.js';
 import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
-import {OfflineMessages} from '../utils/constants.js';
 
 export default class TripEventAdd {
-
   constructor(container, newEventButtonComponent, dataModel, changeData) {
     this._container = container;
     this._newEventButtonComponent = newEventButtonComponent;
@@ -97,5 +94,4 @@ export default class TripEventAdd {
     this._newEventButtonComponent.enable();
     this.destroy();
   }
-
 }

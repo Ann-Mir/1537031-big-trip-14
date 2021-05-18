@@ -7,9 +7,8 @@ import {remove, render, RenderPosition} from '../utils/render.js';
 import TripEventPresenter, {State as TripEventPresenterViewState} from './trip-event.js';
 import TripEventAddPresenter from './trip-event-add.js';
 import {sortByDate, sortByPrice, sortByTime} from '../utils/trip-event.js';
-import {SortType, UpdateType, UserAction} from '../utils/constants.js';
+import {SortType, UpdateType, UserAction, FilterType} from '../utils/constants.js';
 import {tripEventsFilter} from '../filter.js';
-import {FilterType} from '../utils/constants.js';
 
 export default class TripEventsBoard {
   constructor(container, tripEventsModel, dataModel, filterModel, newEventButton, api) {
@@ -232,5 +231,4 @@ export default class TripEventsBoard {
         break;
     }
   }
-
 }

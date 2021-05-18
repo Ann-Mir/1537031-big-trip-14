@@ -31,7 +31,6 @@ const createTripEventsSortForm = (sortType) => {
 };
 
 export default class SortView extends AbstractView {
-
   constructor(sortType) {
     super();
     this._currentType = sortType;
@@ -56,5 +55,4 @@ export default class SortView extends AbstractView {
     this._callback.typeChange = callback;
     this.getElement().addEventListener('click', this._typeChangeHandler);
   }
-
 }

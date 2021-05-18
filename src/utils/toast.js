@@ -16,4 +16,4 @@ const showToast = (message) => {
   }, SHOW_TIME);
 };
 
-export {showToast};
+export { showToast };

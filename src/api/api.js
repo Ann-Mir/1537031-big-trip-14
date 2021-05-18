@@ -13,7 +13,6 @@ const SuccessHTTPStatusRange = {
 };
 
 export default class Api {
-
   constructor(storeModel, endPoint, authorization) {
     this._store = storeModel;
     this._endPoint = endPoint;
@@ -129,5 +128,4 @@ export default class Api {
   static catchError(err) {
     throw err;
   }
-
 }

@@ -3,7 +3,6 @@ import TripControlsView from './view/trip-controls.js';
 import TripControlsNavigationView from './view/trip-controls-navigation.js';
 import TripControlsFiltersView from './view/trip-controls-filters.js';
 import NewEventButtonView from './view/new-event-button.js';
-import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import StatisticsView from './view/statistics.js';
 import {remove, render, RenderPosition} from './utils/render.js';
 import {isOnline} from './utils/common.js';
@@ -12,6 +11,7 @@ import FilterModel from './model/filter.js';
 import DataModel from './model/data.js';
 import FilterPresenter from './presenter/filter.js';
 import TripInfoPresenter from './presenter/trip-info.js';
+import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import Store from './api/store.js';
 import Provider from './api/provider.js';
 import {

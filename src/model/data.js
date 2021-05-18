@@ -1,5 +1,4 @@
 export default class Data {
-
   constructor() {
     this._offers = new Map();
     this._destinations = [];
@@ -20,5 +19,4 @@ export default class Data {
   setDestinations(destinations) {
     this._destinations = destinations.slice();
   }
-
 }

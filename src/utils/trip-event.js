@@ -1,10 +1,6 @@
 import dayjs from 'dayjs';
 import {TIMINGS} from './constants.js';
 
-const sumValues = (accumulator, currentValue) => {
-  return accumulator + currentValue;
-};
-
 const isEventComing = (point) => {
   const today = dayjs();
   return (today.isBefore(dayjs(point.dateFrom), 'd') || today.isSame(dayjs(point.dateFrom), 'd'));
@@ -84,7 +80,6 @@ export {
   humanizeFullDateAndTime,
   isEventExpired,
   isEventComing,
-  sumValues,
   sortByPrice,
   sortByTime,
   sortByDate,

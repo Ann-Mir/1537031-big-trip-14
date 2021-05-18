@@ -55,7 +55,6 @@ const createEventTemplate = (point) => {
 
 
 export default class TripEvent extends AbstractView {
-
   constructor(tripEvent) {
     super();
     this._tripEvent = tripEvent;
@@ -92,5 +91,4 @@ export default class TripEvent extends AbstractView {
       .querySelector('.event__rollup-btn')
       .addEventListener('click', this._editClickHandler);
   }
-
 }

@@ -4,7 +4,6 @@ import {tripEventsFilter} from '../filter.js';
 import {FilterType, UpdateType} from '../utils/constants.js';
 
 export default class Filter {
-
   constructor(container, filterModel, tripEvents) {
     this._container = container;
     this._filterModel = filterModel;
@@ -76,5 +75,4 @@ export default class Filter {
     }
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
-
 }

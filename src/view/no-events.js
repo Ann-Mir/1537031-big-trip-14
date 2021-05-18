@@ -10,7 +10,6 @@ const createNoEventTemplate = (storeModel) => {
 };
 
 export default class NoEvents extends AbstractView {
-
   constructor(storeModel) {
     super();
     this._storeModel = storeModel;
@@ -19,5 +18,4 @@ export default class NoEvents extends AbstractView {
   getTemplate() {
     return createNoEventTemplate(this._storeModel);
   }
-
 }

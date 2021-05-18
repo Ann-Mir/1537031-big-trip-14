@@ -6,9 +6,7 @@ const createTripControlsTemplate = () => {
 };
 
 export default class TripControls extends AbstractView {
-
   getTemplate() {
     return createTripControlsTemplate();
   }
-
 }

@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 const POINTS_TO_SHOW = 3;
 
 export default class TripInfo {
-
   constructor(container, tripEventsModel) {
     this._container = container;
     this._tripInfoComponent = null;
@@ -83,5 +82,4 @@ export default class TripInfo {
     this._tripDates = tripDates;
     this._render();
   }
-
 }
