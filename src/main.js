@@ -107,17 +107,19 @@ const handleNewEventButtonClick = () => {
   tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
 };
 
+const handleDataReceived = () => {
+  filterPresenter.init();
+  tripInfoPresenter.init();
+  siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  newEventButtonComponent.enable();
+  newEventButtonComponent.setClickHandler(handleNewEventButtonClick);
+};
+
 apiWithProvider
   .getData()
   .then((tripEvents) => tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents))
   .catch(() => tripEventsModel.setTripEvents(UpdateType.INIT, []))
-  .finally(() => {
-    filterPresenter.init();
-    tripInfoPresenter.init();
-    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-    newEventButtonComponent.enable();
-    newEventButtonComponent.setClickHandler(handleNewEventButtonClick);
-  });
+  .finally(handleDataReceived);
 
 window.addEventListener('load', () => {
   navigator.serviceWorker.register('/sw.js');
