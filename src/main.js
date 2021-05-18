@@ -40,10 +40,12 @@ const api = new Api(dataModel, END_POINT, AUTHORIZATION);
 const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 
-const tripControls = new TripControlsView();
-const tripControlsNavigation = new TripControlsNavigationView();
-const tripControlsFilters = new TripControlsFiltersView();
+const tripControlsComponent = new TripControlsView();
+const tripControlsNavigationComponent = new TripControlsNavigationView();
+const tripControlsFiltersComponent = new TripControlsFiltersView();
 const newEventButtonComponent = new NewEventButtonView();
+const siteMenuComponent = new SiteMenuView();
+
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(
   bodyContainerElement,
   tripEventsModel,
@@ -52,19 +54,18 @@ const tripEventsBoardPresenter = new TripEventsBoardPresenter(
   newEventButtonComponent,
   apiWithProvider,
 );
-const siteMenuComponent = new SiteMenuView();
-const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
+const filterPresenter = new FilterPresenter(tripControlsFiltersComponent, filterModel, tripEventsModel);
 const tripInfoPresenter = new TripInfoPresenter(tripMainElement, tripEventsModel);
 
 let statisticsComponent = null;
 
 tripEventsBoardPresenter.init();
 
-render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
-render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
-render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
+render(tripMainElement, tripControlsComponent, RenderPosition.BEFOREEND);
+render(tripControlsComponent, tripControlsNavigationComponent, RenderPosition.AFTERBEGIN);
+render(tripControlsComponent, tripControlsFiltersComponent, RenderPosition.BEFOREEND);
 render(tripMainElement, newEventButtonComponent, RenderPosition.BEFOREEND);
-render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
+render(tripControlsNavigationComponent, siteMenuComponent, RenderPosition.BEFOREEND);
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -78,6 +79,7 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.STATS:
       tripEventsBoardPresenter.destroy();
       newEventButtonComponent.disable();
+      filterPresenter.disable();
       remove(statisticsComponent);
       statisticsComponent = new StatisticsView(tripEventsModel.getTripEvents());
       render(bodyContainerElement, statisticsComponent, RenderPosition.BEFOREEND);
