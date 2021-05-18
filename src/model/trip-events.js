@@ -7,13 +7,13 @@ export default class TripEvents extends Observer {
     this._tripEvents = [];
   }
 
+  getTripEvents() {
+    return this._tripEvents;
+  }
+
   setTripEvents(updateType, tripEvents) {
     this._tripEvents = tripEvents.slice();
     this._notify(updateType);
-  }
-
-  getTripEvents() {
-    return this._tripEvents;
   }
 
   getTotalCost() {

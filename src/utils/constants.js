@@ -29,7 +29,7 @@ export const STATISTICS_SETTINGS = {
   titleFontSize: 23,
   titlePosition: 'left',
   padding: 5,
-  minBarLength: 75,
+  minBarLength: 85,
   barHeight: 55,
   barThickness: 44,
 

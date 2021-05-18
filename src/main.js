@@ -21,11 +21,11 @@ import {
   MenuItem,
   OFFLINE_TITLE,
   STORE_NAME,
-  UpdateType
+  UpdateType,
+  OfflineMessages,
 } from './utils/constants.js';
 import Api from './api/api.js';
 import {showToast} from './utils/toast.js';
-import {OfflineMessages} from './utils/constants';
 
 const siteHeaderElement = document.querySelector('.page-header');
 const tripMainElement = siteHeaderElement.querySelector('.trip-main');

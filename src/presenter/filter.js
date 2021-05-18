@@ -19,34 +19,6 @@ export default class Filter {
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
-  init() {
-    const filters = this._getFilters();
-    const prevFilterComponent = this._filterComponent;
-
-    this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
-    this._filterComponent.setTypeChangeHandler(this._handleFilterTypeChange);
-
-    if (prevFilterComponent === null) {
-      render(this._container, this._filterComponent, RenderPosition.BEFOREEND);
-      return;
-    }
-
-    replace(this._filterComponent, prevFilterComponent);
-    remove(prevFilterComponent);
-  }
-
-  _handleModelEvent() {
-    this.init();
-  }
-
-  _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
-      return;
-    }
-
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
-  }
-
   _getFilters() {
     const tripEvents = this._tripEventsModel.getTripEvents();
 
@@ -69,6 +41,22 @@ export default class Filter {
     ];
   }
 
+  init() {
+    const filters = this._getFilters();
+    const prevFilterComponent = this._filterComponent;
+
+    this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
+    this._filterComponent.setTypeChangeHandler(this._handleFilterTypeChange);
+
+    if (prevFilterComponent === null) {
+      render(this._container, this._filterComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    replace(this._filterComponent, prevFilterComponent);
+    remove(prevFilterComponent);
+  }
+
   disable() {
     this._filterComponent
       .getElement()
@@ -76,6 +64,17 @@ export default class Filter {
       .forEach((item) => {
         item.setAttribute('disabled', 'disabled');
       });
+  }
+
+  _handleModelEvent() {
+    this.init();
+  }
+
+  _handleFilterTypeChange(filterType) {
+    if (this._filterModel.getFilter() === filterType) {
+      return;
+    }
+    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
 }

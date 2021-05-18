@@ -155,15 +155,17 @@ const createEditPointTemplate = (availableOffers, destinations, state, mode= Mod
           </li>`;
 };
 
-
 export default class TripEventEdit extends SmartView {
+
   constructor(dataModel, tripEvent = DEFAULT_POINT, mode = Mode.EDIT) {
     super();
     this._dataModel = dataModel;
     this._state = TripEventEdit.parseTripEventToState(tripEvent, this._dataModel.getOffers());
     this._mode = mode;
+
     this._startDatePicker = null;
     this._endDatePicker = null;
+
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeEditFormHandler = this._closeEditFormHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
@@ -176,6 +178,16 @@ export default class TripEventEdit extends SmartView {
     this._setStartDatePicker();
     this._setEndDatePicker();
     this._setInnerHandlers();
+  }
+
+  getTemplate() {
+    return createEditPointTemplate(this._dataModel.getOffers(), this._dataModel.getDestinations(), this._state, this._mode);
+  }
+
+  reset(tripEvent) {
+    this.updateState(
+      TripEventEdit.parseTripEventToState(tripEvent, this._dataModel.getOffers()),
+    );
   }
 
   removeElement() {
@@ -202,6 +214,15 @@ export default class TripEventEdit extends SmartView {
         .querySelector('.event__available-offers')
         .addEventListener('click', this._offersSelectionHandler);
     }
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setCloseEditFormHandler(this._callback.formClose);
+    this._setStartDatePicker();
+    this._setEndDatePicker();
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _startDateChangeHandler([userDate]) {
@@ -308,15 +329,6 @@ export default class TripEventEdit extends SmartView {
     );
   }
 
-  restoreHandlers() {
-    this._setInnerHandlers();
-    this.setFormSubmitHandler(this._callback.formSubmit);
-    this.setCloseEditFormHandler(this._callback.formClose);
-    this._setStartDatePicker();
-    this._setEndDatePicker();
-    this.setDeleteClickHandler(this._callback.deleteClick);
-  }
-
   _eventTypeToggleHandler(evt) {
     evt.preventDefault();
     const type = evt.target.dataset.type;
@@ -333,10 +345,6 @@ export default class TripEventEdit extends SmartView {
         hasOffers: !!(availableOffers && availableOffers.length > 0),
       },
     );
-  }
-
-  getTemplate() {
-    return createEditPointTemplate(this._dataModel.getOffers(), this._dataModel.getDestinations(), this._state, this._mode);
   }
 
   _formSubmitHandler(evt) {
@@ -368,10 +376,16 @@ export default class TripEventEdit extends SmartView {
     }
   }
 
-  reset(tripEvent) {
-    this.updateState(
-      TripEventEdit.parseTripEventToState(tripEvent, this._dataModel.getOffers()),
-    );
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(TripEventEdit.parseStateToTripEvent(this._state));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement()
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this._formDeleteClickHandler);
   }
 
   static parseTripEventToState(tripEvent, availableOffers) {
@@ -416,15 +430,4 @@ export default class TripEventEdit extends SmartView {
     return state;
   }
 
-  _formDeleteClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.deleteClick(TripEventEdit.parseStateToTripEvent(this._state));
-  }
-
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
-    this.getElement()
-      .querySelector('.event__reset-btn')
-      .addEventListener('click', this._formDeleteClickHandler);
-  }
 }

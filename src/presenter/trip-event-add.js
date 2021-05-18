@@ -8,8 +8,8 @@ import {OfflineMessages} from '../utils/constants.js';
 
 export default class TripEventAdd {
 
-  constructor(tripEventsListContainer, newEventButtonComponent, dataModel, changeData) {
-    this._tripEventsListContainer = tripEventsListContainer;
+  constructor(container, newEventButtonComponent, dataModel, changeData) {
+    this._container = container;
     this._newEventButtonComponent = newEventButtonComponent;
     this._tripEventAddComponent = null;
     this._destroyCallback = null;
@@ -20,6 +20,24 @@ export default class TripEventAdd {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+  }
+
+  setSaving() {
+    this._tripEventAddComponent.updateState({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._tripEventAddComponent.updateState({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+    this._tripEventAddComponent.shake(resetFormState);
   }
 
   init(callback) {
@@ -34,7 +52,7 @@ export default class TripEventAdd {
     this._tripEventAddComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     render(
-      this._tripEventsListContainer,
+      this._container,
       this._tripEventAddComponent,
       RenderPosition.AFTERBEGIN,
     );
@@ -78,24 +96,6 @@ export default class TripEventAdd {
   _handleDeleteClick() {
     this._newEventButtonComponent.enable();
     this.destroy();
-  }
-
-  setSaving() {
-    this._tripEventAddComponent.updateState({
-      isDisabled: true,
-      isSaving: true,
-    });
-  }
-
-  setAborting() {
-    const resetFormState = () => {
-      this._tripEventAddComponent.updateState({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-    this._tripEventAddComponent.shake(resetFormState);
   }
 
 }

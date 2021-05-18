@@ -8,26 +8,15 @@ const POINTS_TO_SHOW = 3;
 export default class TripInfo {
 
   constructor(container, tripEventsModel) {
+    this._container = container;
+    this._tripInfoComponent = null;
     this._tripEventsModel = tripEventsModel;
     this._totalCost = 0;
     this._route = '';
     this._tripDates = '';
-    this._container = container;
-    this._tripInfoComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._tripEventsModel.addObserver(this._handleModelEvent);
-  }
-
-  init() {
-    this._totalCost = this._tripEventsModel.getTotalCost();
-    this._route = this.getRoute();
-    this._tripDates = this.getEventPeriod();
-
-    this._render();
-
-    this._tripEventsModel.addObserver(this._handleModelEvent);
-    this._handleModelEvent();
   }
 
   getEventPeriod() {
@@ -57,6 +46,17 @@ export default class TripInfo {
     const startingPoint = tripEvents[0];
     const endingPoint = tripEvents[tripEvents.length - 1];
     return `${startingPoint.destination.name} &mdash; ... &mdash; ${endingPoint.destination.name}`;
+  }
+
+  init() {
+    this._totalCost = this._tripEventsModel.getTotalCost();
+    this._route = this.getRoute();
+    this._tripDates = this.getEventPeriod();
+
+    this._render();
+
+    this._tripEventsModel.addObserver(this._handleModelEvent);
+    this._handleModelEvent();
   }
 
   _render() {
