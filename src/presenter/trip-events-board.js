@@ -9,6 +9,7 @@ import TripEventAddPresenter from './trip-event-add.js';
 import {sortByDate, sortByPrice, sortByTime} from '../utils/trip-event.js';
 import {SortType, UpdateType, UserAction, FilterType} from '../utils/constants.js';
 import {tripEventsFilter} from '../utils/filter.js';
+import {isOnline} from '../utils/common.js';
 
 export default class TripEventsBoard {
   constructor(container, tripEventsModel, dataModel, filterModel, newEventButton, api) {
@@ -225,9 +226,11 @@ export default class TripEventsBoard {
         break;
       case UpdateType.INIT:
         this._isLoading = false;
-        this._newEventButtonComponent.enable();
         this._clearBoard();
         this._renderBoard();
+        if (isOnline()) {
+          this._newEventButtonComponent.enable();
+        }
         break;
     }
   }

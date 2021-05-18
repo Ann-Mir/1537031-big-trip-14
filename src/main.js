@@ -71,7 +71,9 @@ const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
       remove(statisticsComponent);
-      newEventButtonComponent.enable();
+      if (isOnline()) {
+        newEventButtonComponent.enable();
+      }
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripEventsBoardPresenter.init();
       siteMenuComponent.setItem(MenuItem.TABLE);

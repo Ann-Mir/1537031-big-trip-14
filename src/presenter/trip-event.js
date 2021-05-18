@@ -166,7 +166,7 @@ export default class TripEvent {
   _handleFavoriteClick() {
     this._changeData(
       UserAction.UPDATE_EVENT,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       cloneObjectValue(
         this._tripEvent,
         {isFavorite: !this._tripEvent.isFavorite}),
