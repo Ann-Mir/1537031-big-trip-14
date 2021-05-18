@@ -188,6 +188,7 @@ export default class TripEventsBoard {
         break;
       case UpdateType.INIT:
         this._isLoading = false;
+        this._newEventButtonComponent.enable();
         this._clearBoard();
         this._renderBoard();
         break;

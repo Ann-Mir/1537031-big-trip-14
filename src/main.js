@@ -111,7 +111,7 @@ const handleDataReceived = () => {
   filterPresenter.init();
   tripInfoPresenter.init();
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-  newEventButtonComponent.enable();
+  //newEventButtonComponent.enable();
   newEventButtonComponent.setClickHandler(handleNewEventButtonClick);
 };
 
