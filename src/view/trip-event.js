@@ -28,9 +28,9 @@ const createEventTemplate = (point) => {
               <h3 class="event__title">${type} ${point.destination ? point.destination.name : ''}</h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="${humanizeFullDate(point.dateFrom)}T${humanizeTime(point.dateFrom)}">${humanizeDate(point.dateFrom)}</time>
+                  <time class="event__start-time" datetime="${humanizeFullDate(point.dateFrom)}T${humanizeTime(point.dateFrom)}">${humanizeTime(point.dateFrom)}</time>
                   &mdash;
-                  <time class="event__end-time" datetime="${humanizeFullDate(point.dateTo)}T${humanizeTime(point.dateTo)}">${humanizeDate(point.dateTo)}</time>
+                  <time class="event__end-time" datetime="${humanizeFullDate(point.dateTo)}T${humanizeTime(point.dateTo)}">${humanizeTime(point.dateTo)}</time>
                 </p>
                 <p class="event__duration">${duration}</p>
               </div>
@@ -55,6 +55,7 @@ const createEventTemplate = (point) => {
 
 
 export default class TripEvent extends AbstractView {
+
   constructor(tripEvent) {
     super();
     this._tripEvent = tripEvent;
@@ -91,4 +92,5 @@ export default class TripEvent extends AbstractView {
       .querySelector('.event__rollup-btn')
       .addEventListener('click', this._editClickHandler);
   }
+
 }

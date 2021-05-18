@@ -18,4 +18,5 @@ export default class NoEvents extends AbstractView {
   getTemplate() {
     return createNoEventTemplate(this._storeModel);
   }
+
 }

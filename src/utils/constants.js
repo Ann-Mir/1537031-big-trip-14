@@ -1,5 +1,3 @@
-import {nanoid} from 'nanoid';
-
 export const SortType = {
   DAY: 'day',
   PRICE: 'price',
@@ -31,7 +29,7 @@ export const STATISTICS_SETTINGS = {
   titleFontSize: 23,
   titlePosition: 'left',
   padding: 5,
-  minBarLength: 100,
+  minBarLength: 75,
   barHeight: 55,
   barThickness: 44,
 
@@ -66,7 +64,6 @@ export const DEFAULT_POINT = {
   dateFrom: new Date(),
   dateTo: new Date(),
   destination: null,
-  id: nanoid(),
   isFavorite: false,
   type: 'taxi',
   offers: [],
@@ -82,3 +79,18 @@ export const TIMINGS = {
   minutesPerHour: 60,
   hoursPerDay: 24,
 };
+
+export const OfflineMessages = {
+  CONNECTION: 'Connection is lost',
+  CREATE: 'You can\'t create new event offline',
+  SAVE: 'You can\'t save event offline',
+  DELETE: 'You can\'t delete event offline',
+  EDIT: 'You can\'t edit event offline',
+};
+
+export const AUTHORIZATION = 'Basic hfbh48fcn9w934avd';
+export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+const STORE_PREFIX = 'bigtrip-localstorage';
+const STORE_VER = 'v14';
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+export const OFFLINE_TITLE = ' [offline]';

@@ -1,4 +1,4 @@
-import TripEventsModel from './model/trip-events.js';
+import TripEventsModel from '../model/trip-events.js';
 
 const Method = {
   GET: 'GET',
@@ -13,6 +13,7 @@ const SuccessHTTPStatusRange = {
 };
 
 export default class Api {
+
   constructor(storeModel, endPoint, authorization) {
     this._store = storeModel;
     this._endPoint = endPoint;
@@ -84,6 +85,16 @@ export default class Api {
     });
   }
 
+  sync(data) {
+    return this._load({
+      url: 'points/sync',
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    })
+      .then(Api.toJSON);
+  }
+
   _load({
     url,
     method = Method.GET,
@@ -118,4 +129,5 @@ export default class Api {
   static catchError(err) {
     throw err;
   }
+
 }

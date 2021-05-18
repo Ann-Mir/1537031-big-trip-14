@@ -2,6 +2,7 @@ import Observer from '../utils/observer.js';
 import {FilterType} from '../utils/constants.js';
 
 export default class Filter extends Observer {
+
   constructor() {
     super();
     this._activeFilter = FilterType.EVERYTHING;
@@ -15,4 +16,5 @@ export default class Filter extends Observer {
   getFilter() {
     return this._activeFilter;
   }
+
 }

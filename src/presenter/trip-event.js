@@ -3,7 +3,10 @@ import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {cloneObjectValue} from '../utils/common.js';
 import {UserAction, UpdateType} from '../utils/constants.js';
-import {sortByDate} from '../utils/trip-event.js';
+import {isOnline} from '../utils/common.js';
+import {showToast} from '../utils/toast.js';
+import {getDuration} from '../utils/trip-event.js';
+import {OfflineMessages} from '../utils/constants.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -17,9 +20,9 @@ export const State = {
 };
 
 export default class TripEvent {
-  constructor(tripEventsListContainer, storeModel, changeData, changeMode) {
-    this._tripEventsListContainer = tripEventsListContainer;
-    this._storeModel = storeModel;
+  constructor(tripEventsContainer, dataModel, changeData, changeMode) {
+    this._tripEventsContainer = tripEventsContainer;
+    this._dataModel = dataModel;
     this._changeData = changeData;
     this._changeMode = changeMode;
 
@@ -42,7 +45,7 @@ export default class TripEvent {
     const prevTripEventEditComponent = this._tripEventEditComponent;
 
     this._tripEventComponent = new TripEventView(tripEvent);
-    this._tripEventEditComponent = new TripEventEditView(this._storeModel, tripEvent);
+    this._tripEventEditComponent = new TripEventEditView(this._dataModel, tripEvent);
 
     this._tripEventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._tripEventComponent.setEditClickHandler(this._handleEditClick);
@@ -51,7 +54,7 @@ export default class TripEvent {
     this._tripEventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevTripEventComponent === null || prevTripEventEditComponent === null) {
-      render(this._tripEventsListContainer, this._tripEventComponent, RenderPosition.BEFOREEND);
+      render(this._tripEventsContainer, this._tripEventComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -64,11 +67,11 @@ export default class TripEvent {
       this._mode = Mode.DEFAULT;
     }
 
-    if (this._tripEventsListContainer.getElement().contains(prevTripEventComponent.getElement())) {
+    if (this._tripEventsContainer.getElement().contains(prevTripEventComponent.getElement())) {
       replace(this._tripEventComponent, prevTripEventComponent);
     }
 
-    if (this._tripEventsListContainer.getElement().contains(prevTripEventEditComponent.getElement())) {
+    if (this._tripEventsContainer.getElement().contains(prevTripEventEditComponent.getElement())) {
       replace(this._tripEventEditComponent, prevTripEventEditComponent);
     }
 
@@ -138,18 +141,30 @@ export default class TripEvent {
   }
 
   _handleEditClick() {
+    if (!isOnline()) {
+      showToast(OfflineMessages.EDIT);
+      return;
+    }
+
     this._replaceCardToForm();
   }
 
   _handleFormSubmit(update) {
-    const isMinorUpdate =
-      !(sortByDate(this._tripEvent.dateFrom, update.dateFrom) === 0);
+    if (!isOnline()) {
+      showToast(OfflineMessages.SAVE);
+      return;
+    }
 
+    const isMinorUpdate = (this._tripEvent.dateFrom !== update.dateFrom)
+      || (this._tripEvent.basePrice !== update.basePrice)
+      || (getDuration(this._tripEvent.dateFrom, this._tripEvent.dateTo)
+        !== getDuration(update.dateFrom, update.dateTo));
     this._changeData(
       UserAction.UPDATE_EVENT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
     );
+    this._replaceFormToCard();
   }
 
   _handleEditFormClose() {
@@ -169,10 +184,15 @@ export default class TripEvent {
   }
 
   _handleDeleteClick(tripEvent) {
+    if (!isOnline()) {
+      showToast(OfflineMessages.DELETE);
+      return;
+    }
     this._changeData(
       UserAction.DELETE_EVENT,
       UpdateType.MINOR,
       tripEvent,
     );
   }
+
 }

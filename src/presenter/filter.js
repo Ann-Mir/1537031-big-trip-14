@@ -4,8 +4,9 @@ import {tripEventsFilter} from '../filter.js';
 import {FilterType, UpdateType} from '../utils/constants.js';
 
 export default class Filter {
-  constructor(filterContainer, filterModel, tripEvents) {
-    this._filterContainer = filterContainer;
+
+  constructor(container, filterModel, tripEvents) {
+    this._container = container;
     this._filterModel = filterModel;
     this._tripEventsModel = tripEvents;
 
@@ -23,10 +24,10 @@ export default class Filter {
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
-    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
+      render(this._container, this._filterComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -67,4 +68,14 @@ export default class Filter {
       },
     ];
   }
+
+  disable() {
+    this._filterComponent
+      .getElement()
+      .querySelectorAll('.trip-filters__filter-input')
+      .forEach((item) => {
+        item.setAttribute('disabled', 'disabled');
+      });
+  }
+
 }

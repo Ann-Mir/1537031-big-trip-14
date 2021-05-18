@@ -980,6 +980,32 @@ main {
 .statistics__item:not(:last-child) {
   margin-bottom: 78px; }
 
+.toast-container {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0.4em;
+  padding-left: 0.4em;
+  width: 100%;
+  height: 0;
+  font-family: 'Montserrat';
+  font-size: 16px;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.toast-item {
+  display: flex;
+  margin-bottom: 0.4em;
+  padding: 0.4em;
+  background-color: red;
+  color: navajowhite;
+}
+
 @keyframes shake {
   0%,
   100% {

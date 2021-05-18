@@ -1,30 +1,34 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {
-  getUniqueItems,
-  getCostsByTripType,
-  countEventsByTripType,
-  getDurationByTripType
-} from '../utils/statistics.js';
 import SmartView from './smart.js';
-import {humanizeDuration} from '../utils/trip-event.js';
+import {getDuration, humanizeDuration} from '../utils/trip-event.js';
 import {StatiscticsTitles, STATISTICS_SETTINGS} from '../utils/constants.js';
+import {sortMapByValues} from '../utils/statistics.js';
 
 
-const renderMoneyChart = (moneyCtx, events) => {
-  const eventsTypes = events.map((event) => event.type);
-  const uniqTypes = getUniqueItems(eventsTypes);
-  const moneyByTypes = uniqTypes.map((type) => getCostsByTripType(events, type));
+const renderMoneyChart = (moneyCtx, tripEvents) => {
+  const eventsByType = new Map();
+  tripEvents.forEach((tripEvent) => {
+    if (eventsByType.has(tripEvent.type)) {
+      let spendingsByType = eventsByType.get(tripEvent.type);
+      spendingsByType = spendingsByType + tripEvent.basePrice;
+      eventsByType.set(tripEvent.type, spendingsByType);
+    } else {
+      eventsByType.set(tripEvent.type, tripEvent.basePrice);
+    }
+  });
 
-  moneyCtx.height = uniqTypes.length * STATISTICS_SETTINGS.barHeight;
+  const sortedEvents = sortMapByValues(eventsByType);
+
+  moneyCtx.height = sortedEvents.size * STATISTICS_SETTINGS.barHeight;
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: STATISTICS_SETTINGS.type,
     data: {
-      labels: uniqTypes,
+      labels: [...sortedEvents.keys()],
       datasets: [{
-        data: moneyByTypes,
+        data: [...sortedEvents.values()],
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
@@ -86,19 +90,28 @@ const renderMoneyChart = (moneyCtx, events) => {
 };
 
 const renderChartByTripType = (typeCtx, tripEvents) => {
-  const eventTypes = tripEvents.map((tripEvent) => tripEvent.type);
-  const uniqueTypes = getUniqueItems(eventTypes);
-  const eventsByTypeCounts = uniqueTypes.map((type) => countEventsByTripType(tripEvents, type));
+  const eventsByType = new Map();
+  tripEvents.forEach((tripEvent) => {
+    if (eventsByType.has(tripEvent.type)) {
+      let countByType = eventsByType.get(tripEvent.type);
+      countByType = countByType + 1;
+      eventsByType.set(tripEvent.type, countByType);
+    } else {
+      eventsByType.set(tripEvent.type, 1);
+    }
+  });
 
-  typeCtx.height = uniqueTypes.length * STATISTICS_SETTINGS.barHeight;
+  const sortedEvents = sortMapByValues(eventsByType);
+
+  typeCtx.height = sortedEvents.size * STATISTICS_SETTINGS.barHeight;
 
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: STATISTICS_SETTINGS.type,
     data: {
-      labels: uniqueTypes,
+      labels: [...sortedEvents.keys()],
       datasets: [{
-        data: eventsByTypeCounts,
+        data: [...sortedEvents.values()],
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
@@ -160,19 +173,28 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
 };
 
 const renderTimeChart = (timeCtx, tripEvents) => {
-  const eventTypes = tripEvents.map((tripEvent) => tripEvent.type);
-  const uniqueTypes = getUniqueItems(eventTypes);
-  const durationsByTripTypes = uniqueTypes.map((type) => getDurationByTripType(tripEvents, type));
+  const eventsByType = new Map();
+  tripEvents.forEach((tripEvent) => {
+    if (eventsByType.has(tripEvent.type)) {
+      let duration = eventsByType.get(tripEvent.type);
+      duration = duration + getDuration(tripEvent.dateFrom, tripEvent.dateTo);
+      eventsByType.set(tripEvent.type, duration);
+    } else {
+      eventsByType.set(tripEvent.type, getDuration(tripEvent.dateFrom, tripEvent.dateTo));
+    }
+  });
 
-  timeCtx.height = uniqueTypes.length * STATISTICS_SETTINGS.barHeight;
+  const sortedEvents = sortMapByValues(eventsByType);
+
+  timeCtx.height = sortedEvents.size * STATISTICS_SETTINGS.barHeight;
 
   return new Chart(timeCtx, {
     plugins: [ChartDataLabels],
     type: STATISTICS_SETTINGS.type,
     data: {
-      labels: uniqueTypes,
+      labels: [...sortedEvents.keys()],
       datasets: [{
-        data: durationsByTripTypes,
+        data: [...sortedEvents.values()],
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
@@ -252,6 +274,7 @@ const createStatisticsTemplate = () => {
 };
 
 export default class Statistics extends SmartView {
+
   constructor(tripEvents) {
     super();
 
@@ -296,4 +319,5 @@ export default class Statistics extends SmartView {
     this._moneyChart = renderMoneyChart(moneyCtx, this._tripEvents);
     this._typeChart = renderChartByTripType(typeCtx, this._tripEvents);
   }
+
 }

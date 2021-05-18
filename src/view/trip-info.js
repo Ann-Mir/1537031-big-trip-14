@@ -16,6 +16,7 @@ const createTripInfoTemplate = (totalCost, route, tripDates) => {
 };
 
 export default class TripInfo extends AbstractView {
+
   constructor(totalCost, route, tripDates) {
     super();
     this._totalCost = totalCost;
@@ -26,5 +27,6 @@ export default class TripInfo extends AbstractView {
   getTemplate() {
     return createTripInfoTemplate(this._totalCost, this._route, this._tripDates);
   }
+
 }
 

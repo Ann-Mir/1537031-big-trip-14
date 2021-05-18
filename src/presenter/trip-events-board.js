@@ -12,15 +12,16 @@ import {tripEventsFilter} from '../filter.js';
 import {FilterType} from '../utils/constants.js';
 
 export default class TripEventsBoard {
-  constructor(container, tripEventsModel, storeModel, filterModel, api) {
+  constructor(container, tripEventsModel, dataModel, filterModel, newEventButton, api) {
     this._tripEventsModel = tripEventsModel;
     this._filterModel = filterModel;
-    this._storeModel = storeModel;
+    this._dataModel = dataModel;
     this._container = container;
     this._tripEventPresenter = {};
     this._boardComponent = new TripEventsBoardView();
     this._tripEventsListComponent = new EventsListView();
-    this._noEventsComponent = new NoEventsView(storeModel);
+    this._noEventsComponent = new NoEventsView(dataModel);
+    this._newEventButtonComponent = newEventButton;
     this._isLoading = true;
     this._api = api;
     this._currentSortType = SortType.DAY;
@@ -35,7 +36,8 @@ export default class TripEventsBoard {
     this._filterModel.addObserver(this._handleModelEvent);
     this._tripEventAddPresenter = new TripEventAddPresenter(
       this._tripEventsListComponent,
-      this._storeModel,
+      this._newEventButtonComponent,
+      this._dataModel,
       this._handleViewAction,
     );
   }
@@ -50,8 +52,9 @@ export default class TripEventsBoard {
     const filterType = this._filterModel.getFilter();
     const tripEvents = this._tripEventsModel.getTripEvents();
     const filteredTripEvents = tripEventsFilter[filterType](tripEvents);
-
     switch (this._currentSortType) {
+      case SortType.DAY:
+        return filteredTripEvents.sort(sortByDate);
       case SortType.PRICE:
         return filteredTripEvents.sort(sortByPrice);
       case SortType.TIME:
@@ -107,13 +110,13 @@ export default class TripEventsBoard {
   _renderSort() {
     this._sortComponent = new SortView(this._currentSortType);
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
-    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._sortComponent.setTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderEvent(tripEvent) {
     const tripEventPresenter = new TripEventPresenter(
       this._tripEventsListComponent,
-      this._storeModel,
+      this._dataModel,
       this._handleViewAction,
       this._handleModeChange,
     );
@@ -185,6 +188,7 @@ export default class TripEventsBoard {
         break;
       case UpdateType.INIT:
         this._isLoading = false;
+        this._newEventButtonComponent.enable();
         this._clearBoard();
         this._renderBoard();
         break;
@@ -194,6 +198,7 @@ export default class TripEventsBoard {
   _renderBoard() {
     if (this._isLoading) {
       this._renderLoading();
+      this._newEventButtonComponent.disable();
       return;
     }
 

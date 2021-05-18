@@ -5,93 +5,133 @@ import TripControlsFiltersView from './view/trip-controls-filters.js';
 import NewEventButtonView from './view/new-event-button.js';
 import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import StatisticsView from './view/statistics.js';
-import {render, RenderPosition} from './utils/render.js';
+import {remove, render, RenderPosition} from './utils/render.js';
+import {isOnline} from './utils/common.js';
 import TripEventsModel from './model/trip-events.js';
 import FilterModel from './model/filter.js';
-import StoreModel from './model/store.js';
+import DataModel from './model/data.js';
 import FilterPresenter from './presenter/filter.js';
 import TripInfoPresenter from './presenter/trip-info.js';
-import {MenuItem} from './utils/constants.js';
-import {FilterType, UpdateType} from './utils/constants.js';
-import {remove} from './utils/render.js';
-import Api from './api.js';
+import Store from './api/store.js';
+import Provider from './api/provider.js';
+import {
+  AUTHORIZATION,
+  END_POINT,
+  FilterType,
+  MenuItem,
+  OFFLINE_TITLE,
+  STORE_NAME,
+  UpdateType
+} from './utils/constants.js';
+import Api from './api/api.js';
+import {showToast} from './utils/toast.js';
+import {OfflineMessages} from './utils/constants';
 
-const AUTHORIZATION = 'Basic hfbh48fcn9w934avd';
-const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
-
-let statisticsComponent = null;
+const siteHeaderElement = document.querySelector('.page-header');
+const tripMainElement = siteHeaderElement.querySelector('.trip-main');
+const siteMainElement = document.querySelector('.page-main');
+const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
 
 const tripEventsModel = new TripEventsModel();
 const filterModel = new FilterModel();
-const storeModel = new StoreModel();
+const dataModel = new DataModel();
 
-const api = new Api(storeModel, END_POINT, AUTHORIZATION);
+const api = new Api(dataModel, END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
-const siteHeaderElement = document.querySelector('.page-header');
-const tripControls = new TripControlsView();
-const tripMainElement = siteHeaderElement.querySelector('.trip-main');
-const tripControlsNavigation = new TripControlsNavigationView();
-const tripControlsFilters = new TripControlsFiltersView();
-const siteMainElement = document.querySelector('.page-main');
-const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
+const tripControlsComponent = new TripControlsView();
+const tripControlsNavigationComponent = new TripControlsNavigationView();
+const tripControlsFiltersComponent = new TripControlsFiltersView();
+const newEventButtonComponent = new NewEventButtonView();
+const siteMenuComponent = new SiteMenuView();
+
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(
   bodyContainerElement,
   tripEventsModel,
-  storeModel,
+  dataModel,
   filterModel,
-  api,
+  newEventButtonComponent,
+  apiWithProvider,
 );
-
-const siteMenuComponent = new SiteMenuView();
-
-const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
+const filterPresenter = new FilterPresenter(tripControlsFiltersComponent, filterModel, tripEventsModel);
 const tripInfoPresenter = new TripInfoPresenter(tripMainElement, tripEventsModel);
+
+let statisticsComponent = null;
 
 tripEventsBoardPresenter.init();
 
-const newEventButtonComponent = new NewEventButtonView();
-
-render(tripMainElement, tripControls, RenderPosition.BEFOREEND);
-render(tripControls, tripControlsNavigation, RenderPosition.AFTERBEGIN);
-render(tripControls, tripControlsFilters, RenderPosition.BEFOREEND);
+render(tripMainElement, tripControlsComponent, RenderPosition.BEFOREEND);
+render(tripControlsComponent, tripControlsNavigationComponent, RenderPosition.AFTERBEGIN);
+render(tripControlsComponent, tripControlsFiltersComponent, RenderPosition.BEFOREEND);
 render(tripMainElement, newEventButtonComponent, RenderPosition.BEFOREEND);
-render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
+render(tripControlsNavigationComponent, siteMenuComponent, RenderPosition.BEFOREEND);
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
       remove(statisticsComponent);
+      newEventButtonComponent.enable();
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripEventsBoardPresenter.init();
-      siteMenuComponent.setMenuItem(MenuItem.TABLE);
+      siteMenuComponent.setItem(MenuItem.TABLE);
       break;
     case MenuItem.STATS:
       tripEventsBoardPresenter.destroy();
+      newEventButtonComponent.disable();
+      filterPresenter.disable();
       remove(statisticsComponent);
       statisticsComponent = new StatisticsView(tripEventsModel.getTripEvents());
       render(bodyContainerElement, statisticsComponent, RenderPosition.BEFOREEND);
-      siteMenuComponent.setMenuItem(MenuItem.STATS);
+      siteMenuComponent.setItem(MenuItem.STATS);
       break;
   }
 };
 
 const handleTaskNewFormClose = () => {
+  newEventButtonComponent.enable();
   remove(statisticsComponent);
-  siteMenuComponent.setMenuItem(MenuItem.TABLE);
+  siteMenuComponent.setItem(MenuItem.TABLE);
 };
 
-api
+const handleNewEventButtonClick = () => {
+  tripEventsBoardPresenter.destroy();
+  newEventButtonComponent.disable();
+  filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+  tripEventsBoardPresenter.init();
+  if (!isOnline()) {
+    showToast(OfflineMessages.CREATE);
+    siteMenuComponent.setItem(MenuItem.TABLE);
+    return;
+  }
+  tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
+};
+
+const handleDataReceived = () => {
+  filterPresenter.init();
+  tripInfoPresenter.init();
+  siteMenuComponent.setClickHandler(handleSiteMenuClick);
+  newEventButtonComponent.setClickHandler(handleNewEventButtonClick);
+};
+
+apiWithProvider
   .getData()
   .then((tripEvents) => tripEventsModel.setTripEvents(UpdateType.INIT, tripEvents))
   .catch(() => tripEventsModel.setTripEvents(UpdateType.INIT, []))
-  .finally(() => {
-    tripInfoPresenter.init();
-    filterPresenter.init();
-    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-    newEventButtonComponent.setClickHandler(() => {
-      tripEventsBoardPresenter.destroy();
-      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-      tripEventsBoardPresenter.init();
-      tripEventsBoardPresenter.createTripEvent(handleTaskNewFormClose);
-    });
-  });
+  .finally(handleDataReceived);
+
+window.addEventListener('load', () => {
+  navigator.serviceWorker.register('/sw.js');
+});
+
+window.addEventListener('online', () => {
+  newEventButtonComponent.enable();
+  document.title = document.title.replace(OFFLINE_TITLE, '');
+  apiWithProvider.sync();
+});
+
+window.addEventListener('offline', () => {
+  newEventButtonComponent.disable();
+  showToast(OfflineMessages.CONNECTION);
+  document.title += OFFLINE_TITLE;
+});

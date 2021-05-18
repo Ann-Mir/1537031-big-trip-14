@@ -9,27 +9,28 @@ const createSiteMenuTemplate = () => {
 };
 
 export default class SiteMenu extends AbstractView {
+
   constructor() {
     super();
 
-    this._menuClickHandler = this._menuClickHandler.bind(this);
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createSiteMenuTemplate();
   }
 
-  _menuClickHandler(evt) {
+  _clickHandler(evt) {
     evt.preventDefault();
     this._callback.menuClick(evt.target.id);
   }
 
-  setMenuClickHandler(callback) {
+  setClickHandler(callback) {
     this._callback.menuClick = callback;
-    this.getElement().addEventListener('click', this._menuClickHandler);
+    this.getElement().addEventListener('click', this._clickHandler);
   }
 
-  setMenuItem(menuItem) {
+  setItem(menuItem) {
     const items = this.getElement().querySelectorAll('.trip-tabs__btn');
     items.forEach((item) => {
       if (item.getAttribute('id') === menuItem) {
@@ -39,5 +40,5 @@ export default class SiteMenu extends AbstractView {
       }
     });
   }
-}
 
+}

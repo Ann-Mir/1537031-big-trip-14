@@ -1,6 +1,7 @@
 import Observer from '../utils/observer.js';
 
 export default class TripEvents extends Observer {
+
   constructor() {
     super();
     this._tripEvents = [];
@@ -17,7 +18,8 @@ export default class TripEvents extends Observer {
 
   getTotalCost() {
     const totalCost = this._tripEvents.reduce((sum, item) => {
-      return item.basePrice + sum;
+      const offersCost = item.offers.reduce((cost, offer) => offer.price + cost, 0);
+      return item.basePrice + offersCost + sum;
     }, 0);
     return totalCost;
   }
@@ -103,4 +105,5 @@ export default class TripEvents extends Observer {
 
     return adaptedTripEvent;
   }
+
 }
