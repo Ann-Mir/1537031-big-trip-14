@@ -27,7 +27,10 @@ const STORE_VER = 'v14';
 const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 const OFFLINE_TITLE = ' [offline]';
 
-let statisticsComponent = null;
+const siteHeaderElement = document.querySelector('.page-header');
+const tripMainElement = siteHeaderElement.querySelector('.trip-main');
+const siteMainElement = document.querySelector('.page-main');
+const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
 
 const tripEventsModel = new TripEventsModel();
 const filterModel = new FilterModel();
@@ -37,15 +40,10 @@ const api = new Api(dataModel, END_POINT, AUTHORIZATION);
 const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 
-const siteHeaderElement = document.querySelector('.page-header');
 const tripControls = new TripControlsView();
-const tripMainElement = siteHeaderElement.querySelector('.trip-main');
 const tripControlsNavigation = new TripControlsNavigationView();
 const tripControlsFilters = new TripControlsFiltersView();
-const siteMainElement = document.querySelector('.page-main');
-const bodyContainerElement = siteMainElement.querySelector('.page-body__container');
 const newEventButtonComponent = new NewEventButtonView();
-
 const tripEventsBoardPresenter = new TripEventsBoardPresenter(
   bodyContainerElement,
   tripEventsModel,
@@ -54,11 +52,11 @@ const tripEventsBoardPresenter = new TripEventsBoardPresenter(
   newEventButtonComponent,
   apiWithProvider,
 );
-
 const siteMenuComponent = new SiteMenuView();
-
 const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, tripEventsModel);
 const tripInfoPresenter = new TripInfoPresenter(tripMainElement, tripEventsModel);
+
+let statisticsComponent = null;
 
 tripEventsBoardPresenter.init();
 
@@ -111,7 +109,6 @@ const handleDataReceived = () => {
   filterPresenter.init();
   tripInfoPresenter.init();
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-  //newEventButtonComponent.enable();
   newEventButtonComponent.setClickHandler(handleNewEventButtonClick);
 };
 
