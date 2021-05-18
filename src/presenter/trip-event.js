@@ -97,14 +97,6 @@ export default class TripEvent {
       this._mode = Mode.DEFAULT;
     }
 
-    if (this._container.getElement().contains(prevTripEventComponent.getElement())) {
-      replace(this._tripEventComponent, prevTripEventComponent);
-    }
-
-    if (this._container.getElement().contains(prevTripEventEditComponent.getElement())) {
-      replace(this._tripEventEditComponent, prevTripEventEditComponent);
-    }
-
     remove(prevTripEventComponent);
     remove(prevTripEventEditComponent);
   }
@@ -165,7 +157,6 @@ export default class TripEvent {
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
     );
-    this._replaceFormToCard();
   }
 
   _handleEditFormClose() {
