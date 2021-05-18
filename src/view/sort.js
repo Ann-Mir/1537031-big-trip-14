@@ -41,6 +41,11 @@ export default class SortView extends AbstractView {
     return createTripEventsSortForm(this._currentType);
   }
 
+  setTypeChangeHandler(callback) {
+    this._callback.typeChange = callback;
+    this.getElement().addEventListener('click', this._typeChangeHandler);
+  }
+
   _typeChangeHandler(evt) {
     if (!evt.target.classList.contains('trip-sort__input--enabled')
       && !evt.target.classList.contains('trip-sort__btn--enabled')) {
@@ -49,10 +54,5 @@ export default class SortView extends AbstractView {
 
     evt.preventDefault();
     this._callback.typeChange(evt.target.dataset.sortType);
-  }
-
-  setTypeChangeHandler(callback) {
-    this._callback.typeChange = callback;
-    this.getElement().addEventListener('click', this._typeChangeHandler);
   }
 }

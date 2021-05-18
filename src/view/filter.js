@@ -41,13 +41,13 @@ export default class Filter extends AbstractView {
     return createTripFiltersElement(this._filters, this._currentOption);
   }
 
-  _typeChangeHandler(evt) {
-    evt.preventDefault();
-    this._callback.typeChange(evt.target.value);
-  }
-
   setTypeChangeHandler(callback) {
     this._callback.typeChange = callback;
     this.getElement().addEventListener('change', this._typeChangeHandler);
+  }
+
+  _typeChangeHandler(evt) {
+    evt.preventDefault();
+    this._callback.typeChange(evt.target.value);
   }
 }

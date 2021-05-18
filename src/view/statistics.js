@@ -2,7 +2,7 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
 import {getDuration, humanizeDuration} from '../utils/trip-event.js';
-import {StatiscticsTitles, STATISTICS_SETTINGS} from '../utils/constants.js';
+import {StatisticsTitles, STATISTICS_SETTINGS} from '../utils/constants.js';
 import {sortMapByValues} from '../utils/statistics.js';
 
 
@@ -48,7 +48,7 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
       },
       title: {
         display: true,
-        text: StatiscticsTitles.MONEY,
+        text: StatisticsTitles.MONEY,
         fontColor: STATISTICS_SETTINGS.fontColor,
         fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,
@@ -131,7 +131,7 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
       },
       title: {
         display: true,
-        text: StatiscticsTitles.TYPE,
+        text: StatisticsTitles.TYPE,
         fontColor: STATISTICS_SETTINGS.fontColor,
         fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,
@@ -214,7 +214,7 @@ const renderTimeChart = (timeCtx, tripEvents) => {
       },
       title: {
         display: true,
-        text: StatiscticsTitles.TIME_SPENT,
+        text: StatisticsTitles.TIME_SPENT,
         fontColor: STATISTICS_SETTINGS.fontColor,
         fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,

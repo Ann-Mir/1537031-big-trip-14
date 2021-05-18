@@ -8,7 +8,7 @@ import TripEventPresenter, {State as TripEventPresenterViewState} from './trip-e
 import TripEventAddPresenter from './trip-event-add.js';
 import {sortByDate, sortByPrice, sortByTime} from '../utils/trip-event.js';
 import {SortType, UpdateType, UserAction, FilterType} from '../utils/constants.js';
-import {tripEventsFilter} from '../filter.js';
+import {tripEventsFilter} from '../utils/filter.js';
 
 export default class TripEventsBoard {
   constructor(container, tripEventsModel, dataModel, filterModel, newEventButton, api) {

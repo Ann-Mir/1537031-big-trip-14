@@ -35,7 +35,7 @@ export const STATISTICS_SETTINGS = {
 
 };
 
-export const StatiscticsTitles = {
+export const StatisticsTitles = {
   TYPE: 'TYPE',
   MONEY: 'MONEY',
   TIME_SPENT: 'TIME-SPENT',

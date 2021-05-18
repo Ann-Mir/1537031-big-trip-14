@@ -1,6 +1,12 @@
 import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
-import {UserAction, UpdateType, DEFAULT_POINT, OfflineMessages, Mode} from '../utils/constants.js';
+import {
+  UserAction,
+  UpdateType,
+  DEFAULT_POINT,
+  OfflineMessages,
+  Mode
+} from '../utils/constants.js';
 import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
 

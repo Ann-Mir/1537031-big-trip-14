@@ -22,7 +22,7 @@ import {
   OFFLINE_TITLE,
   STORE_NAME,
   UpdateType,
-  OfflineMessages,
+  OfflineMessages
 } from './utils/constants.js';
 import Api from './api/api.js';
 import {showToast} from './utils/toast.js';
