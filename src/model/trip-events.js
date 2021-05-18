@@ -26,7 +26,6 @@ export default class TripEvents extends Observer {
   updateTripEvent(updateType, update) {
     const index = this._tripEvents.findIndex(
       (tripEvent) => tripEvent.id === update.id);
-
     if (index === -1) {
       throw new Error('Can\'t update unexisting trip event');
     }
@@ -36,7 +35,6 @@ export default class TripEvents extends Observer {
       update,
       ...this._tripEvents.slice(index + 1),
     ];
-
     this._notify(updateType, update);
   }
 

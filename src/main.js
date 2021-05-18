@@ -91,7 +91,9 @@ const handleSiteMenuClick = (menuItem) => {
 };
 
 const handleTaskNewFormClose = () => {
-  newEventButtonComponent.enable();
+  if (isOnline()) {
+    newEventButtonComponent.enable();
+  }
   remove(statisticsComponent);
   siteMenuComponent.setItem(MenuItem.TABLE);
 };

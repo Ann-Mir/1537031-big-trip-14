@@ -91,7 +91,7 @@ export default class TripEvent {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._tripEventEditComponent, prevTripEventEditComponent);
+      replace(this._tripEventComponent, prevTripEventEditComponent);
       this._mode = Mode.DEFAULT;
     }
 

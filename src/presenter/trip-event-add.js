@@ -99,7 +99,9 @@ export default class TripEventAdd {
   }
 
   _handleDeleteClick() {
-    this._newEventButtonComponent.enable();
+    if (isOnline()) {
+      this._newEventButtonComponent.enable();
+    }
     this.destroy();
   }
 }

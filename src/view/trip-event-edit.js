@@ -119,10 +119,10 @@ const createEditPointTemplate = (availableOffers, destinations, state, mode= Mod
 
                 <div class="event__field-group  event__field-group--time">
                   <label class="visually-hidden" for="event-start-time-1">From</label>
-                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeFullDateAndTime(dateFrom)}" ${isDisabled ? 'disabled' : ''}>
+                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeFullDateAndTime(dateFrom)}" ${isDisabled ? 'disabled' : ''} required>
                   &mdash;
                   <label class="visually-hidden" for="event-end-time-1">To</label>
-                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeFullDateAndTime(dateTo)}" ${isDisabled ? 'disabled' : ''}>
+                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeFullDateAndTime(dateTo)}" ${isDisabled ? 'disabled' : ''} required>
                 </div>
 
                 <div class="event__field-group  event__field-group--price">
@@ -130,7 +130,7 @@ const createEditPointTemplate = (availableOffers, destinations, state, mode= Mod
                     <span class="visually-hidden">Price</span>
                     &euro;
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" step="1" name="event-price" value="${he.encode(String(basePrice))}" ${isDisabled ? 'disabled' : ''}>
+                  <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" step="1" name="event-price" value="${he.encode(String(basePrice))}" ${isDisabled ? 'disabled' : ''} required>
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit"${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
@@ -254,7 +254,7 @@ export default class TripEventEdit extends SmartView {
       .addEventListener('click', this._eventTypeToggleHandler);
     this.getElement()
       .querySelector('.event__input--destination')
-      .addEventListener('blur', this._destinationToggleHandler);
+      .addEventListener('change', this._destinationToggleHandler);
     this.getElement()
       .querySelector('.event__input--price')
       .addEventListener('change', this._priceChangeHAndler);
@@ -290,16 +290,18 @@ export default class TripEventEdit extends SmartView {
   }
 
   _startDateChangeHandler([userDate]) {
+    const startDate = userDate ? userDate : new Date();
     this.updateState({
-      dateFrom: userDate,
-      dateTo: userDate > this._state.dateTo ? userDate : this._state.dateTo,
+      dateFrom: startDate,
+      dateTo: startDate > this._state.dateTo ? startDate : this._state.dateTo,
     });
   }
 
   _endDateChangeHandler([userDate]) {
+    const endDate = userDate ? userDate : new Date();
     this.updateState({
-      dateFrom: userDate < this._state.dateFrom ? userDate : this._state.dateFrom,
-      dateTo: userDate,
+      dateFrom: endDate< this._state.dateFrom ? endDate : this._state.dateFrom,
+      dateTo: endDate,
     });
   }
 
