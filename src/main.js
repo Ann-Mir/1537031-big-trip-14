@@ -89,6 +89,7 @@ const handleSiteMenuClick = (menuItem) => {
 };
 
 const handleTaskNewFormClose = () => {
+  newEventButtonComponent.enable();
   remove(statisticsComponent);
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
 };
