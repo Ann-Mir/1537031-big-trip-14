@@ -1,19 +1,18 @@
 import Observer from '../utils/observer.js';
 
 export default class TripEvents extends Observer {
-
   constructor() {
     super();
     this._tripEvents = [];
   }
 
+  getTripEvents() {
+    return this._tripEvents;
+  }
+
   setTripEvents(updateType, tripEvents) {
     this._tripEvents = tripEvents.slice();
     this._notify(updateType);
-  }
-
-  getTripEvents() {
-    return this._tripEvents;
   }
 
   getTotalCost() {
@@ -27,7 +26,6 @@ export default class TripEvents extends Observer {
   updateTripEvent(updateType, update) {
     const index = this._tripEvents.findIndex(
       (tripEvent) => tripEvent.id === update.id);
-
     if (index === -1) {
       throw new Error('Can\'t update unexisting trip event');
     }
@@ -37,7 +35,6 @@ export default class TripEvents extends Observer {
       update,
       ...this._tripEvents.slice(index + 1),
     ];
-
     this._notify(updateType, update);
   }
 
@@ -105,5 +102,4 @@ export default class TripEvents extends Observer {
 
     return adaptedTripEvent;
   }
-
 }

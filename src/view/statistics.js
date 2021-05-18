@@ -2,7 +2,7 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
 import {getDuration, humanizeDuration} from '../utils/trip-event.js';
-import {StatiscticsTitles, STATISTICS_SETTINGS} from '../utils/constants.js';
+import {StatisticsTitles, STATISTICS_SETTINGS} from '../utils/constants.js';
 import {sortMapByValues} from '../utils/statistics.js';
 
 
@@ -32,6 +32,8 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
+        barThickness: STATISTICS_SETTINGS.barThickness,
+        minBarLength: STATISTICS_SETTINGS.minBarLength,
       }],
     },
     options: {
@@ -48,7 +50,7 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
       },
       title: {
         display: true,
-        text: StatiscticsTitles.MONEY,
+        text: StatisticsTitles.MONEY,
         fontColor: STATISTICS_SETTINGS.fontColor,
         fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,
@@ -65,7 +67,6 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          barThickness: STATISTICS_SETTINGS.barThickness,
         }],
         xAxes: [{
           ticks: {
@@ -76,7 +77,6 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: STATISTICS_SETTINGS.minBarLength,
         }],
       },
       legend: {
@@ -115,6 +115,8 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
+        barThickness: STATISTICS_SETTINGS.barThickness,
+        minBarLength: STATISTICS_SETTINGS.minBarLength,
       }],
     },
     options: {
@@ -131,7 +133,7 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
       },
       title: {
         display: true,
-        text: StatiscticsTitles.TYPE,
+        text: StatisticsTitles.TYPE,
         fontColor: STATISTICS_SETTINGS.fontColor,
         fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,
@@ -148,7 +150,6 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          barThickness: STATISTICS_SETTINGS.barThickness,
         }],
         xAxes: [{
           ticks: {
@@ -159,7 +160,6 @@ const renderChartByTripType = (typeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: STATISTICS_SETTINGS.minBarLength,
         }],
       },
       legend: {
@@ -198,6 +198,8 @@ const renderTimeChart = (timeCtx, tripEvents) => {
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
+        barThickness: STATISTICS_SETTINGS.barThickness,
+        minBarLength: STATISTICS_SETTINGS.minBarLength,
       }],
     },
     options: {
@@ -214,7 +216,7 @@ const renderTimeChart = (timeCtx, tripEvents) => {
       },
       title: {
         display: true,
-        text: StatiscticsTitles.TIME_SPENT,
+        text: StatisticsTitles.TIME_SPENT,
         fontColor: STATISTICS_SETTINGS.fontColor,
         fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,
@@ -231,7 +233,6 @@ const renderTimeChart = (timeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          barThickness: STATISTICS_SETTINGS.barThickness,
         }],
         xAxes: [{
           ticks: {
@@ -242,7 +243,6 @@ const renderTimeChart = (timeCtx, tripEvents) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: STATISTICS_SETTINGS.minBarLength,
         }],
       },
       legend: {
@@ -274,7 +274,6 @@ const createStatisticsTemplate = () => {
 };
 
 export default class Statistics extends SmartView {
-
   constructor(tripEvents) {
     super();
 
@@ -283,23 +282,6 @@ export default class Statistics extends SmartView {
     this._typeChart = null;
     this._timeChart = null;
 
-    this._setCharts();
-  }
-
-  removeElement() {
-    super.removeElement();
-
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
-    }
-  }
-
-  getTemplate() {
-    return createStatisticsTemplate();
-  }
-
-  restoreHandlers() {
     this._setCharts();
   }
 
@@ -320,4 +302,20 @@ export default class Statistics extends SmartView {
     this._typeChart = renderChartByTripType(typeCtx, this._tripEvents);
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+  }
+
+  getTemplate() {
+    return createStatisticsTemplate();
+  }
+
+  restoreHandlers() {
+    this._setCharts();
+  }
 }

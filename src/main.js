@@ -3,7 +3,6 @@ import TripControlsView from './view/trip-controls.js';
 import TripControlsNavigationView from './view/trip-controls-navigation.js';
 import TripControlsFiltersView from './view/trip-controls-filters.js';
 import NewEventButtonView from './view/new-event-button.js';
-import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import StatisticsView from './view/statistics.js';
 import {remove, render, RenderPosition} from './utils/render.js';
 import {isOnline} from './utils/common.js';
@@ -12,6 +11,7 @@ import FilterModel from './model/filter.js';
 import DataModel from './model/data.js';
 import FilterPresenter from './presenter/filter.js';
 import TripInfoPresenter from './presenter/trip-info.js';
+import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import Store from './api/store.js';
 import Provider from './api/provider.js';
 import {
@@ -21,11 +21,11 @@ import {
   MenuItem,
   OFFLINE_TITLE,
   STORE_NAME,
-  UpdateType
+  UpdateType,
+  OfflineMessages
 } from './utils/constants.js';
 import Api from './api/api.js';
 import {showToast} from './utils/toast.js';
-import {OfflineMessages} from './utils/constants';
 
 const siteHeaderElement = document.querySelector('.page-header');
 const tripMainElement = siteHeaderElement.querySelector('.trip-main');
@@ -71,7 +71,9 @@ const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
       remove(statisticsComponent);
-      newEventButtonComponent.enable();
+      if (isOnline()) {
+        newEventButtonComponent.enable();
+      }
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripEventsBoardPresenter.init();
       siteMenuComponent.setItem(MenuItem.TABLE);
@@ -89,16 +91,18 @@ const handleSiteMenuClick = (menuItem) => {
 };
 
 const handleTaskNewFormClose = () => {
-  newEventButtonComponent.enable();
+  if (isOnline()) {
+    newEventButtonComponent.enable();
+  }
   remove(statisticsComponent);
   siteMenuComponent.setItem(MenuItem.TABLE);
 };
 
 const handleNewEventButtonClick = () => {
   tripEventsBoardPresenter.destroy();
+  tripEventsBoardPresenter.init();
   newEventButtonComponent.disable();
   filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-  tripEventsBoardPresenter.init();
   if (!isOnline()) {
     showToast(OfflineMessages.CREATE);
     siteMenuComponent.setItem(MenuItem.TABLE);

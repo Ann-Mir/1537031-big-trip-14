@@ -2,11 +2,10 @@ import TripEventView from '../view/trip-event.js';
 import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {cloneObjectValue} from '../utils/common.js';
-import {UserAction, UpdateType} from '../utils/constants.js';
+import {UserAction, UpdateType, OfflineMessages} from '../utils/constants.js';
 import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
 import {getDuration} from '../utils/trip-event.js';
-import {OfflineMessages} from '../utils/constants.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -20,8 +19,8 @@ export const State = {
 };
 
 export default class TripEvent {
-  constructor(tripEventsContainer, dataModel, changeData, changeMode) {
-    this._tripEventsContainer = tripEventsContainer;
+  constructor(container, dataModel, changeData, changeMode) {
+    this._container = container;
     this._dataModel = dataModel;
     this._changeData = changeData;
     this._changeMode = changeMode;
@@ -36,58 +35,6 @@ export default class TripEvent {
     this._handleEditFormClose = this._handleEditFormClose.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-  }
-
-  init(tripEvent) {
-    this._tripEvent = tripEvent;
-
-    const prevTripEventComponent = this._tripEventComponent;
-    const prevTripEventEditComponent = this._tripEventEditComponent;
-
-    this._tripEventComponent = new TripEventView(tripEvent);
-    this._tripEventEditComponent = new TripEventEditView(this._dataModel, tripEvent);
-
-    this._tripEventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._tripEventComponent.setEditClickHandler(this._handleEditClick);
-    this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
-    this._tripEventEditComponent.setCloseEditFormHandler(this._handleEditFormClose);
-    this._tripEventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
-
-    if (prevTripEventComponent === null || prevTripEventEditComponent === null) {
-      render(this._tripEventsContainer, this._tripEventComponent, RenderPosition.BEFOREEND);
-      return;
-    }
-
-    if (this._mode === Mode.DEFAULT) {
-      replace(this._tripEventComponent, prevTripEventComponent);
-    }
-
-    if (this._mode === Mode.EDITING) {
-      replace(this._tripEventEditComponent, prevTripEventEditComponent);
-      this._mode = Mode.DEFAULT;
-    }
-
-    if (this._tripEventsContainer.getElement().contains(prevTripEventComponent.getElement())) {
-      replace(this._tripEventComponent, prevTripEventComponent);
-    }
-
-    if (this._tripEventsContainer.getElement().contains(prevTripEventEditComponent.getElement())) {
-      replace(this._tripEventEditComponent, prevTripEventEditComponent);
-    }
-
-    remove(prevTripEventComponent);
-    remove(prevTripEventEditComponent);
-  }
-
-  destroy() {
-    remove(this._tripEventComponent);
-    remove(this._tripEventEditComponent);
-  }
-
-  resetView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._replaceFormToCard();
-    }
   }
 
   setViewState(state) {
@@ -116,6 +63,50 @@ export default class TripEvent {
         this._tripEventEditComponent.shake(resetFormState);
         this._tripEventEditComponent.shake(resetFormState);
         break;
+    }
+  }
+
+  init(tripEvent) {
+    this._tripEvent = tripEvent;
+
+    const prevTripEventComponent = this._tripEventComponent;
+    const prevTripEventEditComponent = this._tripEventEditComponent;
+
+    this._tripEventComponent = new TripEventView(tripEvent);
+    this._tripEventEditComponent = new TripEventEditView(this._dataModel, tripEvent);
+
+    this._tripEventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._tripEventComponent.setEditClickHandler(this._handleEditClick);
+    this._tripEventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._tripEventEditComponent.setCloseEditFormHandler(this._handleEditFormClose);
+    this._tripEventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+
+    if (prevTripEventComponent === null || prevTripEventEditComponent === null) {
+      render(this._container, this._tripEventComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    if (this._mode === Mode.DEFAULT) {
+      replace(this._tripEventComponent, prevTripEventComponent);
+    }
+
+    if (this._mode === Mode.EDITING) {
+      replace(this._tripEventComponent, prevTripEventEditComponent);
+      this._mode = Mode.DEFAULT;
+    }
+
+    remove(prevTripEventComponent);
+    remove(prevTripEventEditComponent);
+  }
+
+  destroy() {
+    remove(this._tripEventComponent);
+    remove(this._tripEventEditComponent);
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToCard();
     }
   }
 
@@ -164,7 +155,6 @@ export default class TripEvent {
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
     );
-    this._replaceFormToCard();
   }
 
   _handleEditFormClose() {
@@ -176,7 +166,7 @@ export default class TripEvent {
   _handleFavoriteClick() {
     this._changeData(
       UserAction.UPDATE_EVENT,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       cloneObjectValue(
         this._tripEvent,
         {isFavorite: !this._tripEvent.isFavorite}),
@@ -194,5 +184,4 @@ export default class TripEvent {
       tripEvent,
     );
   }
-
 }

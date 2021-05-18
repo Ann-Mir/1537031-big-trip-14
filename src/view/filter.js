@@ -5,16 +5,16 @@ const createFilterItemTemplate = (filter, currentFilterType) => {
   const {type, name, count} = filter;
 
   return (`<div class="trip-filters__filter">
-              <input
-               id="filter-${name}"
-               class="trip-filters__filter-input  visually-hidden"
-               type="radio" name="trip-filter" ${type === currentFilterType ? 'checked' : ''}
-               ${count === 0 ? 'disabled' : ''} value="${name}"
-               />
-              <label class="trip-filters__filter-label" for="filter-${name}">
-                ${capitalizeFirstLetter(name)}
-              </label>
-            </div>`
+            <input
+             id="filter-${name}"
+             class="trip-filters__filter-input  visually-hidden"
+             type="radio" name="trip-filter" ${type === currentFilterType ? 'checked' : ''}
+             ${count === 0 ? 'disabled' : ''} value="${name}"
+             />
+            <label class="trip-filters__filter-label" for="filter-${name}">
+              ${capitalizeFirstLetter(name)}
+            </label>
+           </div>`
   );
 };
 
@@ -29,27 +29,25 @@ const createTripFiltersElement = (filterItems, currentFilterType) => {
 };
 
 export default class Filter extends AbstractView {
-
   constructor(filters, currentFilterType) {
     super();
     this._filters = filters;
-    this._currentFilter = currentFilterType;
+    this._currentOption = currentFilterType;
 
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createTripFiltersElement(this._filters, this._currentFilter);
+    return createTripFiltersElement(this._filters, this._currentOption);
+  }
+
+  setTypeChangeHandler(callback) {
+    this._callback.typeChange = callback;
+    this.getElement().addEventListener('change', this._typeChangeHandler);
   }
 
   _typeChangeHandler(evt) {
     evt.preventDefault();
-    this._callback.filterTypeChange(evt.target.value);
+    this._callback.typeChange(evt.target.value);
   }
-
-  setTypeChangeHandler(callback) {
-    this._callback.filterTypeChange = callback;
-    this.getElement().addEventListener('change', this._typeChangeHandler);
-  }
-
 }

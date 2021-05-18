@@ -1,10 +1,6 @@
 import dayjs from 'dayjs';
 import {TIMINGS} from './constants.js';
 
-const sumValues = (accumulator, currentValue) => {
-  return accumulator + currentValue;
-};
-
 const isEventComing = (point) => {
   const today = dayjs();
   return (today.isBefore(dayjs(point.dateFrom), 'd') || today.isSame(dayjs(point.dateFrom), 'd'));
@@ -60,17 +56,6 @@ const humanizeDay = (date) => {
   return dayjs(date).format('DD');
 };
 
-const getEventPeriod = (startingPoint, endingPoint) => {
-  const monthStart = dayjs(startingPoint.dateFrom).month();
-  const monthEnd = dayjs(endingPoint.dateTo).month();
-  if (monthStart == monthEnd) {
-    return `${
-      humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDay(endingPoint.dateTo)}`;
-  }
-  return `${
-    humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDate(endingPoint.dateTo)}`;
-};
-
 const sortByPrice = (firstEvent, secondEvent) => {
   return secondEvent.basePrice - firstEvent.basePrice;
 };
@@ -87,7 +72,6 @@ const sortByDate = (firstEvent, secondEvent) => {
 };
 
 export {
-  getEventPeriod,
   humanizeDay,
   humanizeDuration,
   humanizeTime,
@@ -96,7 +80,6 @@ export {
   humanizeFullDateAndTime,
   isEventExpired,
   isEventComing,
-  sumValues,
   sortByPrice,
   sortByTime,
   sortByDate,

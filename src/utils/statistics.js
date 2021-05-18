@@ -6,6 +6,4 @@ const sortMapByValues = (mapToSort) => {
   return sortedMap;
 };
 
-export {
-  sortMapByValues
-};
+export { sortMapByValues };
