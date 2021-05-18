@@ -4,6 +4,7 @@ import {UserAction, UpdateType, DEFAULT_POINT} from '../utils/constants.js';
 import {Mode} from '../utils/constants.js';
 import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
+import {OfflineMessages} from '../utils/constants.js';
 
 export default class TripEventAdd {
 
@@ -61,7 +62,7 @@ export default class TripEventAdd {
 
   _handleFormSubmit(tripEvent) {
     if (!isOnline()) {
-      showToast('You can\'t save event offline');
+      showToast(OfflineMessages.SAVE);
       return;
     }
 

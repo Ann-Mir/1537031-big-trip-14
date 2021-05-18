@@ -25,6 +25,7 @@ import {
 } from './utils/constants.js';
 import Api from './api/api.js';
 import {showToast} from './utils/toast.js';
+import {OfflineMessages} from './utils/constants';
 
 const siteHeaderElement = document.querySelector('.page-header');
 const tripMainElement = siteHeaderElement.querySelector('.trip-main');
@@ -99,7 +100,7 @@ const handleNewEventButtonClick = () => {
   filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
   tripEventsBoardPresenter.init();
   if (!isOnline()) {
-    showToast('You can\'t create new event offline');
+    showToast(OfflineMessages.CREATE);
     siteMenuComponent.setItem(MenuItem.TABLE);
     return;
   }
@@ -131,6 +132,6 @@ window.addEventListener('online', () => {
 
 window.addEventListener('offline', () => {
   newEventButtonComponent.disable();
-  showToast('Connection is lost');
+  showToast(OfflineMessages.CONNECTION);
   document.title += OFFLINE_TITLE;
 });

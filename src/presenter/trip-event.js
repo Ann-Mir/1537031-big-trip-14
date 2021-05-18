@@ -5,7 +5,8 @@ import {cloneObjectValue} from '../utils/common.js';
 import {UserAction, UpdateType} from '../utils/constants.js';
 import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
-import {getDuration} from '../utils/trip-event';
+import {getDuration} from '../utils/trip-event.js';
+import {OfflineMessages} from '../utils/constants.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -141,7 +142,7 @@ export default class TripEvent {
 
   _handleEditClick() {
     if (!isOnline()) {
-      showToast('You can\'t edit event offline');
+      showToast(OfflineMessages.EDIT);
       return;
     }
 
@@ -150,7 +151,7 @@ export default class TripEvent {
 
   _handleFormSubmit(update) {
     if (!isOnline()) {
-      showToast('You can\'t save event offline');
+      showToast(OfflineMessages.SAVE);
       return;
     }
 
@@ -184,7 +185,7 @@ export default class TripEvent {
 
   _handleDeleteClick(tripEvent) {
     if (!isOnline()) {
-      showToast('You can\'t delete event offline');
+      showToast(OfflineMessages.DELETE);
       return;
     }
     this._changeData(

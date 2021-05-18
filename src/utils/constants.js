@@ -80,6 +80,14 @@ export const TIMINGS = {
   hoursPerDay: 24,
 };
 
+export const OfflineMessages = {
+  CONNECTION: 'Connection is lost',
+  CREATE: 'You can\'t create new event offline',
+  SAVE: 'You can\'t save event offline',
+  DELETE: 'You can\'t delete event offline',
+  EDIT: 'You can\'t edit event offline',
+};
+
 export const AUTHORIZATION = 'Basic hfbh48fcn9w934avd';
 export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 const STORE_PREFIX = 'bigtrip-localstorage';
