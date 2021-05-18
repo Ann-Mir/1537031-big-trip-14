@@ -79,3 +79,10 @@ export const TIMINGS = {
   minutesPerHour: 60,
   hoursPerDay: 24,
 };
+
+export const AUTHORIZATION = 'Basic hfbh48fcn9w934avd';
+export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+const STORE_PREFIX = 'bigtrip-localstorage';
+const STORE_VER = 'v14';
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+export const OFFLINE_TITLE = ' [offline]';

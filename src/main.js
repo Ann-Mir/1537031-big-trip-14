@@ -5,7 +5,7 @@ import TripControlsFiltersView from './view/trip-controls-filters.js';
 import NewEventButtonView from './view/new-event-button.js';
 import TripEventsBoardPresenter from './presenter/trip-events-board.js';
 import StatisticsView from './view/statistics.js';
-import {render, RenderPosition} from './utils/render.js';
+import {remove, render, RenderPosition} from './utils/render.js';
 import {isOnline} from './utils/common.js';
 import TripEventsModel from './model/trip-events.js';
 import FilterModel from './model/filter.js';
@@ -14,18 +14,17 @@ import FilterPresenter from './presenter/filter.js';
 import TripInfoPresenter from './presenter/trip-info.js';
 import Store from './api/store.js';
 import Provider from './api/provider.js';
-import {MenuItem} from './utils/constants.js';
-import {FilterType, UpdateType} from './utils/constants.js';
-import {remove} from './utils/render.js';
+import {
+  AUTHORIZATION,
+  END_POINT,
+  FilterType,
+  MenuItem,
+  OFFLINE_TITLE,
+  STORE_NAME,
+  UpdateType
+} from './utils/constants.js';
 import Api from './api/api.js';
 import {showToast} from './utils/toast.js';
-
-const AUTHORIZATION = 'Basic hfbh48fcn9w934avd';
-const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
-const STORE_PREFIX = 'bigtrip-localstorage';
-const STORE_VER = 'v14';
-const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
-const OFFLINE_TITLE = ' [offline]';
 
 const siteHeaderElement = document.querySelector('.page-header');
 const tripMainElement = siteHeaderElement.querySelector('.trip-main');
