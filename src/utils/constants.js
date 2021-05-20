@@ -7,7 +7,7 @@ export const SortType = {
 export const DATEPICKER_SETTINGS = {
   enableTime: true,
   dateFormat: 'd/m/y H:i',
-  time_24hr: true,
+  'time_24hr': true,
 };
 
 export const UserAction = {
@@ -32,7 +32,6 @@ export const STATISTICS_SETTINGS = {
   minBarLength: 85,
   barHeight: 55,
   barThickness: 44,
-
 };
 
 export const StatisticsTitles = {
