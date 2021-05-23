@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {TIMINGS} from './constants.js';
+import {Timings} from './constants.js';
 
 const isEventComing = (point) => {
   const today = dayjs();
@@ -20,11 +20,11 @@ const formatDateAndTime = (date, format) => {
 };
 
 const humanizeDuration = (duration) => {
-  let minutes = Math.trunc(duration / TIMINGS.millisecondsPerMinute % TIMINGS.minutesPerHour);
+  let minutes = Math.trunc(duration / Timings.MILLISECONDS_PER_MINUTE % Timings.MINUTES_PER_HOUR);
   let hours = Math.trunc(duration / (
-    TIMINGS.millisecondsPerMinute * TIMINGS.minutesPerHour) % TIMINGS.hoursPerDay);
+    Timings.MILLISECONDS_PER_MINUTE * Timings.MINUTES_PER_HOUR) % Timings.HOURS_PER_DAY);
   let days = Math.trunc(duration / (
-    TIMINGS.millisecondsPerMinute * TIMINGS.minutesPerHour * TIMINGS.hoursPerDay));
+    Timings.MILLISECONDS_PER_MINUTE * Timings.MINUTES_PER_HOUR * Timings.HOURS_PER_DAY));
 
   days = (days < 10) ? '0' + days : days;
   hours = (hours < 10) ? '0' + hours : hours;
