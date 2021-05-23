@@ -11,24 +11,12 @@ const isEventExpired = (point) => {
   return today.isAfter(dayjs(point.dateTo), 'd');
 };
 
-const humanizeFullDateAndTime = (date) => {
-  return dayjs(date).format('DD/MM/YY HH:MM');
-};
-
-const humanizeFullDate = (date) => {
-  return dayjs(date).format('YYYY-MM-DD');
-};
-
-const humanizeDate = (date) => {
-  return dayjs(date).format('MMM D');
-};
-
-const humanizeTime = (date) => {
-  return dayjs(date).format('HH:mm');
-};
-
 const getDuration = (startDate, endDate) => {
   return dayjs(endDate).diff(dayjs(startDate));
+};
+
+const formatDateAndTime = (date, format) => {
+  return dayjs(date).format(format);
 };
 
 const humanizeDuration = (duration) => {
@@ -52,10 +40,6 @@ const humanizeDuration = (duration) => {
   return `${days}D ${hours}H ${minutes}M`;
 };
 
-const humanizeDay = (date) => {
-  return dayjs(date).format('DD');
-};
-
 const sortByPrice = (firstEvent, secondEvent) => {
   return secondEvent.basePrice - firstEvent.basePrice;
 };
@@ -72,12 +56,8 @@ const sortByDate = (firstEvent, secondEvent) => {
 };
 
 export {
-  humanizeDay,
+  formatDateAndTime,
   humanizeDuration,
-  humanizeTime,
-  humanizeDate,
-  humanizeFullDate,
-  humanizeFullDateAndTime,
   isEventExpired,
   isEventComing,
   sortByPrice,

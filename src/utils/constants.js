@@ -87,6 +87,14 @@ export const OfflineMessages = {
   EDIT: 'You can\'t edit event offline',
 };
 
+export const DateTimeFormats = {
+  FULL_DATE_AND_TIME: 'DD/MM/YY HH:MM',
+  FULL_DATE: 'YYYY-MM-DD',
+  DATE: 'MMM D',
+  DAY: 'DD',
+  TIME: 'HH:mm',
+};
+
 export const AUTHORIZATION = 'Basic hfbhfmdkcn9wfdfdvd';
 export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 const STORE_PREFIX = 'bigtrip-localstorage';

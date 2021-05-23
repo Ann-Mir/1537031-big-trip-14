@@ -1,11 +1,10 @@
 import {capitalizeFirstLetter} from '../utils/common.js';
-import {humanizeFullDateAndTime} from '../utils/trip-event.js';
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import he from 'he';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import {DATEPICKER_SETTINGS, DEFAULT_POINT, Mode} from '../utils/constants.js';
-
+import {DATEPICKER_SETTINGS, DEFAULT_POINT, Mode, DateTimeFormats} from '../utils/constants.js';
+import {formatDateAndTime} from '../utils/trip-event.js';
 
 const createRollUpButtonTemplate = (mode) => {
   return mode === Mode.EDIT ? `<button class="event__rollup-btn" type="button">
@@ -119,10 +118,10 @@ const createEditPointTemplate = (availableOffers, destinations, state, mode= Mod
 
                 <div class="event__field-group  event__field-group--time">
                   <label class="visually-hidden" for="event-start-time-1">From</label>
-                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeFullDateAndTime(dateFrom)}" ${isDisabled ? 'disabled' : ''} required>
+                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDateAndTime(dateFrom, DateTimeFormats.FULL_DATE_AND_TIME)}" ${isDisabled ? 'disabled' : ''} required>
                   &mdash;
                   <label class="visually-hidden" for="event-end-time-1">To</label>
-                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeFullDateAndTime(dateTo)}" ${isDisabled ? 'disabled' : ''} required>
+                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDateAndTime(dateTo, DateTimeFormats.FULL_DATE_AND_TIME)}" ${isDisabled ? 'disabled' : ''} required>
                 </div>
 
                 <div class="event__field-group  event__field-group--price">
