@@ -5,7 +5,8 @@ import {
   UpdateType,
   DEFAULT_POINT,
   OfflineMessages,
-  Mode
+  Mode,
+  EscapeKeys
 } from '../utils/constants.js';
 import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
@@ -74,7 +75,7 @@ export default class TripEventAdd {
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (evt.key === EscapeKeys.ESCAPE || evt.key === EscapeKeys.ESC) {
       evt.preventDefault();
       if (isOnline()) {
         this._newEventButtonComponent.enable();

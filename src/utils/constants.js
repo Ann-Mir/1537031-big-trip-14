@@ -73,10 +73,11 @@ export const MenuItem = {
   STATS: 'STATS',
 };
 
-export const TIMINGS = {
-  millisecondsPerMinute: 60000,
-  minutesPerHour: 60,
-  hoursPerDay: 24,
+export const Timings = {
+  MILLISECONDS_PER_MINUTE: 60000,
+  MINUTES_PER_HOUR: 60,
+  HOURS_PER_DAY: 24,
+  MILLISECONDS_PER_SECOND: 1000,
 };
 
 export const OfflineMessages = {
@@ -93,6 +94,11 @@ export const DateTimeFormats = {
   DATE: 'MMM D',
   DAY: 'DD',
   TIME: 'HH:mm',
+};
+
+export const EscapeKeys = {
+  ESCAPE: 'Escape',
+  ESC: 'Esc',
 };
 
 export const AUTHORIZATION = 'Basic hfbhfmdkcn9wfdfdvd';

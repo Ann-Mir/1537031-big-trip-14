@@ -2,7 +2,7 @@ import TripEventView from '../view/trip-event.js';
 import TripEventEditView from '../view/trip-event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {cloneObjectValue} from '../utils/common.js';
-import {UserAction, UpdateType, OfflineMessages} from '../utils/constants.js';
+import {UserAction, UpdateType, OfflineMessages, EscapeKeys} from '../utils/constants.js';
 import {isOnline} from '../utils/common.js';
 import {showToast} from '../utils/toast.js';
 import {getDuration} from '../utils/trip-event.js';
@@ -124,7 +124,7 @@ export default class TripEvent {
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (evt.key === EscapeKeys.ESCAPE || evt.key === EscapeKeys.ESC) {
       evt.preventDefault();
       this._tripEventEditComponent.reset(this._tripEvent);
       this._replaceFormToCard();
