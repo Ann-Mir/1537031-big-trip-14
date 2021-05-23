@@ -1,7 +1,8 @@
 import TripInfoView from '../view/trip-info.js';
-import {humanizeDate, humanizeDay, sortByDate} from '../utils/trip-event.js';
+import {sortByDate, formatDateAndTime} from '../utils/trip-event.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
 import dayjs from 'dayjs';
+import {DateTimeFormats} from '../utils/constants.js';
 
 const POINTS_TO_SHOW = 3;
 
@@ -29,10 +30,12 @@ export default class TripInfo {
     const monthEnd = dayjs(endingPoint.dateTo).month();
     if (monthStart === monthEnd) {
       return `${
-        humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDay(endingPoint.dateTo)}`;
+        formatDateAndTime(startingPoint.dateFrom, DateTimeFormats.DATE)}&nbsp;&mdash;&nbsp;
+        ${formatDateAndTime(endingPoint.dateTo, DateTimeFormats.DAY)}`;
     }
     return `${
-      humanizeDate(startingPoint.dateFrom)}&nbsp;&mdash;&nbsp;${humanizeDate(endingPoint.dateTo)}`;
+      formatDateAndTime(startingPoint.dateFrom, DateTimeFormats.DATE)}&nbsp;&mdash;&nbsp;
+      ${formatDateAndTime(endingPoint.dateTo, DateTimeFormats.DATE)}`;
   }
 
   getRoute() {

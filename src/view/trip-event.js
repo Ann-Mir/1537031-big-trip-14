@@ -1,12 +1,11 @@
 import AbstractView from './abstract.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import {
-  humanizeDate,
   humanizeDuration,
-  humanizeFullDate,
-  humanizeTime,
   getDuration
 } from '../utils/trip-event.js';
+import {formatDateAndTime} from '../utils/trip-event.js';
+import {DateTimeFormats} from '../utils/constants.js';
 
 const createOffersTemplate = (offers) => {
   const offersList = offers.map((offer) => {
@@ -28,8 +27,8 @@ const createEventTemplate = (point) => {
   const offersList = createOffersTemplate(point.offers);
   return `<li class="trip-events__item">
             <div class="event">
-              <time class="event__date" datetime="${humanizeFullDate(point.dateFrom)}">
-                ${humanizeDate(point.dateFrom)}
+              <time class="event__date" datetime="${formatDateAndTime(point.dateFrom, DateTimeFormats.FULL_DATE)}">
+                ${formatDateAndTime(point.dateFrom, DateTimeFormats.DATE)}
               </time>
               <div class="event__type">
                 <img
@@ -43,14 +42,14 @@ const createEventTemplate = (point) => {
                 <p class="event__time">
                   <time
                     class="event__start-time"
-                    datetime="${humanizeFullDate(point.dateFrom)}T${humanizeTime(point.dateFrom)}">
-                      ${humanizeTime(point.dateFrom)}
+                    datetime="${formatDateAndTime(point.dateFrom, DateTimeFormats.FULL_DATE)}T${formatDateAndTime(point.dateFrom, DateTimeFormats.TIME)}">
+                      ${formatDateAndTime(point.dateFrom, DateTimeFormats.TIME)}
                   </time>
                   &mdash;
                   <time
                     class="event__end-time"
-                    datetime="${humanizeFullDate(point.dateTo)}T${humanizeTime(point.dateTo)}">
-                      ${humanizeTime(point.dateTo)}
+                    datetime="${formatDateAndTime(point.dateTo, DateTimeFormats.FULL_DATE)}T${formatDateAndTime(point.dateTo, DateTimeFormats.TIME)}">
+                      ${formatDateAndTime(point.dateTo, DateTimeFormats.TIME)}
                   </time>
                 </p>
                 <p class="event__duration">${duration}</p>
