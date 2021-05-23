@@ -41,6 +41,15 @@ export default class Filter extends AbstractView {
     return createTripFiltersElement(this._filters, this._currentOption);
   }
 
+  disableInputs() {
+    this
+      .getElement()
+      .querySelectorAll('.trip-filters__filter-input')
+      .forEach((item) => {
+        item.setAttribute('disabled', 'disabled');
+      });
+  }
+
   setTypeChangeHandler(callback) {
     this._callback.typeChange = callback;
     this.getElement().addEventListener('change', this._typeChangeHandler);
