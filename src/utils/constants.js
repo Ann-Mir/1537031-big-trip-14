@@ -101,7 +101,7 @@ export const EscapeKeys = {
   ESC: 'Esc',
 };
 
-export const AUTHORIZATION = 'Basic hfbhfmdkcn9wfdfdvd';
+export const AUTHORIZATION = 'Basic hfndj847693odvd';
 export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 const STORE_PREFIX = 'bigtrip-localstorage';
 const STORE_VER = 'v14';

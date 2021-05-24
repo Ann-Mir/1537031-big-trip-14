@@ -279,13 +279,21 @@ export default class TripEventEdit extends SmartView {
     );
   }
 
+  _removeDatePicker() {
+    if (this._startDatePicker) {
+      this._startDatePicker.destroy();
+      this._startDatePicker = null;
+    }
+
+    if (this._endDatePicker) {
+      this._endDatePicker.destroy();
+      this._endDatePicker = null;
+    }
+  }
+
   removeElement() {
     super.removeElement();
-
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
-    }
+    this._removeDatePicker();
   }
 
   _startDateChangeHandler([userDate]) {
@@ -385,6 +393,7 @@ export default class TripEventEdit extends SmartView {
 
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
+    this._removeDatePicker();
     this._callback.deleteClick(TripEventEdit.parseStateToTripEvent(this._state));
   }
 
