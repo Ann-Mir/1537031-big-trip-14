@@ -173,8 +173,6 @@ export default class TripEventEdit extends SmartView {
     this._offersSelectionHandler = this._offersSelectionHandler.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
-    this._setStartDatePicker();
-    this._setEndDatePicker();
     this._setInnerHandlers();
   }
 
@@ -208,7 +206,7 @@ export default class TripEventEdit extends SmartView {
     }
   }
 
-  _setStartDatePicker() {
+  setStartDatePicker() {
     if (this._startDatePicker) {
       this._startDatePicker.destroy();
       this._startDatePicker = null;
@@ -227,7 +225,7 @@ export default class TripEventEdit extends SmartView {
     );
   }
 
-  _setEndDatePicker() {
+  setEndDatePicker() {
     if (this._endDatePicker) {
       this._endDatePicker.destroy();
       this._endDatePicker = null;
@@ -268,8 +266,8 @@ export default class TripEventEdit extends SmartView {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setCloseEditFormHandler(this._callback.formClose);
-    this._setStartDatePicker();
-    this._setEndDatePicker();
+    this.setStartDatePicker();
+    this.setEndDatePicker();
     this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
@@ -279,7 +277,7 @@ export default class TripEventEdit extends SmartView {
     );
   }
 
-  _removeDatePicker() {
+  removeDatePicker() {
     if (this._startDatePicker) {
       this._startDatePicker.destroy();
       this._startDatePicker = null;
@@ -293,7 +291,7 @@ export default class TripEventEdit extends SmartView {
 
   removeElement() {
     super.removeElement();
-    this._removeDatePicker();
+    this.removeDatePicker();
   }
 
   _startDateChangeHandler([userDate]) {
@@ -393,7 +391,7 @@ export default class TripEventEdit extends SmartView {
 
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
-    this._removeDatePicker();
+    this.removeDatePicker();
     this._callback.deleteClick(TripEventEdit.parseStateToTripEvent(this._state));
   }
 

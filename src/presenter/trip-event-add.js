@@ -54,6 +54,8 @@ export default class TripEventAdd {
     this._tripEventAddComponent = new TripEventEditView(this._dataModel, DEFAULT_POINT, Mode.ADD);
     this._tripEventAddComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._tripEventAddComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._tripEventAddComponent.setStartDatePicker();
+    this._tripEventAddComponent.setEndDatePicker();
 
     render(
       this._container,
@@ -72,6 +74,9 @@ export default class TripEventAdd {
     }
 
     document.removeEventListener('keydown', this._escKeyDownHandler);
+    if (this._tripEventAddComponent) {
+      this._tripEventAddComponent.removeDatePicker();
+    }
   }
 
   _escKeyDownHandler(evt) {

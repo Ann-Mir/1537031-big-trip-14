@@ -113,6 +113,8 @@ export default class TripEvent {
   _replaceCardToForm() {
     replace(this._tripEventEditComponent, this._tripEventComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
+    this._tripEventEditComponent.setStartDatePicker();
+    this._tripEventEditComponent.setEndDatePicker();
     this._changeMode();
     this._mode = Mode.EDITING;
   }
@@ -120,6 +122,7 @@ export default class TripEvent {
   _replaceFormToCard() {
     replace(this._tripEventComponent, this._tripEventEditComponent);
     document.removeEventListener('keydown', this._escKeyDownHandler);
+    this._tripEventEditComponent.removeDatePicker();
     this._mode = Mode.DEFAULT;
   }
 
