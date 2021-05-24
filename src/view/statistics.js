@@ -6,7 +6,7 @@ import {StatisticsTitles, STATISTICS_SETTINGS} from '../utils/constants.js';
 import {
   sortMapByValues,
   mapEventsByType,
-  mapSpendingsByType,
+  mapSpendingByType,
   mapDurationByType
 } from '../utils/statistics.js';
 
@@ -129,7 +129,7 @@ export default class Statistics extends SmartView {
     const typeCtx = this.getElement().querySelector('.statistics__chart--transport');
     const timeCtx = this.getElement().querySelector('.statistics__chart--time');
 
-    const sortedSpendingsByType = sortMapByValues(mapSpendingsByType(this._tripEvents));
+    const sortedSpendingByType = sortMapByValues(mapSpendingByType(this._tripEvents));
     const sortedTripTypesCount = sortMapByValues(mapEventsByType(this._tripEvents));
     const sortedDurationByType = sortMapByValues(mapDurationByType(this._tripEvents));
 
@@ -144,8 +144,8 @@ export default class Statistics extends SmartView {
 
     this._moneyChart = renderChart(
       moneyCtx,
-      [...sortedSpendingsByType.keys()],
-      [...sortedSpendingsByType.values()],
+      [...sortedSpendingByType.keys()],
+      [...sortedSpendingByType.values()],
       formatMoneyValue,
       formatLabelName,
       StatisticsTitles.MONEY,
