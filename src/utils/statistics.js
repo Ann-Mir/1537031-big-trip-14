@@ -22,13 +22,13 @@ const mapEventsByType = (tripEvents) => {
   return eventsByType;
 };
 
-const mapSpendingsByType = (tripEvents) => {
+const mapSpendingByType = (tripEvents) => {
   const eventsByType = new Map();
   tripEvents.forEach((tripEvent) => {
     if (eventsByType.has(tripEvent.type)) {
-      let spendingsByType = eventsByType.get(tripEvent.type);
-      spendingsByType = spendingsByType + tripEvent.basePrice;
-      eventsByType.set(tripEvent.type, spendingsByType);
+      let spendingByType = eventsByType.get(tripEvent.type);
+      spendingByType = spendingByType + tripEvent.basePrice;
+      eventsByType.set(tripEvent.type, spendingByType);
     } else {
       eventsByType.set(tripEvent.type, tripEvent.basePrice);
     }
@@ -54,6 +54,6 @@ const mapDurationByType = (tripEvents) => {
 export {
   sortMapByValues,
   mapEventsByType,
-  mapSpendingsByType,
+  mapSpendingByType,
   mapDurationByType
 };

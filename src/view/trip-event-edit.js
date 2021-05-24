@@ -181,7 +181,6 @@ export default class TripEventEdit extends SmartView {
   }
 
   setDeleteClickHandler(callback) {
-    this.removeDatePicker();
     this._callback.deleteClick = callback;
     this.getElement()
       .querySelector('.event__reset-btn')
@@ -189,7 +188,6 @@ export default class TripEventEdit extends SmartView {
   }
 
   setFormSubmitHandler(callback) {
-    this.removeDatePicker();
     this._callback.formSubmit = callback;
     this
       .getElement()
@@ -198,7 +196,6 @@ export default class TripEventEdit extends SmartView {
   }
 
   setCloseEditFormHandler(callback) {
-    this.removeDatePicker();
     if (this.getElement().querySelector('.event__rollup-btn')) {
 
       this._callback.formClose = callback;
@@ -278,6 +275,7 @@ export default class TripEventEdit extends SmartView {
     this.updateState(
       TripEventEdit.parseTripEventToState(tripEvent, this._dataModel.getOffers()),
     );
+    this.removeDatePicker();
   }
 
   removeDatePicker() {
@@ -293,8 +291,8 @@ export default class TripEventEdit extends SmartView {
   }
 
   removeElement() {
-    super.removeElement();
     this.removeDatePicker();
+    super.removeElement();
   }
 
   _startDateChangeHandler([userDate]) {
@@ -383,16 +381,19 @@ export default class TripEventEdit extends SmartView {
   }
 
   _formSubmitHandler(evt) {
+    this.removeDatePicker();
     evt.preventDefault();
     this._callback.formSubmit(TripEventEdit.parseStateToTripEvent(this._state));
   }
 
   _closeEditFormHandler(evt) {
+    this.removeDatePicker();
     evt.preventDefault();
     this._callback.formClose();
   }
 
   _formDeleteClickHandler(evt) {
+    this.removeDatePicker();
     evt.preventDefault();
     this._callback.deleteClick(TripEventEdit.parseStateToTripEvent(this._state));
   }
