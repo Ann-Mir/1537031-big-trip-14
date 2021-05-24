@@ -1,34 +1,33 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
-import {getDuration, humanizeDuration} from '../utils/trip-event.js';
+import {humanizeDuration} from '../utils/trip-event.js';
 import {StatisticsTitles, STATISTICS_SETTINGS} from '../utils/constants.js';
-import {sortMapByValues} from '../utils/statistics.js';
+import {
+  sortMapByValues,
+  mapEventsByType,
+  mapSpendingsByType,
+  mapDurationByType
+} from '../utils/statistics.js';
 
+const formatMoneyValue = (value) => `€ ${value}`;
 
-const renderMoneyChart = (moneyCtx, tripEvents) => {
-  const eventsByType = new Map();
-  tripEvents.forEach((tripEvent) => {
-    if (eventsByType.has(tripEvent.type)) {
-      let spendingsByType = eventsByType.get(tripEvent.type);
-      spendingsByType = spendingsByType + tripEvent.basePrice;
-      eventsByType.set(tripEvent.type, spendingsByType);
-    } else {
-      eventsByType.set(tripEvent.type, tripEvent.basePrice);
-    }
-  });
+const formatTypeCount = (value) => `${value}x`;
 
-  const sortedEvents = sortMapByValues(eventsByType);
+const formatDuration = (value) => `${humanizeDuration(value)}`;
 
-  moneyCtx.height = sortedEvents.size * STATISTICS_SETTINGS.barHeight;
+const formatLabelName = (value) => `${value.toUpperCase()}`;
 
-  return new Chart(moneyCtx, {
+const renderChart = (canvas, labels, data, dataFormatter, labelsFormatter, chartTitle) => {
+  canvas.height = data.length * STATISTICS_SETTINGS.barHeight;
+
+  return new Chart(canvas, {
     plugins: [ChartDataLabels],
     type: STATISTICS_SETTINGS.type,
     data: {
-      labels: [...sortedEvents.keys()],
+      labels: labels,
       datasets: [{
-        data: [...sortedEvents.values()],
+        data: data,
         backgroundColor: STATISTICS_SETTINGS.backgroundColor,
         hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
         anchor: STATISTICS_SETTINGS.dataAnchor,
@@ -45,12 +44,12 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
           color: STATISTICS_SETTINGS.datalabelsColor,
           anchor: STATISTICS_SETTINGS.datalabelsAnchor,
           align: STATISTICS_SETTINGS.datalabelsAlign,
-          formatter: (val) => `€ ${val}`,
+          formatter: dataFormatter,
         },
       },
       title: {
         display: true,
-        text: StatisticsTitles.MONEY,
+        text: chartTitle,
         fontColor: STATISTICS_SETTINGS.fontColor,
         fontSize: STATISTICS_SETTINGS.titleFontSize,
         position: STATISTICS_SETTINGS.titlePosition,
@@ -61,173 +60,7 @@ const renderMoneyChart = (moneyCtx, tripEvents) => {
             fontColor: STATISTICS_SETTINGS.fontColor,
             padding: STATISTICS_SETTINGS.padding,
             fontSize: STATISTICS_SETTINGS.basicFontSize,
-            callback: (val) => `${val.toUpperCase()}`,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        enabled: false,
-      },
-    },
-  });
-};
-
-const renderChartByTripType = (typeCtx, tripEvents) => {
-  const eventsByType = new Map();
-  tripEvents.forEach((tripEvent) => {
-    if (eventsByType.has(tripEvent.type)) {
-      let countByType = eventsByType.get(tripEvent.type);
-      countByType = countByType + 1;
-      eventsByType.set(tripEvent.type, countByType);
-    } else {
-      eventsByType.set(tripEvent.type, 1);
-    }
-  });
-
-  const sortedEvents = sortMapByValues(eventsByType);
-
-  typeCtx.height = sortedEvents.size * STATISTICS_SETTINGS.barHeight;
-
-  return new Chart(typeCtx, {
-    plugins: [ChartDataLabels],
-    type: STATISTICS_SETTINGS.type,
-    data: {
-      labels: [...sortedEvents.keys()],
-      datasets: [{
-        data: [...sortedEvents.values()],
-        backgroundColor: STATISTICS_SETTINGS.backgroundColor,
-        hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
-        anchor: STATISTICS_SETTINGS.dataAnchor,
-        barThickness: STATISTICS_SETTINGS.barThickness,
-        minBarLength: STATISTICS_SETTINGS.minBarLength,
-      }],
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: STATISTICS_SETTINGS.basicFontSize,
-          },
-          color: STATISTICS_SETTINGS.datalabelsColor,
-          anchor: STATISTICS_SETTINGS.datalabelsAnchor,
-          align: STATISTICS_SETTINGS.datalabelsAlign,
-          formatter: (val) => `${val}x`,
-        },
-      },
-      title: {
-        display: true,
-        text: StatisticsTitles.TYPE,
-        fontColor: STATISTICS_SETTINGS.fontColor,
-        fontSize: STATISTICS_SETTINGS.titleFontSize,
-        position: STATISTICS_SETTINGS.titlePosition,
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: STATISTICS_SETTINGS.fontColor,
-            padding: STATISTICS_SETTINGS.padding,
-            fontSize: STATISTICS_SETTINGS.basicFontSize,
-            callback: (val) => `${val.toUpperCase()}`,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        enabled: false,
-      },
-    },
-  });
-};
-
-const renderTimeChart = (timeCtx, tripEvents) => {
-  const eventsByType = new Map();
-  tripEvents.forEach((tripEvent) => {
-    if (eventsByType.has(tripEvent.type)) {
-      let duration = eventsByType.get(tripEvent.type);
-      duration = duration + getDuration(tripEvent.dateFrom, tripEvent.dateTo);
-      eventsByType.set(tripEvent.type, duration);
-    } else {
-      eventsByType.set(tripEvent.type, getDuration(tripEvent.dateFrom, tripEvent.dateTo));
-    }
-  });
-
-  const sortedEvents = sortMapByValues(eventsByType);
-
-  timeCtx.height = sortedEvents.size * STATISTICS_SETTINGS.barHeight;
-
-  return new Chart(timeCtx, {
-    plugins: [ChartDataLabels],
-    type: STATISTICS_SETTINGS.type,
-    data: {
-      labels: [...sortedEvents.keys()],
-      datasets: [{
-        data: [...sortedEvents.values()],
-        backgroundColor: STATISTICS_SETTINGS.backgroundColor,
-        hoverBackgroundColor: STATISTICS_SETTINGS.hoverBackgroundColor,
-        anchor: STATISTICS_SETTINGS.dataAnchor,
-        barThickness: STATISTICS_SETTINGS.barThickness,
-        minBarLength: STATISTICS_SETTINGS.minBarLength,
-      }],
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: STATISTICS_SETTINGS.basicFontSize,
-          },
-          color: STATISTICS_SETTINGS.datalabelsColor,
-          anchor: STATISTICS_SETTINGS.datalabelsAnchor,
-          align: STATISTICS_SETTINGS.datalabelsAlign,
-          formatter: (val) => `${humanizeDuration(val)}`,
-        },
-      },
-      title: {
-        display: true,
-        text: StatisticsTitles.TIME_SPENT,
-        fontColor: STATISTICS_SETTINGS.fontColor,
-        fontSize: STATISTICS_SETTINGS.titleFontSize,
-        position: STATISTICS_SETTINGS.titlePosition,
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: STATISTICS_SETTINGS.fontColor,
-            padding: STATISTICS_SETTINGS.padding,
-            fontSize: STATISTICS_SETTINGS.basicFontSize,
-            callback: (val) => `${val.toUpperCase()}`,
+            callback: labelsFormatter,
           },
           gridLines: {
             display: false,
@@ -296,10 +129,36 @@ export default class Statistics extends SmartView {
     const typeCtx = this.getElement().querySelector('.statistics__chart--transport');
     const timeCtx = this.getElement().querySelector('.statistics__chart--time');
 
+    const sortedSpendingsByType = sortMapByValues(mapSpendingsByType(this._tripEvents));
+    const sortedTripTypesCount = sortMapByValues(mapEventsByType(this._tripEvents));
+    const sortedDurationByType = sortMapByValues(mapDurationByType(this._tripEvents));
 
-    this._timeChart = renderTimeChart(timeCtx, this._tripEvents);
-    this._moneyChart = renderMoneyChart(moneyCtx, this._tripEvents);
-    this._typeChart = renderChartByTripType(typeCtx, this._tripEvents);
+    this._timeChart = renderChart(
+      timeCtx,
+      [...sortedDurationByType.keys()],
+      [...sortedDurationByType.values()],
+      formatDuration,
+      formatLabelName,
+      StatisticsTitles.TIME_SPENT,
+    );
+
+    this._moneyChart = renderChart(
+      moneyCtx,
+      [...sortedSpendingsByType.keys()],
+      [...sortedSpendingsByType.values()],
+      formatMoneyValue,
+      formatLabelName,
+      StatisticsTitles.MONEY,
+    );
+
+    this._typeChart = renderChart(
+      typeCtx,
+      [...sortedTripTypesCount.keys()],
+      [...sortedTripTypesCount.values()],
+      formatTypeCount,
+      formatLabelName,
+      StatisticsTitles.TYPE,
+    );
   }
 
   removeElement() {

@@ -25,7 +25,7 @@ const render = (container, child, place) => {
 };
 
 const createElement = (template) => {
-  const newElement = document.createElement('div'); // 1
+  const newElement = document.createElement('div');
   newElement.innerHTML = template;
 
   return newElement.firstChild;
