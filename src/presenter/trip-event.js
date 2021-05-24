@@ -122,7 +122,6 @@ export default class TripEvent {
   _replaceFormToCard() {
     replace(this._tripEventComponent, this._tripEventEditComponent);
     document.removeEventListener('keydown', this._escKeyDownHandler);
-    this._tripEventEditComponent.removeDatePicker();
     this._mode = Mode.DEFAULT;
   }
 
@@ -148,7 +147,6 @@ export default class TripEvent {
       showToast(OfflineMessages.SAVE);
       return;
     }
-
     const isMinorUpdate = (this._tripEvent.dateFrom !== update.dateFrom)
       || (this._tripEvent.basePrice !== update.basePrice)
       || (getDuration(this._tripEvent.dateFrom, this._tripEvent.dateTo)

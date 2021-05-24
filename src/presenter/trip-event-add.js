@@ -66,6 +66,9 @@ export default class TripEventAdd {
   }
 
   destroy() {
+    if (this._tripEventAddComponent) {
+      this._tripEventAddComponent.removeDatePicker();
+    }
     remove(this._tripEventAddComponent);
     this._tripEventAddComponent = null;
 
@@ -74,9 +77,6 @@ export default class TripEventAdd {
     }
 
     document.removeEventListener('keydown', this._escKeyDownHandler);
-    if (this._tripEventAddComponent) {
-      this._tripEventAddComponent.removeDatePicker();
-    }
   }
 
   _escKeyDownHandler(evt) {
@@ -94,7 +94,6 @@ export default class TripEventAdd {
       showToast(OfflineMessages.SAVE);
       return;
     }
-
     this._newEventButtonComponent.enable();
 
     this._changeData(
