@@ -106,6 +106,7 @@ export default class TripEvent {
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
+      this._tripEventEditComponent.reset(this._tripEvent);
       this._replaceFormToCard();
     }
   }
